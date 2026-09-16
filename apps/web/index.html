@@ -1,0 +1,85 @@
+<!doctype html>
+<html lang="en">
+  <head>
+ <!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-LCWBTL35M6"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'G-LCWBTL35M6');
+</script>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover, interactive-widget=resizes-content" />
+    <meta name="theme-color" content="#5a8f6c" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="default" />
+    <meta name="mobile-web-app-capable" content="yes" />
+    <link rel="icon" href="/favicon.ico" sizes="any" />
+    <link rel="icon" type="image/png" href="/icon-513.png" />
+    <link rel="apple-touch-icon" href="/icon-513.png" />
+    <link rel="manifest" href="/manifest.json" />
+
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;0,700;1,400;1,500&family=Syne:wght@400;500;600;700;800&family=DM+Mono:wght@300;400;500&display=swap" />
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;0,700;1,400;1,500&family=Syne:wght@400;500;600;700;800&family=DM+Mono:wght@300;400;500&display=swap" media="print" onload="this.media='all'" />
+
+    <title>Rivly — Meet Riva, Your AI Life Companion</title>
+    <meta name="description" content="Riva knows your goals, your schedule, and your family — and checks in before you ask. Not a planner. Your Life OS. Built in India." />
+    <meta name="author" content="Rivly" />
+
+    <!-- Cashfree Payment Gateway SDK -->
+    <script src="https://sdk.cashfree.com/js/v3/cashfree.js"></script>
+
+    <!-- Social crawlers don't execute JS, so these static tags are the ones that
+         actually get read. URLs must be absolute. -->
+    <meta property="og:title" content="Rivly — Meet Riva, Your AI Life Companion" />
+    <meta property="og:description" content="Riva knows your goals, your schedule, and your family — and checks in before you ask. Not a planner. Your Life OS. Built in India." />
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content="https://rivly.in/" />
+    <meta property="og:site_name" content="Rivly" />
+    <meta property="og:image" content="https://rivly.in/og-image.png" />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:site" content="@rivly" />
+    <meta name="twitter:title" content="Rivly — Meet Riva, Your AI Life Companion" />
+    <meta name="twitter:description" content="Riva knows your goals, your schedule, and your family — and checks in before you ask. Not a planner. Your Life OS. Built in India." />
+    <meta name="twitter:image" content="https://rivly.in/og-image.png" />
+    <script>
+      (function() {
+        try {
+          // Check local storage
+          const stored = localStorage.getItem('dailyRhythm_theme'); // Must match key in useTheme.ts
+          let theme = 'light';
+          
+          if (stored) {
+            theme = JSON.parse(stored);
+          }
+          
+          // Determine if dark
+          const systemDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+          const isDark = theme === 'dark' || (theme === 'system' && systemDark);
+          
+          if (isDark) {
+            document.documentElement.classList.add('dark');
+          } else {
+            document.documentElement.classList.remove('dark');
+          }
+        } catch (e) {
+          console.error('Theme initialization error', e);
+        }
+      })();
+    </script>
+  </head>
+
+  <body>
+     <noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-N4RQ38FH"
+  height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
+    <div id="root"></div>
+    <script type="module" src="/src/main.tsx"></script>
+  </body>
+</html>

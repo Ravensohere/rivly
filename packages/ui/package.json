@@ -1,0 +1,10 @@
+{
+  "name": "@vivly/ui",
+  "version": "0.1.0",
+  "type": "module",
+  "main": "./index.ts",
+  "dependencies": {
+    "@vivly/shared": "*",
+    "@vivly/core": "*"
+  }
+}

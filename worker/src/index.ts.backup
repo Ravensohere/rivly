@@ -1,0 +1,35 @@
+import { Hono } from 'hono';
+import { cors } from 'hono/cors';
+import { Bindings, Variables } from './types';
+import { CORS_CONFIG } from './config/constants';
+import { authMiddleware } from './middleware/auth';
+
+// Import route modules
+import healthRoutes from './routes/health';
+import taskRoutes from './routes/tasks';
+import focusRoutes from './routes/focus';
+import rivaRoutes from './routes/riva';
+import orbRoutes from './routes/orb';
+import insightsRoutes from './routes/insights';
+import adminRoutes from './routes/admin';
+import waitlistRoutes from './routes/waitlist';
+
+const app = new Hono<{ Bindings: Bindings; Variables: Variables }>();
+
+// --- Global Middleware ---
+app.use('*', cors(CORS_CONFIG));
+
+// Auth middleware for protected routes
+app.use('/api/*', authMiddleware);
+
+// --- Mount Routes ---
+app.route('/api', healthRoutes);
+app.route('/api/tasks', taskRoutes);
+app.route('/api/focus', focusRoutes);
+app.route('/api/riva', rivaRoutes);
+app.route('/api', orbRoutes);
+app.route('/api/insights', insightsRoutes);
+app.route('/api/admin', adminRoutes);
+app.route('/api/waitlist', waitlistRoutes);
+
+export default app;

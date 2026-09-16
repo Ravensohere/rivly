@@ -1,0 +1,39 @@
+{
+  "name": "@vivly/web",
+  "private": true,
+  "version": "0.1.0",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "lint": "eslint .",
+    "preview": "vite preview",
+    "typecheck": "tsc --noEmit -p tsconfig.app.json",
+    "test": "vitest run",
+    "test:watch": "vitest"
+  },
+  "dependencies": {
+    "@capacitor/android": "^8.1.0",
+    "@capacitor/core": "^8.1.0",
+    "@capacitor/ios": "^8.1.0",
+    "@capacitor/local-notifications": "^8.0.1",
+    "@vivly/api-client": "*",
+    "@vivly/core": "*",
+    "@vivly/shared": "*",
+    "@vivly/ui": "*"
+  },
+  "devDependencies": {
+    "@testing-library/dom": "^10.4.1",
+    "@testing-library/jest-dom": "^6.9.1",
+    "@testing-library/react": "^16.3.2",
+    "@testing-library/react-hooks": "^8.0.1",
+    "@testing-library/user-event": "^14.6.1",
+    "@types/jest": "^30.0.0",
+    "jest": "^30.2.0",
+    "jsdom": "^28.1.0",
+    "react-test-renderer": "^17.0.2",
+    "ts-jest": "^29.4.6",
+    "ts-node": "^10.9.2",
+    "vitest": "^4.0.18"
+  }
+}
