@@ -1,0 +1,18 @@
+Rivly — source fingerprint
+==========================
+
+Owner / author : Venkat Raju <118790430+venkat2295@users.noreply.github.com>
+Snapshot date  : 2026-09-20T19:27:21+05:30
+Commit         : 834ebeb66f6d48850a6139fea4c8e3c685984881
+Tree           : 16f84c0691b3fd6f2fda043f0efeea14b05fbc77
+Tracked files  : 500
+Content digest : sha256:6a5e1bbf9804c6c0eb61f9ccdfa735fdcaa6f422104f6efea6ab82fd3f5d3232
+
+The content digest is the SHA-256 of the full recursive file listing
+(mode, blob SHA-1, path) of the tree above. Any change to any tracked
+file — content, name, or permissions — changes it.
+
+Verify a clone matches this fingerprint:
+
+    git ls-tree -r 834ebeb66f6d48850a6139fea4c8e3c685984881 | sha256sum
+    # expect: 6a5e1bbf9804c6c0eb61f9ccdfa735fdcaa6f422104f6efea6ab82fd3f5d3232
