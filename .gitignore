@@ -144,3 +144,35 @@ landing.diff
 patch.js
 patch.cjs
 supabase/.temp/
+
+# Agent/editor tooling
+.agent/
+.claude/
+.cursor/
+.cursorrules
+.windsurfrules
+.opencode.json
+.mcp.json
+.superpowers/
+.code-review-graph/
+.idea/
+AGENTS.md
+GEMINI.md
+CLAUDE.md
+
+# Local caches & scratch
+.npm_cache/
+*.log
+
+# Internal planning/handover docs (not needed to build the app)
+/*.md
+!/README.md
+docs/
+context/
+scripts/
+old_useRivaLogic.ts
+temp_old_fab.tsx
+worker.js
+generate-icon.js
+/*.png
+README.mdgit
