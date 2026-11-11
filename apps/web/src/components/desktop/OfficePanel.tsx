@@ -4,7 +4,7 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { desktopCall, DesktopContext } from '@/lib/desktopApi';
 import { usePolled } from '@/components/desktop/RemoteConsole';
-import { Brain, Calendar as CalendarIcon, Check, ListTodo, Mail, Pause, Pencil, Play, Plus, Send, Sparkles, Square, Timer, Trash2, X } from 'lucide-react';
+import { Brain, Calendar as CalendarIcon, CalendarClock, Check, HeartPulse, ListTodo, Mail, Pause, Pencil, Play, Plus, Send, Sparkles, Square, Timer, Trash2, X } from 'lucide-react';
 import { SuggestionsTray } from '@/components/inbox/SuggestionsTray';
 import { SentRepliesList } from '@/components/inbox/SentRepliesList';
 import { useGoogleCalendarSimple } from '@/hooks/useGoogleCalendarSimple';
@@ -18,6 +18,7 @@ export function OfficePanel({ ctx }: { ctx: DesktopContext }) {
   return (
     <div className="w-full flex flex-col gap-4">
       <CheckinCard ctx={ctx} />
+      <DeadlineCheckinCard ctx={ctx} />
       <CalendarCard />
       <SuggestionsTray />
       <TasksCard ctx={ctx} />
@@ -150,6 +151,73 @@ function CheckinCard({ ctx }: { ctx: DesktopContext }) {
           value={draft}
           onChange={(e) => setDraft(e.target.value)}
           placeholder="every 30 minutes"
+          disabled={busy}
+          className="rounded-full flex-1"
+        />
+        <Button
+          variant={cfg?.enabled ? 'outline' : 'default'}
+          className={`rounded-full shrink-0 ${cfg?.enabled ? '' : 'bg-orange-400 hover:bg-orange-500 text-white'}`}
+          disabled={busy || !draft.trim()}
+          onClick={() => void save(cfg?.enabled ? { enabled: false } : { enabled: true, schedule: draft.trim() })}
+        >
+          {cfg?.enabled ? 'Turn off' : 'Turn on'}
+        </Button>
+      </div>
+      {cfg?.enabled && <p className="text-xs text-orange-400">On — checking {cfg.schedule}.</p>}
+      {error && <p className="text-xs text-destructive">{error}</p>}
+    </SectionCard>
+  );
+}
+
+interface DeadlineCheckinConfig {
+  enabled: boolean;
+  schedule: string;
+}
+
+function DeadlineCheckinCard({ ctx }: { ctx: DesktopContext }) {
+  const [cfg, setCfg] = useState<DeadlineCheckinConfig | null>(null);
+  const [draft, setDraft] = useState('every day at 9am');
+  const [error, setError] = useState<string | null>(null);
+  const [busy, setBusy] = useState(false);
+
+  const poll = usePolled(
+    () => desktopCall<DeadlineCheckinConfig>(ctx, { method: 'GET', path: '/deadline-checkin/config' }),
+    15000,
+    true,
+  );
+  useEffect(() => {
+    if (!poll.data || cfg) return;
+    setCfg(poll.data);
+    setDraft(poll.data.schedule);
+  }, [poll.data, cfg]);
+
+  const save = useCallback(
+    async (patch: Partial<DeadlineCheckinConfig>) => {
+      setBusy(true);
+      setError(null);
+      try {
+        const next = await desktopCall<DeadlineCheckinConfig>(ctx, { method: 'PUT', path: '/deadline-checkin/config', body: patch });
+        setCfg(next);
+        setDraft(next.schedule);
+      } catch (e) {
+        setError(e instanceof Error ? e.message : String(e));
+      } finally {
+        setBusy(false);
+      }
+    },
+    [ctx],
+  );
+
+  return (
+    <SectionCard title="Deadline reminders" icon={<CalendarClock className="w-4 h-4 text-orange-400" />}>
+      <p className="text-xs text-muted-foreground">
+        Speaks up about tasks due within the next 3 days, so a deadline doesn't sneak up on you.
+      </p>
+      <div className="flex gap-2">
+        <Input
+          value={draft}
+          onChange={(e) => setDraft(e.target.value)}
+          placeholder="every day at 9am"
           disabled={busy}
           className="rounded-full flex-1"
         />
