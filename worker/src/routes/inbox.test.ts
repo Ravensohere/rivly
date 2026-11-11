@@ -18,4 +18,10 @@ describe('inbox routes', () => {
     // Without DB this may 200 with defaults or 500; assert it routes (not 404).
     expect(res.status).not.toBe(404);
   });
+
+  it('GET /sent returns shape', async () => {
+    const app = appWithUser();
+    const res = await app.request('/inbox/sent', {}, { GROQ_API_KEY: 'x' } as any);
+    expect(res.status).not.toBe(404);
+  });
 });

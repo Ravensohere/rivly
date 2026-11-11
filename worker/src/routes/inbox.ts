@@ -7,7 +7,15 @@ import {
   type ScanDeps,
   type SuggestionRow,
 } from '../services/inboxScan';
-import { getFreshAccessToken, fetchGmailCandidates, fetchCalendarCandidates, hasGmailScope } from '../services/google';
+import {
+  getFreshAccessToken,
+  fetchGmailCandidates,
+  fetchCalendarCandidates,
+  hasGmailScope,
+  fetchGmailSent,
+  normalizeSentMessage,
+  gmailFailureHint,
+} from '../services/google';
 import { extractSuggestions } from '../services/ai/inboxExtract';
 import {
   DEFAULT_INBOX_CATEGORIES,
@@ -166,6 +174,26 @@ inboxRoutes.get('/suggestions', async (c) => {
     .order('due_at', { ascending: true, nullsFirst: false });
   if (error) return c.json({ error: error.message }, 500);
   return c.json({ suggestions: data || [] });
+});
+
+inboxRoutes.get('/sent', async (c) => {
+  const userId = c.get('userId');
+  const supabase = createSupabaseClient(c.env);
+  const { data: conn } = await supabase
+    .from('google_calendar_connections')
+    .select('access_token, refresh_token, expires_at, scope')
+    .eq('user_id', userId)
+    .maybeSingle();
+  if (!conn) return c.json({ sent: [] });
+  try {
+    const fresh = await getFreshAccessToken(c.env, conn);
+    if (!fresh) return c.json({ sent: [] });
+    const messages = await fetchGmailSent(fresh.accessToken);
+    return c.json({ sent: messages.map(normalizeSentMessage) });
+  } catch (e: any) {
+    console.error('[inbox] sent fetch failed:', e);
+    return c.json({ sent: [], error: gmailFailureHint(e) });
+  }
 });
 
 inboxRoutes.post('/suggestions/:id/accept', async (c) => {
