@@ -142,6 +142,7 @@ export const api = {
     status: () => fetchWithAuth('/inbox/status'),
     scan: () => fetchWithAuth('/inbox/scan', { method: 'POST', body: '{}' }),
     suggestions: () => fetchWithAuth('/inbox/suggestions'),
+    sent: () => fetchWithAuth('/inbox/sent'),
     accept: (id: string) => fetchWithAuth(`/inbox/suggestions/${id}/accept`, { method: 'POST', body: '{}' }),
     dismiss: (id: string) => fetchWithAuth(`/inbox/suggestions/${id}/dismiss`, { method: 'POST', body: '{}' }),
     setSettings: (patch: { enabled?: boolean; categories?: string[] }) =>
