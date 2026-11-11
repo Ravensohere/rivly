@@ -217,9 +217,9 @@ export default function DesktopControlPage() {
                 onClick={() => setTab(id)}
                 className={`flex-1 py-1.5 rounded-full transition-colors ${
                   tab === id
-                    ? 'bg-orange-500 text-white'
+                    ? 'bg-orange-400 text-white'
                     : id === 'approvals' && pendingApprovals > 0
-                      ? 'text-orange-500 font-medium'
+                      ? 'text-orange-400 font-medium'
                       : 'text-muted-foreground'
                 }`}
               >
@@ -245,7 +245,7 @@ export default function DesktopControlPage() {
                     disabled={sending}
                     size="icon"
                     variant={speech.listening ? 'default' : 'outline'}
-                    className={`rounded-full shrink-0 ${speech.listening ? 'bg-orange-500 hover:bg-orange-600 text-white' : ''}`}
+                    className={`rounded-full shrink-0 ${speech.listening ? 'bg-orange-400 hover:bg-orange-500 text-white' : ''}`}
                     title={speech.listening ? 'Stop listening' : 'Speak a command'}
                   >
                     <Mic className="w-4 h-4" />
@@ -257,7 +257,7 @@ export default function DesktopControlPage() {
                     disabled={sending || recorder.busy}
                     size="icon"
                     variant={recorder.recording ? 'default' : 'outline'}
-                    className={`rounded-full shrink-0 ${recorder.recording ? 'bg-orange-500 hover:bg-orange-600 text-white' : ''}`}
+                    className={`rounded-full shrink-0 ${recorder.recording ? 'bg-orange-400 hover:bg-orange-500 text-white' : ''}`}
                     title={recorder.recording ? 'Stop and transcribe' : recorder.busy ? 'Transcribing…' : 'Record a command'}
                   >
                     <Mic className="w-4 h-4" />
@@ -339,7 +339,7 @@ function PairingForm({ onPaired }: { onPaired: (s: RelaySettings) => void }) {
 const STATUS_STYLE: Record<DesktopCommand['status'], { dot: string; text: string; label: string }> = {
   pending: { dot: 'bg-muted-foreground', text: 'text-muted-foreground', label: 'Pending' },
   claimed: { dot: 'bg-amber-500', text: 'text-amber-500', label: 'Running' },
-  completed: { dot: 'bg-orange-500', text: 'text-orange-500', label: 'Done' },
+  completed: { dot: 'bg-orange-400', text: 'text-orange-400', label: 'Done' },
   failed: { dot: 'bg-destructive', text: 'text-destructive', label: 'Failed' },
 };
 
