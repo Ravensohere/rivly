@@ -19,6 +19,7 @@ export function OfficePanel({ ctx }: { ctx: DesktopContext }) {
     <div className="w-full flex flex-col gap-4">
       <CheckinCard ctx={ctx} />
       <DeadlineCheckinCard ctx={ctx} />
+      <WellnessCheckinCard ctx={ctx} />
       <CalendarCard />
       <SuggestionsTray />
       <TasksCard ctx={ctx} />
@@ -218,6 +219,73 @@ function DeadlineCheckinCard({ ctx }: { ctx: DesktopContext }) {
           value={draft}
           onChange={(e) => setDraft(e.target.value)}
           placeholder="every day at 9am"
+          disabled={busy}
+          className="rounded-full flex-1"
+        />
+        <Button
+          variant={cfg?.enabled ? 'outline' : 'default'}
+          className={`rounded-full shrink-0 ${cfg?.enabled ? '' : 'bg-orange-400 hover:bg-orange-500 text-white'}`}
+          disabled={busy || !draft.trim()}
+          onClick={() => void save(cfg?.enabled ? { enabled: false } : { enabled: true, schedule: draft.trim() })}
+        >
+          {cfg?.enabled ? 'Turn off' : 'Turn on'}
+        </Button>
+      </div>
+      {cfg?.enabled && <p className="text-xs text-orange-400">On — checking {cfg.schedule}.</p>}
+      {error && <p className="text-xs text-destructive">{error}</p>}
+    </SectionCard>
+  );
+}
+
+interface WellnessCheckinConfig {
+  enabled: boolean;
+  schedule: string;
+}
+
+function WellnessCheckinCard({ ctx }: { ctx: DesktopContext }) {
+  const [cfg, setCfg] = useState<WellnessCheckinConfig | null>(null);
+  const [draft, setDraft] = useState('every day at 8pm');
+  const [error, setError] = useState<string | null>(null);
+  const [busy, setBusy] = useState(false);
+
+  const poll = usePolled(
+    () => desktopCall<WellnessCheckinConfig>(ctx, { method: 'GET', path: '/wellness-checkin/config' }),
+    15000,
+    true,
+  );
+  useEffect(() => {
+    if (!poll.data || cfg) return;
+    setCfg(poll.data);
+    setDraft(poll.data.schedule);
+  }, [poll.data, cfg]);
+
+  const save = useCallback(
+    async (patch: Partial<WellnessCheckinConfig>) => {
+      setBusy(true);
+      setError(null);
+      try {
+        const next = await desktopCall<WellnessCheckinConfig>(ctx, { method: 'PUT', path: '/wellness-checkin/config', body: patch });
+        setCfg(next);
+        setDraft(next.schedule);
+      } catch (e) {
+        setError(e instanceof Error ? e.message : String(e));
+      } finally {
+        setBusy(false);
+      }
+    },
+    [ctx],
+  );
+
+  return (
+    <SectionCard title="Wellness check-ins" icon={<HeartPulse className="w-4 h-4 text-orange-400" />}>
+      <p className="text-xs text-muted-foreground">
+        Nudges you to log how you're feeling if you haven't checked in by evening.
+      </p>
+      <div className="flex gap-2">
+        <Input
+          value={draft}
+          onChange={(e) => setDraft(e.target.value)}
+          placeholder="every day at 8pm"
           disabled={busy}
           className="rounded-full flex-1"
         />
