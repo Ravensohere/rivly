@@ -1,4 +1,5 @@
 import { useCallback, useEffect, useState } from 'react';
+import { useQuery } from '@tanstack/react-query';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { desktopCall, DesktopContext } from '@/lib/desktopApi';
@@ -7,6 +8,8 @@ import { Brain, Calendar as CalendarIcon, Check, ListTodo, Mail, Pause, Pencil, 
 import { SuggestionsTray } from '@/components/inbox/SuggestionsTray';
 import { SentRepliesList } from '@/components/inbox/SentRepliesList';
 import { useGoogleCalendarSimple } from '@/hooks/useGoogleCalendarSimple';
+import { api } from '@/lib/api';
+import { useAuthContext } from '@/contexts/AuthContext';
 
 /** Office-assistant control surface: everything the Assistant tab can only do by typing a
  * sentence, as direct controls instead — mail/meeting check-ins, tasks, lists, focus, learned
@@ -28,22 +31,38 @@ export function OfficePanel({ ctx }: { ctx: DesktopContext }) {
 }
 
 function CalendarCard() {
-  const { googleEvents, fetchGoogleEvents, isConnected } = useGoogleCalendarSimple();
+  // Connection state comes from a cheap status read (shared cache with useInboxRadar/
+  // useSentReplies, same queryKey), not from useGoogleCalendarSimple's own isConnected -
+  // that only ever becomes true *inside* a fetch that already returned >=1 event, so it
+  // misreports "not connected" for a connected user with a free day, and more importantly
+  // never gates the fetch itself: firing fetchGoogleEvents blind risks a 401 that
+  // getCalendarEvents responds to by deleting the whole google_calendar_connections row
+  // (its refresh_token included) via disconnectCalendar(). A read-only dashboard card must
+  // not be able to destroy the credentials the rest of the feature depends on.
+  const { user, isGuest } = useAuthContext();
+  const { data: status } = useQuery({
+    queryKey: ['inbox-status', user?.id],
+    queryFn: () => api.inbox.status(),
+    enabled: !!user && !isGuest,
+    staleTime: 5 * 60 * 1000,
+  });
+  const connected = status?.connected ?? null;
+  const { googleEvents, fetchGoogleEvents } = useGoogleCalendarSimple();
   useEffect(() => {
-    fetchGoogleEvents(new Date());
-  }, [fetchGoogleEvents]);
+    if (connected) fetchGoogleEvents(new Date());
+  }, [connected, fetchGoogleEvents]);
 
   return (
     <SectionCard title="Today's calendar" icon={<CalendarIcon className="w-4 h-4 text-orange-400" />}>
-      {!isConnected && (
+      {connected === false && (
         <p className="text-xs text-muted-foreground text-center">
           Connect Google Calendar in Settings to see events here.
         </p>
       )}
-      {isConnected && googleEvents.length === 0 && (
+      {connected === true && googleEvents.length === 0 && (
         <p className="text-xs text-muted-foreground text-center">No events today.</p>
       )}
-      {isConnected && googleEvents.length > 0 && (
+      {connected === true && googleEvents.length > 0 && (
         <div className="flex flex-col gap-1.5 max-h-56 overflow-auto">
           {googleEvents.map((e: any) => (
             <div key={e.id} className="flex items-center gap-2 rounded-xl px-2 py-1.5 hover:bg-accent/40 text-sm">

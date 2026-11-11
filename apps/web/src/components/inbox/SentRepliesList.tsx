@@ -8,8 +8,25 @@ export function formatSentDate(iso: string): string {
 }
 
 export function SentRepliesList() {
-  const { sent, isLoading } = useSentReplies();
+  const { sent, isLoading, connected, gmailConnected, error } = useSentReplies();
   if (isLoading) return <p className="text-xs text-muted-foreground text-center">Loading…</p>;
+  if (connected === false) {
+    return (
+      <p className="text-xs text-muted-foreground text-center">
+        Connect Google in Settings to see sent mail here.
+      </p>
+    );
+  }
+  if (connected === true && gmailConnected === false) {
+    return (
+      <p className="text-xs text-muted-foreground text-center">
+        Connect Gmail (not just Calendar) in Settings to see sent mail here.
+      </p>
+    );
+  }
+  if (error) {
+    return <p className="text-xs text-destructive text-center">{error}</p>;
+  }
   if (sent.length === 0) {
     return <p className="text-xs text-muted-foreground text-center">No sent mail yet.</p>;
   }

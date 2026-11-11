@@ -19,5 +19,11 @@ export function useSentReplies() {
     enabled,
     staleTime: 60 * 1000,
   });
-  return { sent: (data?.sent || []) as SentReply[], isLoading };
+  return {
+    sent: (data?.sent || []) as SentReply[],
+    isLoading,
+    connected: data?.connected ?? null,
+    gmailConnected: data?.gmailConnected ?? null,
+    error: data?.error as string | undefined,
+  };
 }
