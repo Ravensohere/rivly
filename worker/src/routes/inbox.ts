@@ -178,21 +178,22 @@ inboxRoutes.get('/suggestions', async (c) => {
 
 inboxRoutes.get('/sent', async (c) => {
   const userId = c.get('userId');
-  const supabase = createSupabaseClient(c.env);
-  const { data: conn } = await supabase
-    .from('google_calendar_connections')
-    .select('access_token, refresh_token, expires_at, scope')
-    .eq('user_id', userId)
-    .maybeSingle();
-  if (!conn) return c.json({ sent: [] });
   try {
+    const supabase = createSupabaseClient(c.env);
+    const { data: conn } = await supabase
+      .from('google_calendar_connections')
+      .select('access_token, refresh_token, expires_at, scope')
+      .eq('user_id', userId)
+      .maybeSingle();
+    if (!conn) return c.json({ sent: [], connected: false, gmailConnected: false });
+    if (!hasGmailScope(conn.scope)) return c.json({ sent: [], connected: true, gmailConnected: false });
     const fresh = await getFreshAccessToken(c.env, conn);
-    if (!fresh) return c.json({ sent: [] });
+    if (!fresh) return c.json({ sent: [], connected: true, gmailConnected: true });
     const messages = await fetchGmailSent(fresh.accessToken);
-    return c.json({ sent: messages.map(normalizeSentMessage) });
+    return c.json({ sent: messages.map(normalizeSentMessage), connected: true, gmailConnected: true });
   } catch (e: any) {
     console.error('[inbox] sent fetch failed:', e);
-    return c.json({ sent: [], error: gmailFailureHint(e) });
+    return c.json({ sent: [], connected: true, gmailConnected: true, error: gmailFailureHint(e) });
   }
 });
 
