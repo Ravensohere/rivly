@@ -45,6 +45,18 @@ export function normalizeGmailMessage(msg: any) {
   };
 }
 
+export function normalizeSentMessage(msg: any) {
+  const ms = Number(msg?.internalDate);
+  const date = Number.isFinite(ms) ? new Date(ms).toISOString() : new Date().toISOString();
+  return {
+    source_ref: String(msg?.id || ''),
+    subject: header(msg, 'Subject') || '(no subject)',
+    snippet: (msg?.snippet || '').slice(0, 300),
+    recipient: header(msg, 'To') || '',
+    date,
+  };
+}
+
 /** Google Calendar exposes the join link in several places depending on provider. */
 function calendarMeetingUrl(ev: any): string | null {
   if (typeof ev?.hangoutLink === 'string' && ev.hangoutLink) return ev.hangoutLink;
@@ -210,12 +222,19 @@ async function listMessageIds(accessToken: string, query: string, max: number): 
 
 async function fetchMessage(accessToken: string, id: string): Promise<any | null> {
   const r = await fetch(
-    `https://gmail.googleapis.com/gmail/v1/users/me/messages/${id}?format=metadata&metadataHeaders=Subject&metadataHeaders=From&metadataHeaders=Date`,
+    `https://gmail.googleapis.com/gmail/v1/users/me/messages/${id}?format=metadata&metadataHeaders=Subject&metadataHeaders=From&metadataHeaders=Date&metadataHeaders=To`,
     { headers: { Authorization: `Bearer ${accessToken}` } }
   );
   if (r.ok) return r.json();
   console.warn('[google] gmail message fetch failed', id, r.status);
   return null;
+}
+
+/** Fetch recent sent-mail message metadata (last 30 days). */
+export async function fetchGmailSent(accessToken: string, max = 10): Promise<any[]> {
+  const ids = await listMessageIds(accessToken, 'in:sent newer_than:30d', max);
+  const results = await Promise.all(ids.map((id) => fetchMessage(accessToken, id)));
+  return results.filter((m): m is any => m !== null);
 }
 
 /**

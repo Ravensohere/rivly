@@ -9,6 +9,7 @@ import {
   GmailApiError,
   gmailFailureHint,
   isInvalidGrant,
+  normalizeSentMessage,
 } from './google';
 
 describe('hasGmailScope', () => {
@@ -150,6 +151,28 @@ describe('orderSweepQuery', () => {
     expect(q).toContain('from:flipkart');
     expect(q).toContain('subject:shipped');
     expect(q).toContain('subject:"out for delivery"');
+  });
+});
+
+describe('normalizeSentMessage', () => {
+  it('pulls subject + recipient from headers, snippet + internalDate', () => {
+    const msg = {
+      id: 'xyz',
+      snippet: 'Sounds good, see you then',
+      internalDate: '1750800000000',
+      payload: {
+        headers: [
+          { name: 'Subject', value: 'Re: Meeting' },
+          { name: 'To', value: 'Alex <alex@example.com>' },
+        ],
+      },
+    };
+    const n = normalizeSentMessage(msg);
+    expect(n.source_ref).toBe('xyz');
+    expect(n.subject).toBe('Re: Meeting');
+    expect(n.recipient).toContain('alex@example.com');
+    expect(n.snippet).toBe('Sounds good, see you then');
+    expect(n.date).toMatch(/^\d{4}-\d{2}-\d{2}/);
   });
 });
 
