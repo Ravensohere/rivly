@@ -28,6 +28,7 @@ const ResetPasswordPage = lazy(() => import('@/pages/ResetPasswordPage'));
 const SignupPage = lazy(() => import('@/pages/SignupPage'));
 const MobileAppPage = lazy(() => import('@/pages/MobileAppPage'));
 const LandingPage = lazy(() => import('@/pages/LandingPage'));
+const DesktopControlPage = lazy(() => import('@/pages/DesktopControlPage'));
 
 export function AnimatedRoutes() {
   const location = useLocation();
@@ -96,6 +97,8 @@ export function AnimatedRoutes() {
           <Route path="/calendar/callback" element={user ? <CalendarCallbackPage /> : <Navigate to="/login" replace />} />
           <Route path="/study" element={user ? <StudyTogetherPage /> : <Navigate to="/login" replace />} />
           <Route path="/learn" element={user ? <LearnPage /> : <Navigate to="/login" replace />} />
+          {/* Public on purpose: it authenticates with the relay device secret (see relay.ts), not a Supabase session. */}
+          <Route path="/desktop" element={<DesktopControlPage />} />
 
           {/* Catch-all */}
           <Route path="*" element={<NotFound />} />

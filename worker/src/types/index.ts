@@ -18,6 +18,9 @@ export type Bindings = {
   CASHFREE_SECRET_KEY?: string;
   CASHFREE_WEBHOOK_SECRET?: string;
   CASHFREE_ENV?: 'sandbox' | 'production';
+  /** D1 database for the Cloudflare-native phone-to-desktop relay (worker/src/routes/relay.ts) —
+   * deliberately not Supabase, see MERGE_LOG.md. */
+  DESKTOP_RELAY_DB: D1Database;
 };
 
 // Context variables

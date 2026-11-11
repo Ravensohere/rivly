@@ -30,6 +30,8 @@ export const ALLOWED_ORIGINS = [
   // Legacy brand domain, kept until it stops resolving.
   'https://vivly.app',
   'https://www.vivly.app',
+  // Phone-browser build of the /desktop remote console (Cloudflare Pages).
+  'https://rivly-desktop.pages.dev',
   // Capacitor shells (Android/iOS) present these as their page origin.
   'https://localhost',
   'capacitor://localhost',

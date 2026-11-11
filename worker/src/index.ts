@@ -15,6 +15,7 @@ import adminRoutes from './routes/admin';
 import waitlistRoutes from './routes/waitlist';
 import paymentRoutes from './routes/payment';
 import inboxRoutes from './routes/inbox';
+import relayRoutes from './routes/relay';
 import { handleRivaLiveWebSocket } from './routes/riva-live';
 
 const app = new Hono<{ Bindings: Bindings; Variables: Variables }>();
@@ -37,6 +38,9 @@ app.route('/api/admin', adminRoutes);
 app.route('/api/waitlist', waitlistRoutes);
 app.route('/api/payment', paymentRoutes);
 app.route('/api/inbox', inboxRoutes);
+// Deliberately NOT under /api/* — this group uses its own device-secret auth (relay.ts), not the
+// Supabase JWT authMiddleware applied above to /api/*. See MERGE_LOG.md for why.
+app.route('/relay', relayRoutes);
 
 // --- Export ---
 // WebSocket upgrades must bypass Hono's middleware (CORS, etc.) because
