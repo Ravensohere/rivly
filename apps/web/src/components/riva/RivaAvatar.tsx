@@ -1,34 +1,47 @@
 import { useEffect, useRef, useState } from 'react';
 import { motion } from 'framer-motion';
 
-export type NixiAvatarState = 'idle' | 'listening' | 'thinking' | 'speaking' | 'success' | 'error';
+export type RivaAvatarState =
+  | 'idle'
+  | 'listening'
+  | 'thinking'
+  | 'speaking'
+  | 'success'
+  | 'error'
+  | 'focused'
+  | 'overwhelmed'
+  | 'settled';
 
-export type NixiMotionIntensity = 'calm' | 'normal' | 'energetic';
+export type RivaMotionIntensity = 'calm' | 'normal' | 'energetic';
 
-interface NixiAvatarProps {
-  state?: NixiAvatarState;
+interface RivaAvatarProps {
+  state?: RivaAvatarState;
   pillColor?: string;
   eyeColor?: string;
+  /** hsl(...) string tinting the glow at rest from RhythmOrbContext's dayColors; ignored while
+   * an active voice state (listening/thinking/speaking/success/error) is showing. */
+  moodColor?: string;
   size?: number;
   trackCursor?: boolean;
   /** "Make it yours" motion knob (see MERGE_LOG.md avatar-customization section): scales
    * cursor-pull distance and blink/animation speed without changing the geometry. */
-  motionIntensity?: NixiMotionIntensity;
+  motionIntensity?: RivaMotionIntensity;
   className?: string;
   /** Tapping the avatar plays a short reaction (squint, or hearts on double tap) and calls this. */
   onPress?: () => void;
 }
 
 type Reaction = 'happy' | 'love' | null;
+type Mood = 'focused' | 'overwhelmed' | 'settled';
 
-const MOTION_SCALE: Record<NixiMotionIntensity, { pull: number; blinkSpeed: number; animSpeed: number }> = {
+const MOTION_SCALE: Record<RivaMotionIntensity, { pull: number; blinkSpeed: number; animSpeed: number }> = {
   calm: { pull: 0.5, blinkSpeed: 0.6, animSpeed: 0.65 },
   normal: { pull: 1, blinkSpeed: 1, animSpeed: 1 },
   energetic: { pull: 1.8, blinkSpeed: 1.6, animSpeed: 1.5 },
 };
 
 /**
- * Nixi-style avatar: a rounded capsule/pill with two eyes, matching the documented visual
+ * Riva's avatar: a rounded capsule/pill with two eyes, matching the documented visual
  * reference (Nixi_Research_and_Claude_Code_Handoff.pdf, sections B/C — capsule geometry C01,
  * vertical-oval eyes with soft glow C02, "Make it yours" color customization C06-C09). This is
  * an original implementation built from that V-labeled (website-visible) screenshot evidence,
@@ -40,18 +53,23 @@ const MOTION_SCALE: Record<NixiMotionIntensity, { pull: number; blinkSpeed: numb
  *
  * Lives alongside Rivly's own LivingOrb.tsx (the calm breathing-orb identity, kept where it
  * already works) rather than replacing it — this is the second, more expressive/interactive
- * avatar, used for the desktop-control surface.
+ * avatar, used for the desktop-control surface and (via DayPlannerAvatar) the home screen.
+ *
+ * Mood states (focused/overwhelmed/settled) render RhythmOrbContext's mood as eye expressions
+ * rather than a separate component; voice state always wins over mood (see glowColor below and
+ * the DayPlannerAvatar wrapper that derives the `state` prop).
  */
-export function NixiAvatar({
+export function RivaAvatar({
   state = 'idle',
   pillColor = '#14141c',
   eyeColor = '#ffffff',
+  moodColor,
   size = 120,
   trackCursor = true,
   motionIntensity = 'normal',
   className = '',
   onPress,
-}: NixiAvatarProps) {
+}: RivaAvatarProps) {
   const containerRef = useRef<HTMLDivElement>(null);
   const [gaze, setGaze] = useState({ x: 0, y: 0 });
   const [blinking, setBlinking] = useState(false);
@@ -115,11 +133,14 @@ export function NixiAvatar({
 
   // Idle blink: a natural, irregular interval rather than a fixed loop, so two avatars on
   // screen at once don't blink in visible lockstep. Interval scales inversely with blinkSpeed.
+  // Mood states blink too (slower for focused, per the mood's own cadence below), so the blink
+  // loop runs for idle/listening/focused/overwhelmed/settled, not just idle/listening.
   useEffect(() => {
-    if (state !== 'idle' && state !== 'listening') return;
+    if (state !== 'idle' && state !== 'listening' && state !== 'focused' && state !== 'overwhelmed' && state !== 'settled') return;
     let cancelled = false;
+    const moodBlinkScale = state === 'focused' ? 0.6 : 1; // ~40% slower blink interval when focused
     function scheduleBlink() {
-      const delay = (2600 + Math.random() * 3200) / motion_.blinkSpeed;
+      const delay = (2600 + Math.random() * 3200) / (motion_.blinkSpeed * moodBlinkScale);
       setTimeout(() => {
         if (cancelled) return;
         setBlinking(true);
@@ -137,7 +158,11 @@ export function NixiAvatar({
 
   const width = size;
   const height = size * 0.62; // capsule proportions matching the documented reference screenshot
-  const glowColor = state === 'error' ? '#ef4444' : state === 'success' ? '#f97316' : eyeColor;
+  const isVoiceActive = state === 'listening' || state === 'thinking' || state === 'speaking';
+  const glowColor =
+    state === 'error' ? '#ef4444' : state === 'success' ? '#f97316' : isVoiceActive ? eyeColor : moodColor ?? eyeColor;
+  const mood: Mood | undefined =
+    state === 'focused' || state === 'overwhelmed' || state === 'settled' ? state : undefined;
 
   return (
     <div
@@ -166,14 +191,22 @@ export function NixiAvatar({
             ? { scale: [1, 1.04, 1] }
             : state === 'thinking'
               ? { rotate: [0, -1.5, 1.5, 0] }
-              : { scale: 1, rotate: 0 }
+              : state === 'overwhelmed'
+                ? { scale: [1, 1.015, 1] }
+                : state === 'settled'
+                  ? { scale: [1, 1.01, 1] }
+                  : { scale: 1, rotate: 0 }
         }
         transition={
           state === 'listening'
             ? { duration: 1.1 / motion_.animSpeed, repeat: Infinity, ease: 'easeInOut' }
             : state === 'thinking'
               ? { duration: 1.6 / motion_.animSpeed, repeat: Infinity, ease: 'easeInOut' }
-              : { type: 'spring', stiffness: 300, damping: 20 }
+              : state === 'overwhelmed'
+                ? { duration: 2.2 / motion_.animSpeed, repeat: Infinity, ease: 'easeInOut' } // listening pulse at ~0.5x speed
+                : state === 'settled'
+                  ? { duration: 3.4 / motion_.animSpeed, repeat: Infinity, ease: 'easeInOut' } // slower, calmer cadence than overwhelmed
+                  : { type: 'spring', stiffness: 300, damping: 20 }
         }
       >
         {state === 'error' ? (
@@ -195,6 +228,7 @@ export function NixiAvatar({
                 talking={state === 'speaking'}
                 talkSpeed={motion_.animSpeed}
                 offset={i * 0.07}
+                mood={mood}
               />
             ))}
           </>
@@ -215,6 +249,7 @@ function Eye({
   talking,
   talkSpeed,
   offset,
+  mood,
 }: {
   color: string;
   size: number;
@@ -224,17 +259,31 @@ function Eye({
   talking: boolean;
   talkSpeed: number;
   offset: number;
+  mood?: Mood;
 }) {
-  const eyeWidth = size * 0.16;
-  const eyeHeight = blinking ? size * 0.04 : wide ? size * 0.48 : size * 0.4;
+  // Mood adjustments to the base geometry (design doc Global Constraints):
+  // - focused: narrower (eyeWidth * 0.85), slightly taller resting height, glow boosted.
+  // - overwhelmed: shorter resting height (eyeHeight * 0.75), dimmed glow (alpha reduced) —
+  //   kept visually distinct from error's X-eyes (no strikethrough, just a softer, shorter eye).
+  // - settled: extra glow radius, calm (no height change beyond the base).
+  const widthScale = mood === 'focused' ? 0.85 : 1;
+  const restHeight = mood === 'focused' ? size * 0.44 : mood === 'overwhelmed' ? size * 0.3 : size * 0.4;
+  const eyeWidth = size * 0.16 * widthScale;
+  const eyeHeight = blinking ? size * 0.04 : wide ? size * 0.48 : restHeight;
   const h = size * 0.4;
+  const glowBlur = mood === 'settled' ? size * 0.26 : size * 0.18;
+  const glowAlpha = mood === 'overwhelmed' ? '55' : 'aa';
+  // A hex alpha suffix (e.g. "#ffffffaa") is only valid CSS when `color` is itself hex —
+  // appending it to an hsl(...)/rgb(...) string (moodColor's format) produces an invalid
+  // color value that gets silently dropped, losing the glow entirely.
+  const shadowColor = color.startsWith('#') ? `${color}${glowAlpha}` : color;
   return (
     <motion.div
       style={{
         width: eyeWidth,
         borderRadius: eyeWidth / 2,
         background: color,
-        boxShadow: `0 0 ${size * 0.18}px ${color}aa`,
+        boxShadow: `0 0 ${glowBlur}px ${shadowColor}`,
       }}
       animate={
         talking
