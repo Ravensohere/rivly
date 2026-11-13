@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useRef, useState } from 'react';
 import { PageTransition } from '@/components/ui/PageTransition';
-import { NixiAvatar, NixiAvatarState } from '@/components/riva/NixiAvatar';
+import { RivaAvatar, RivaAvatarState } from '@/components/riva/RivaAvatar';
 import { AvatarCustomizer } from '@/components/riva/AvatarCustomizer';
 import { AssistantPanel, type AssistantActivity } from '@/components/desktop/AssistantPanel';
 import { ApprovalsPanel, Approval, TerminalsPanel, usePolled } from '@/components/desktop/RemoteConsole';
@@ -117,7 +117,7 @@ export default function DesktopControlPage() {
   const showRecorderFallback = !speech.supported && !!LOCAL_DESKTOP_URL;
   const baseAvatarState = useAvatarStateFromCommands(commands, sending);
   const [assistantActivity, setAssistantActivity] = useState<AssistantActivity>('idle');
-  const avatarState: NixiAvatarState =
+  const avatarState: RivaAvatarState =
     tab === 'assistant' && assistantActivity !== 'idle'
       ? assistantActivity
       : speech.listening || recorder.recording
@@ -165,7 +165,7 @@ export default function DesktopControlPage() {
         >
           <Settings2 className="w-4 h-4" />
         </button>
-        <NixiAvatar
+        <RivaAvatar
           state={avatarState}
           size={120}
           pillColor={avatarSettings.pillColor}
@@ -374,7 +374,7 @@ function summarize(o: Record<string, unknown> | undefined) {
 
 /** Drives the avatar from the newest command's real lifecycle. Success (heart eyes) shows for a few seconds
  * after a command finishes while this page is open, then settles back to idle. */
-function useAvatarStateFromCommands(commands: DesktopCommand[], sending: boolean): NixiAvatarState {
+function useAvatarStateFromCommands(commands: DesktopCommand[], sending: boolean): RivaAvatarState {
   const latest = commands[0];
   const seen = useRef<{ id: string | null; status: string | null; first: boolean }>({ id: null, status: null, first: true });
   const [celebrate, setCelebrate] = useState(false);
