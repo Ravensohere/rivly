@@ -24,7 +24,7 @@ export function ProUpgradeModal({ open, onClose, feature, limitReached }: ProUpg
         <DialogHeader>
           <div className="flex items-center justify-between mb-2">
             <div className="flex items-center gap-2">
-              <div className="w-10 h-10 rounded-full bg-gradient-to-br from-purple-600 to-pink-600 flex items-center justify-center">
+              <div className="w-10 h-10 rounded-full bg-gradient-to-br from-primary to-pink-600 flex items-center justify-center">
                 <Sparkles className="w-6 h-6 text-white" />
               </div>
               <DialogTitle className="text-xl">Upgrade to Pro</DialogTitle>
@@ -46,9 +46,9 @@ export function ProUpgradeModal({ open, onClose, feature, limitReached }: ProUpg
           className="space-y-4"
         >
           {/* Pricing Box */}
-          <div className="p-4 rounded-lg bg-gradient-to-br from-purple-50 to-pink-50 dark:from-purple-900/20 dark:to-pink-900/20 border-2 border-purple-600">
+          <div className="p-4 rounded-lg bg-gradient-to-br from-primary/10 to-pink-50 dark:from-primary/20 dark:to-pink-900/20 border-2 border-primary">
             <div className="flex items-baseline gap-2 mb-2">
-              <span className="text-3xl font-bold text-purple-900 dark:text-purple-100">₹199</span>
+              <span className="text-3xl font-bold text-primary">₹199</span>
               <span className="text-sm text-gray-600 dark:text-gray-400">/month</span>
             </div>
             <p className="text-xs text-gray-500">Cancel anytime. Privacy-first.</p>
@@ -67,7 +67,7 @@ export function ProUpgradeModal({ open, onClose, feature, limitReached }: ProUpg
                 'No data selling, ever'
               ].map((benefit, i) => (
                 <li key={i} className="flex items-start gap-2 text-sm">
-                  <Check className="w-4 h-4 text-purple-600 mt-0.5 shrink-0" />
+                  <Check className="w-4 h-4 text-primary mt-0.5 shrink-0" />
                   <span className="text-gray-700 dark:text-gray-300">{benefit}</span>
                 </li>
               ))}
@@ -77,7 +77,7 @@ export function ProUpgradeModal({ open, onClose, feature, limitReached }: ProUpg
           {/* CTA Buttons */}
           <div className="space-y-2 pt-2">
             <Button
-              className="w-full bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700 text-white"
+              className="w-full bg-gradient-to-r from-primary to-pink-600 hover:from-primary/90 hover:to-pink-700 text-primary-foreground"
               size="lg"
               onClick={handleUpgrade}
             >

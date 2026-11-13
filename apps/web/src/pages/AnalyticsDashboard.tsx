@@ -452,10 +452,10 @@ function AnalyticsView({ stats, timeline, adoption, loading }: {
       </div>
 
       {/* Key Insights */}
-      <Card className="bg-gradient-to-br from-purple-50 to-pink-50 dark:from-purple-900/20 dark:to-pink-900/20">
+      <Card className="bg-gradient-to-br from-primary/10 to-pink-50 dark:from-primary/20 dark:to-pink-900/20">
         <CardHeader>
           <CardTitle className="flex items-center gap-2">
-            <Sparkles className="w-5 h-5 text-purple-600" />
+            <Sparkles className="w-5 h-5 text-primary" />
             Beta Insights
           </CardTitle>
         </CardHeader>
