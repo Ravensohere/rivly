@@ -265,7 +265,7 @@ export function AssistantPanel({ ctx, onActivity }: { ctx: DesktopContext; onAct
           onKeyDown={(e) => e.key === 'Enter' && void send()}
           placeholder={`Message ${name}`}
           disabled={busy}
-          className="flex-1 min-w-0 h-11 rounded-full border border-neutral-300 bg-white px-4 text-sm text-neutral-900 placeholder:text-neutral-400 outline-none focus:border-orange-500"
+          className="flex-1 min-w-0 h-11 rounded-full border border-neutral-300 bg-white px-4 text-sm text-neutral-900 placeholder:text-neutral-400 outline-none focus:border-primary"
         />
         {speech.supported && (
           <button
