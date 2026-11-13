@@ -17,7 +17,7 @@ import { OverwhelmedScreen } from '@/components/mental/OverwhelmedScreen';
 import { ThoughtParkingSheet } from '@/components/mental/ThoughtParkingSheet';
 import { SuggestionsTray } from '@/components/inbox/SuggestionsTray';
 import { FirstActionNudge } from '@/components/onboarding/FirstActionNudge';
-import { RhythmOrb } from '@/components/ui/RhythmOrb';
+import { DayPlannerAvatar } from '@/components/planner/DayPlannerAvatar';
 import { RivaGlobe } from '@/components/ui/RivaGlobe';
 import { TimeGreeting } from '@/components/planner/TimeGreeting';
 import { DateSelector } from '@/components/planner/DateSelector';
@@ -889,7 +889,7 @@ export default function DayPlanner() {
 
         {/* ORB */}
         <div style={{ position: 'relative', zIndex: 1, marginBottom: '-0.25rem' }}>
-          <RhythmOrb size="md" />
+          <DayPlannerAvatar size="md" />
         </div>
 
         {/* FLOW SCORE — elegant italic display beneath the orb */}
