@@ -1,0 +1,1474 @@
+# Review package: 7f5f3a2a7dc856bbee1b613b070d221795c157ee..HEAD
+
+## Commits
+9c616a4 chore: add redesign pipeline card schema and inventory
+
+## Files changed
+ docs/superpowers/cards/_inventory.md             | 60 ++++++++++++++++++++++++
+ docs/superpowers/cards/_schema.md                | 58 +++++++++++++++++++++++
+ docs/superpowers/cards/alarm-ringing.md          | 36 ++++++++++++++
+ docs/superpowers/cards/auth-callback.md          | 36 ++++++++++++++
+ docs/superpowers/cards/calendar-callback.md      | 36 ++++++++++++++
+ docs/superpowers/cards/day-planner.md            | 36 ++++++++++++++
+ docs/superpowers/cards/desktop-control.md        | 36 ++++++++++++++
+ docs/superpowers/cards/focus.md                  | 36 ++++++++++++++
+ docs/superpowers/cards/forgot-password.md        | 36 ++++++++++++++
+ docs/superpowers/cards/insights.md               | 36 ++++++++++++++
+ docs/superpowers/cards/landing-contrast.md       | 36 ++++++++++++++
+ docs/superpowers/cards/landing-cta.md            | 36 ++++++++++++++
+ docs/superpowers/cards/landing-features.md       | 36 ++++++++++++++
+ docs/superpowers/cards/landing-manifesto.md      | 36 ++++++++++++++
+ docs/superpowers/cards/landing-problem.md        | 36 ++++++++++++++
+ docs/superpowers/cards/landing-riva.md           | 36 ++++++++++++++
+ docs/superpowers/cards/landing-whynot-promise.md | 36 ++++++++++++++
+ docs/superpowers/cards/landing.md                | 36 ++++++++++++++
+ docs/superpowers/cards/landscape.md              | 36 ++++++++++++++
+ docs/superpowers/cards/learn.md                  | 36 ++++++++++++++
+ docs/superpowers/cards/login.md                  | 36 ++++++++++++++
+ docs/superpowers/cards/mobile-app.md             | 36 ++++++++++++++
+ docs/superpowers/cards/not-found.md              | 36 ++++++++++++++
+ docs/superpowers/cards/onboarding.md             | 36 ++++++++++++++
+ docs/superpowers/cards/privacy-policy.md         | 36 ++++++++++++++
+ docs/superpowers/cards/profile.md                | 36 ++++++++++++++
+ docs/superpowers/cards/reflect-and-journal.md    | 36 ++++++++++++++
+ docs/superpowers/cards/reset-password.md         | 36 ++++++++++++++
+ docs/superpowers/cards/settings.md               | 36 ++++++++++++++
+ docs/superpowers/cards/signup.md                 | 36 ++++++++++++++
+ docs/superpowers/cards/sleep.md                  | 36 ++++++++++++++
+ docs/superpowers/cards/study-together.md         | 36 ++++++++++++++
+ docs/superpowers/cards/terms-of-service.md       | 36 ++++++++++++++
+ 33 files changed, 1234 insertions(+)
+
+## Diff
+diff --git a/docs/superpowers/cards/_inventory.md b/docs/superpowers/cards/_inventory.md
+new file mode 100644
+index 0000000..3339092
+--- /dev/null
++++ b/docs/superpowers/cards/_inventory.md
+@@ -0,0 +1,60 @@
++# Redesign Pipeline Inventory
++
++## Routed Pages (24 pages → 24 cards)
++
++| Slug | Source File | Kind |
++|------|-------------|------|
++| alarm-ringing | `apps/web/src/pages/AlarmRingingPage.tsx` | page |
++| auth-callback | `apps/web/src/pages/AuthCallbackPage.tsx` | page |
++| calendar-callback | `apps/web/src/pages/CalendarCallbackPage.tsx` | page |
++| day-planner | `apps/web/src/pages/DayPlanner.tsx` | page |
++| desktop-control | `apps/web/src/pages/DesktopControlPage.tsx` | page |
++| focus | `apps/web/src/pages/FocusPage.tsx` | page |
++| forgot-password | `apps/web/src/pages/ForgotPasswordPage.tsx` | page |
++| insights | `apps/web/src/pages/InsightsPage.tsx` | page |
++| landing | `apps/web/src/pages/LandingPage.tsx` | page |
++| landscape | `apps/web/src/pages/LandscapePage.tsx` | page |
++| learn | `apps/web/src/pages/LearnPage.tsx` | page |
++| login | `apps/web/src/pages/LoginPage.tsx` | page |
++| mobile-app | `apps/web/src/pages/MobileAppPage.tsx` | page |
++| not-found | `apps/web/src/pages/NotFound.tsx` | page |
++| onboarding | `apps/web/src/pages/OnboardingPage.tsx` | page |
++| privacy-policy | `apps/web/src/pages/PrivacyPolicyPage.tsx` | page |
++| profile | `apps/web/src/pages/ProfilePage.tsx` | page |
++| reflect-and-journal | `apps/web/src/pages/ReflectAndJournalPage.tsx` | page |
++| reset-password | `apps/web/src/pages/ResetPasswordPage.tsx` | page |
++| settings | `apps/web/src/pages/SettingsPage.tsx` | page |
++| signup | `apps/web/src/pages/SignupPage.tsx` | page |
++| sleep | `apps/web/src/pages/SleepPage.tsx` | page |
++| study-together | `apps/web/src/pages/StudyTogetherPage.tsx` | page |
++| terms-of-service | `apps/web/src/pages/TermsOfServicePage.tsx` | page |
++
++## Landing Page Sections (8 sections → 7 cards, with WhyNotSection + PromiseSection combined)
++
++| Slug | Source File | Kind |
++|------|-------------|------|
++| landing-problem | `apps/web/src/pages/LandingPage.tsx` | landing-section |
++| landing-manifesto | `apps/web/src/pages/LandingPage.tsx` | landing-section |
++| landing-contrast | `apps/web/src/pages/LandingPage.tsx` | landing-section |
++| landing-features | `apps/web/src/pages/LandingPage.tsx` | landing-section |
++| landing-riva | `apps/web/src/pages/LandingPage.tsx` | landing-section |
++| landing-whynot-promise | `apps/web/src/pages/LandingPage.tsx` | landing-section |
++| landing-cta | `apps/web/src/pages/LandingPage.tsx` | landing-section |
++
++## Unrouted Pages (dead code, no cards)
++
++| Slug | Source File | Reason |
++|------|-------------|--------|
++| admin-dashboard | `apps/web/src/pages/AdminDashboard.tsx` | Not referenced in AnimatedRoutes.tsx |
++| analytics-dashboard | `apps/web/src/pages/AnalyticsDashboard.tsx` | Not referenced in AnimatedRoutes.tsx |
++| index | `apps/web/src/pages/Index.tsx` | Not referenced in AnimatedRoutes.tsx |
++| journal | `apps/web/src/pages/JournalPage.tsx` | Redundant; ReflectAndJournalPage handles both /journal and /reflect routes |
++| pricing | `apps/web/src/pages/PricingPage.tsx` | Not referenced in AnimatedRoutes.tsx |
++| reflection | `apps/web/src/pages/ReflectionPage.tsx` | Redundant; ReflectAndJournalPage handles both routes |
++| waitlist-screen | `apps/web/src/pages/WaitlistScreen.tsx` | Not referenced in AnimatedRoutes.tsx |
++
++## Count Verification
++
++- Routed page files: 24
++- Landing section cards (with WhyNotSection + PromiseSection combined as 1): 7
++- **Total cards expected: 31**
+diff --git a/docs/superpowers/cards/_schema.md b/docs/superpowers/cards/_schema.md
+new file mode 100644
+index 0000000..b3b10f0
+--- /dev/null
++++ b/docs/superpowers/cards/_schema.md
+@@ -0,0 +1,58 @@
++# Card Schema
++
++## Overview
++
++This schema defines the structure of redesign pipeline cards. Each card represents one feature, page, or component to be verified/redesigned through the pipeline.
++
++## State Transitions
++
++States flow: `backlog` → `ready` → `running` → `review` → `merged`. Other states (`blocked`, `archived`) are valid if a card hits an exception, but not expected in normal flow.
++
++## JSON Schema
++
++```json
++{
++  "$schema": "http://json-schema.org/draft-07/schema#",
++  "title": "Redesign Pipeline Card",
++  "type": "object",
++  "required": ["id", "title", "owner", "state", "branch", "acceptance", "merge_gate", "handoff"],
++  "properties": {
++    "id": {
++      "type": "string",
++      "description": "Unique identifier (slug format, lowercase with hyphens)"
++    },
++    "title": {
++      "type": "string",
++      "description": "Human-readable card title"
++    },
++    "owner": {
++      "type": "string",
++      "description": "Person assigned to this card, or 'unassigned'"
++    },
++    "state": {
++      "type": "string",
++      "enum": ["backlog", "ready", "running", "review", "merged", "blocked", "archived"],
++      "description": "Current state in the pipeline"
++    },
++    "branch": {
++      "type": "string",
++      "description": "Git branch where work is tracked"
++    },
++    "acceptance": {
++      "type": "array",
++      "items": {
++        "type": "string"
++      },
++      "description": "List of acceptance criteria that must be met before merge"
++    },
++    "merge_gate": {
++      "type": "string",
++      "description": "Global constraint or gate that must pass before merge (e.g., 'vite build passes')"
++    },
++    "handoff": {
++      "type": ["string", "null"],
++      "description": "Name of person/team to hand off to, or null if none"
++    }
++  }
++}
++```
+diff --git a/docs/superpowers/cards/alarm-ringing.md b/docs/superpowers/cards/alarm-ringing.md
+new file mode 100644
+index 0000000..7182544
+--- /dev/null
++++ b/docs/superpowers/cards/alarm-ringing.md
+@@ -0,0 +1,36 @@
++﻿---
++id: alarm-ringing
++title: Alarm Ringing Page
++owner: unassigned
++state: backlog
++branch: riva/integrated-main
++acceptance:
++  - vite build passes
++  - npm test passes
++  - primary interaction verified
++  - no shared-component regression in holistic smoke pass
++merge_gate: vite build passes, npm test passes, primary interaction verified
++handoff: null
++---
++
++# Card: Alarm Ringing Page
++
++This card represents the redesign/verification pass for the Alarm Ringing Page feature/page in the Rivly web app.
++
++## Details
++
++- **Status:** \{{ state }}\
++- **Owner:** {{ owner }}
++- **Target Branch:** {{ branch }}
++
++## Acceptance Criteria
++
++{{ acceptance }}
++
++## Merge Gate
++
++{{ merge_gate }}
++
++## Handoff
++
++{{ handoff }}
+diff --git a/docs/superpowers/cards/auth-callback.md b/docs/superpowers/cards/auth-callback.md
+new file mode 100644
+index 0000000..61024a9
+--- /dev/null
++++ b/docs/superpowers/cards/auth-callback.md
+@@ -0,0 +1,36 @@
++﻿---
++id: auth-callback
++title: Auth Callback Page
++owner: unassigned
++state: backlog
++branch: riva/integrated-main
++acceptance:
++  - vite build passes
++  - npm test passes
++  - primary interaction verified
++  - no shared-component regression in holistic smoke pass
++merge_gate: vite build passes, npm test passes, primary interaction verified
++handoff: null
++---
++
++# Card: Auth Callback Page
++
++This card represents the redesign/verification pass for the Auth Callback Page feature/page in the Rivly web app.
++
++## Details
++
++- **Status:** \{{ state }}\
++- **Owner:** {{ owner }}
++- **Target Branch:** {{ branch }}
++
++## Acceptance Criteria
++
++{{ acceptance }}
++
++## Merge Gate
++
++{{ merge_gate }}
++
++## Handoff
++
++{{ handoff }}
+diff --git a/docs/superpowers/cards/calendar-callback.md b/docs/superpowers/cards/calendar-callback.md
+new file mode 100644
+index 0000000..80901b5
+--- /dev/null
++++ b/docs/superpowers/cards/calendar-callback.md
+@@ -0,0 +1,36 @@
++﻿---
++id: calendar-callback
++title: Calendar Callback Page
++owner: unassigned
++state: backlog
++branch: riva/integrated-main
++acceptance:
++  - vite build passes
++  - npm test passes
++  - primary interaction verified
++  - no shared-component regression in holistic smoke pass
++merge_gate: vite build passes, npm test passes, primary interaction verified
++handoff: null
++---
++
++# Card: Calendar Callback Page
++
++This card represents the redesign/verification pass for the Calendar Callback Page feature/page in the Rivly web app.
++
++## Details
++
++- **Status:** \{{ state }}\
++- **Owner:** {{ owner }}
++- **Target Branch:** {{ branch }}
++
++## Acceptance Criteria
++
++{{ acceptance }}
++
++## Merge Gate
++
++{{ merge_gate }}
++
++## Handoff
++
++{{ handoff }}
+diff --git a/docs/superpowers/cards/day-planner.md b/docs/superpowers/cards/day-planner.md
+new file mode 100644
+index 0000000..c29533d
+--- /dev/null
++++ b/docs/superpowers/cards/day-planner.md
+@@ -0,0 +1,36 @@
++﻿---
++id: day-planner
++title: Day Planner Page
++owner: unassigned
++state: backlog
++branch: riva/integrated-main
++acceptance:
++  - vite build passes
++  - npm test passes
++  - primary interaction verified
++  - no shared-component regression in holistic smoke pass
++merge_gate: vite build passes, npm test passes, primary interaction verified
++handoff: null
++---
++
++# Card: Day Planner Page
++
++This card represents the redesign/verification pass for the Day Planner Page feature/page in the Rivly web app.
++
++## Details
++
++- **Status:** \{{ state }}\
++- **Owner:** {{ owner }}
++- **Target Branch:** {{ branch }}
++
++## Acceptance Criteria
++
++{{ acceptance }}
++
++## Merge Gate
++
++{{ merge_gate }}
++
++## Handoff
++
++{{ handoff }}
+diff --git a/docs/superpowers/cards/desktop-control.md b/docs/superpowers/cards/desktop-control.md
+new file mode 100644
+index 0000000..c6e670e
+--- /dev/null
++++ b/docs/superpowers/cards/desktop-control.md
+@@ -0,0 +1,36 @@
++﻿---
++id: desktop-control
++title: Desktop Control Page
++owner: unassigned
++state: backlog
++branch: riva/integrated-main
++acceptance:
++  - vite build passes
++  - npm test passes
++  - primary interaction verified
++  - no shared-component regression in holistic smoke pass
++merge_gate: vite build passes, npm test passes, primary interaction verified
++handoff: null
++---
++
++# Card: Desktop Control Page
++
++This card represents the redesign/verification pass for the Desktop Control Page feature/page in the Rivly web app.
++
++## Details
++
++- **Status:** \{{ state }}\
++- **Owner:** {{ owner }}
++- **Target Branch:** {{ branch }}
++
++## Acceptance Criteria
++
++{{ acceptance }}
++
++## Merge Gate
++
++{{ merge_gate }}
++
++## Handoff
++
++{{ handoff }}
+diff --git a/docs/superpowers/cards/focus.md b/docs/superpowers/cards/focus.md
+new file mode 100644
+index 0000000..6a4c198
+--- /dev/null
++++ b/docs/superpowers/cards/focus.md
+@@ -0,0 +1,36 @@
++﻿---
++id: focus
++title: Focus Page
++owner: unassigned
++state: backlog
++branch: riva/integrated-main
++acceptance:
++  - vite build passes
++  - npm test passes
++  - primary interaction verified
++  - no shared-component regression in holistic smoke pass
++merge_gate: vite build passes, npm test passes, primary interaction verified
++handoff: null
++---
++
++# Card: Focus Page
++
++This card represents the redesign/verification pass for the Focus Page feature/page in the Rivly web app.
++
++## Details
++
++- **Status:** \{{ state }}\
++- **Owner:** {{ owner }}
++- **Target Branch:** {{ branch }}
++
++## Acceptance Criteria
++
++{{ acceptance }}
++
++## Merge Gate
++
++{{ merge_gate }}
++
++## Handoff
++
++{{ handoff }}
+diff --git a/docs/superpowers/cards/forgot-password.md b/docs/superpowers/cards/forgot-password.md
+new file mode 100644
+index 0000000..e5e31a3
+--- /dev/null
++++ b/docs/superpowers/cards/forgot-password.md
+@@ -0,0 +1,36 @@
++﻿---
++id: forgot-password
++title: Forgot Password Page
++owner: unassigned
++state: backlog
++branch: riva/integrated-main
++acceptance:
++  - vite build passes
++  - npm test passes
++  - primary interaction verified
++  - no shared-component regression in holistic smoke pass
++merge_gate: vite build passes, npm test passes, primary interaction verified
++handoff: null
++---
++
++# Card: Forgot Password Page
++
++This card represents the redesign/verification pass for the Forgot Password Page feature/page in the Rivly web app.
++
++## Details
++
++- **Status:** \{{ state }}\
++- **Owner:** {{ owner }}
++- **Target Branch:** {{ branch }}
++
++## Acceptance Criteria
++
++{{ acceptance }}
++
++## Merge Gate
++
++{{ merge_gate }}
++
++## Handoff
++
++{{ handoff }}
+diff --git a/docs/superpowers/cards/insights.md b/docs/superpowers/cards/insights.md
+new file mode 100644
+index 0000000..4104205
+--- /dev/null
++++ b/docs/superpowers/cards/insights.md
+@@ -0,0 +1,36 @@
++﻿---
++id: insights
++title: Insights Page
++owner: unassigned
++state: backlog
++branch: riva/integrated-main
++acceptance:
++  - vite build passes
++  - npm test passes
++  - primary interaction verified
++  - no shared-component regression in holistic smoke pass
++merge_gate: vite build passes, npm test passes, primary interaction verified
++handoff: null
++---
++
++# Card: Insights Page
++
++This card represents the redesign/verification pass for the Insights Page feature/page in the Rivly web app.
++
++## Details
++
++- **Status:** \{{ state }}\
++- **Owner:** {{ owner }}
++- **Target Branch:** {{ branch }}
++
++## Acceptance Criteria
++
++{{ acceptance }}
++
++## Merge Gate
++
++{{ merge_gate }}
++
++## Handoff
++
++{{ handoff }}
+diff --git a/docs/superpowers/cards/landing-contrast.md b/docs/superpowers/cards/landing-contrast.md
+new file mode 100644
+index 0000000..034e393
+--- /dev/null
++++ b/docs/superpowers/cards/landing-contrast.md
+@@ -0,0 +1,36 @@
++﻿---
++id: landing-contrast
++title: Landing Page - Contrast Section
++owner: unassigned
++state: backlog
++branch: riva/integrated-main
++acceptance:
++  - vite build passes
++  - npm test passes
++  - primary interaction verified
++  - no shared-component regression in holistic smoke pass
++merge_gate: vite build passes, npm test passes, primary interaction verified
++handoff: null
++---
++
++# Card: Landing Page - Contrast Section
++
++This card represents the redesign/verification pass for the Landing Page - Contrast Section feature/page in the Rivly web app.
++
++## Details
++
++- **Status:** \{{ state }}\
++- **Owner:** {{ owner }}
++- **Target Branch:** {{ branch }}
++
++## Acceptance Criteria
++
++{{ acceptance }}
++
++## Merge Gate
++
++{{ merge_gate }}
++
++## Handoff
++
++{{ handoff }}
+diff --git a/docs/superpowers/cards/landing-cta.md b/docs/superpowers/cards/landing-cta.md
+new file mode 100644
+index 0000000..4f7a08c
+--- /dev/null
++++ b/docs/superpowers/cards/landing-cta.md
+@@ -0,0 +1,36 @@
++﻿---
++id: landing-cta
++title: Landing Page - CTA Section
++owner: unassigned
++state: backlog
++branch: riva/integrated-main
++acceptance:
++  - vite build passes
++  - npm test passes
++  - primary interaction verified
++  - no shared-component regression in holistic smoke pass
++merge_gate: vite build passes, npm test passes, primary interaction verified
++handoff: null
++---
++
++# Card: Landing Page - CTA Section
++
++This card represents the redesign/verification pass for the Landing Page - CTA Section feature/page in the Rivly web app.
++
++## Details
++
++- **Status:** \{{ state }}\
++- **Owner:** {{ owner }}
++- **Target Branch:** {{ branch }}
++
++## Acceptance Criteria
++
++{{ acceptance }}
++
++## Merge Gate
++
++{{ merge_gate }}
++
++## Handoff
++
++{{ handoff }}
+diff --git a/docs/superpowers/cards/landing-features.md b/docs/superpowers/cards/landing-features.md
+new file mode 100644
+index 0000000..d3d34a7
+--- /dev/null
++++ b/docs/superpowers/cards/landing-features.md
+@@ -0,0 +1,36 @@
++﻿---
++id: landing-features
++title: Landing Page - Features Section
++owner: unassigned
++state: backlog
++branch: riva/integrated-main
++acceptance:
++  - vite build passes
++  - npm test passes
++  - primary interaction verified
++  - no shared-component regression in holistic smoke pass
++merge_gate: vite build passes, npm test passes, primary interaction verified
++handoff: null
++---
++
++# Card: Landing Page - Features Section
++
++This card represents the redesign/verification pass for the Landing Page - Features Section feature/page in the Rivly web app.
++
++## Details
++
++- **Status:** \{{ state }}\
++- **Owner:** {{ owner }}
++- **Target Branch:** {{ branch }}
++
++## Acceptance Criteria
++
++{{ acceptance }}
++
++## Merge Gate
++
++{{ merge_gate }}
++
++## Handoff
++
++{{ handoff }}
+diff --git a/docs/superpowers/cards/landing-manifesto.md b/docs/superpowers/cards/landing-manifesto.md
+new file mode 100644
+index 0000000..e0ea3d8
+--- /dev/null
++++ b/docs/superpowers/cards/landing-manifesto.md
+@@ -0,0 +1,36 @@
++﻿---
++id: landing-manifesto
++title: Landing Page - Manifesto Section
++owner: unassigned
++state: backlog
++branch: riva/integrated-main
++acceptance:
++  - vite build passes
++  - npm test passes
++  - primary interaction verified
++  - no shared-component regression in holistic smoke pass
++merge_gate: vite build passes, npm test passes, primary interaction verified
++handoff: null
++---
++
++# Card: Landing Page - Manifesto Section
++
++This card represents the redesign/verification pass for the Landing Page - Manifesto Section feature/page in the Rivly web app.
++
++## Details
++
++- **Status:** \{{ state }}\
++- **Owner:** {{ owner }}
++- **Target Branch:** {{ branch }}
++
++## Acceptance Criteria
++
++{{ acceptance }}
++
++## Merge Gate
++
++{{ merge_gate }}
++
++## Handoff
++
++{{ handoff }}
+diff --git a/docs/superpowers/cards/landing-problem.md b/docs/superpowers/cards/landing-problem.md
+new file mode 100644
+index 0000000..42e8f74
+--- /dev/null
++++ b/docs/superpowers/cards/landing-problem.md
+@@ -0,0 +1,36 @@
++﻿---
++id: landing-problem
++title: Landing Page - Problem Section
++owner: unassigned
++state: backlog
++branch: riva/integrated-main
++acceptance:
++  - vite build passes
++  - npm test passes
++  - primary interaction verified
++  - no shared-component regression in holistic smoke pass
++merge_gate: vite build passes, npm test passes, primary interaction verified
++handoff: null
++---
++
++# Card: Landing Page - Problem Section
++
++This card represents the redesign/verification pass for the Landing Page - Problem Section feature/page in the Rivly web app.
++
++## Details
++
++- **Status:** \{{ state }}\
++- **Owner:** {{ owner }}
++- **Target Branch:** {{ branch }}
++
++## Acceptance Criteria
++
++{{ acceptance }}
++
++## Merge Gate
++
++{{ merge_gate }}
++
++## Handoff
++
++{{ handoff }}
+diff --git a/docs/superpowers/cards/landing-riva.md b/docs/superpowers/cards/landing-riva.md
+new file mode 100644
+index 0000000..b67db62
+--- /dev/null
++++ b/docs/superpowers/cards/landing-riva.md
+@@ -0,0 +1,36 @@
++﻿---
++id: landing-riva
++title: Landing Page - Riva Section
++owner: unassigned
++state: backlog
++branch: riva/integrated-main
++acceptance:
++  - vite build passes
++  - npm test passes
++  - primary interaction verified
++  - no shared-component regression in holistic smoke pass
++merge_gate: vite build passes, npm test passes, primary interaction verified
++handoff: null
++---
++
++# Card: Landing Page - Riva Section
++
++This card represents the redesign/verification pass for the Landing Page - Riva Section feature/page in the Rivly web app.
++
++## Details
++
++- **Status:** \{{ state }}\
++- **Owner:** {{ owner }}
++- **Target Branch:** {{ branch }}
++
++## Acceptance Criteria
++
++{{ acceptance }}
++
++## Merge Gate
++
++{{ merge_gate }}
++
++## Handoff
++
++{{ handoff }}
+diff --git a/docs/superpowers/cards/landing-whynot-promise.md b/docs/superpowers/cards/landing-whynot-promise.md
+new file mode 100644
+index 0000000..88b17fb
+--- /dev/null
++++ b/docs/superpowers/cards/landing-whynot-promise.md
+@@ -0,0 +1,36 @@
++﻿---
++id: landing-whynot-promise
++title: Landing Page - Why Not & Promise Sections
++owner: unassigned
++state: backlog
++branch: riva/integrated-main
++acceptance:
++  - vite build passes
++  - npm test passes
++  - primary interaction verified
++  - no shared-component regression in holistic smoke pass
++merge_gate: vite build passes, npm test passes, primary interaction verified
++handoff: null
++---
++
++# Card: Landing Page - Why Not & Promise Sections
++
++This card represents the redesign/verification pass for the Landing Page - Why Not & Promise Sections feature/page in the Rivly web app.
++
++## Details
++
++- **Status:** \{{ state }}\
++- **Owner:** {{ owner }}
++- **Target Branch:** {{ branch }}
++
++## Acceptance Criteria
++
++{{ acceptance }}
++
++## Merge Gate
++
++{{ merge_gate }}
++
++## Handoff
++
++{{ handoff }}
+diff --git a/docs/superpowers/cards/landing.md b/docs/superpowers/cards/landing.md
+new file mode 100644
+index 0000000..7025ad1
+--- /dev/null
++++ b/docs/superpowers/cards/landing.md
+@@ -0,0 +1,36 @@
++﻿---
++id: landing
++title: Landing Page
++owner: unassigned
++state: backlog
++branch: riva/integrated-main
++acceptance:
++  - vite build passes
++  - npm test passes
++  - primary interaction verified
++  - no shared-component regression in holistic smoke pass
++merge_gate: vite build passes, npm test passes, primary interaction verified
++handoff: null
++---
++
++# Card: Landing Page
++
++This card represents the redesign/verification pass for the Landing Page feature/page in the Rivly web app.
++
++## Details
++
++- **Status:** \{{ state }}\
++- **Owner:** {{ owner }}
++- **Target Branch:** {{ branch }}
++
++## Acceptance Criteria
++
++{{ acceptance }}
++
++## Merge Gate
++
++{{ merge_gate }}
++
++## Handoff
++
++{{ handoff }}
+diff --git a/docs/superpowers/cards/landscape.md b/docs/superpowers/cards/landscape.md
+new file mode 100644
+index 0000000..f9c0842
+--- /dev/null
++++ b/docs/superpowers/cards/landscape.md
+@@ -0,0 +1,36 @@
++﻿---
++id: landscape
++title: Landscape Page
++owner: unassigned
++state: backlog
++branch: riva/integrated-main
++acceptance:
++  - vite build passes
++  - npm test passes
++  - primary interaction verified
++  - no shared-component regression in holistic smoke pass
++merge_gate: vite build passes, npm test passes, primary interaction verified
++handoff: null
++---
++
++# Card: Landscape Page
++
++This card represents the redesign/verification pass for the Landscape Page feature/page in the Rivly web app.
++
++## Details
++
++- **Status:** \{{ state }}\
++- **Owner:** {{ owner }}
++- **Target Branch:** {{ branch }}
++
++## Acceptance Criteria
++
++{{ acceptance }}
++
++## Merge Gate
++
++{{ merge_gate }}
++
++## Handoff
++
++{{ handoff }}
+diff --git a/docs/superpowers/cards/learn.md b/docs/superpowers/cards/learn.md
+new file mode 100644
+index 0000000..b6eb1a4
+--- /dev/null
++++ b/docs/superpowers/cards/learn.md
+@@ -0,0 +1,36 @@
++﻿---
++id: learn
++title: Learn Page
++owner: unassigned
++state: backlog
++branch: riva/integrated-main
++acceptance:
++  - vite build passes
++  - npm test passes
++  - primary interaction verified
++  - no shared-component regression in holistic smoke pass
++merge_gate: vite build passes, npm test passes, primary interaction verified
++handoff: null
++---
++
++# Card: Learn Page
++
++This card represents the redesign/verification pass for the Learn Page feature/page in the Rivly web app.
++
++## Details
++
++- **Status:** \{{ state }}\
++- **Owner:** {{ owner }}
++- **Target Branch:** {{ branch }}
++
++## Acceptance Criteria
++
++{{ acceptance }}
++
++## Merge Gate
++
++{{ merge_gate }}
++
++## Handoff
++
++{{ handoff }}
+diff --git a/docs/superpowers/cards/login.md b/docs/superpowers/cards/login.md
+new file mode 100644
+index 0000000..443753c
+--- /dev/null
++++ b/docs/superpowers/cards/login.md
+@@ -0,0 +1,36 @@
++﻿---
++id: login
++title: Login Page
++owner: unassigned
++state: backlog
++branch: riva/integrated-main
++acceptance:
++  - vite build passes
++  - npm test passes
++  - primary interaction verified
++  - no shared-component regression in holistic smoke pass
++merge_gate: vite build passes, npm test passes, primary interaction verified
++handoff: null
++---
++
++# Card: Login Page
++
++This card represents the redesign/verification pass for the Login Page feature/page in the Rivly web app.
++
++## Details
++
++- **Status:** \{{ state }}\
++- **Owner:** {{ owner }}
++- **Target Branch:** {{ branch }}
++
++## Acceptance Criteria
++
++{{ acceptance }}
++
++## Merge Gate
++
++{{ merge_gate }}
++
++## Handoff
++
++{{ handoff }}
+diff --git a/docs/superpowers/cards/mobile-app.md b/docs/superpowers/cards/mobile-app.md
+new file mode 100644
+index 0000000..bc818fa
+--- /dev/null
++++ b/docs/superpowers/cards/mobile-app.md
+@@ -0,0 +1,36 @@
++﻿---
++id: mobile-app
++title: Mobile App Page
++owner: unassigned
++state: backlog
++branch: riva/integrated-main
++acceptance:
++  - vite build passes
++  - npm test passes
++  - primary interaction verified
++  - no shared-component regression in holistic smoke pass
++merge_gate: vite build passes, npm test passes, primary interaction verified
++handoff: null
++---
++
++# Card: Mobile App Page
++
++This card represents the redesign/verification pass for the Mobile App Page feature/page in the Rivly web app.
++
++## Details
++
++- **Status:** \{{ state }}\
++- **Owner:** {{ owner }}
++- **Target Branch:** {{ branch }}
++
++## Acceptance Criteria
++
++{{ acceptance }}
++
++## Merge Gate
++
++{{ merge_gate }}
++
++## Handoff
++
++{{ handoff }}
+diff --git a/docs/superpowers/cards/not-found.md b/docs/superpowers/cards/not-found.md
+new file mode 100644
+index 0000000..dfaa27f
+--- /dev/null
++++ b/docs/superpowers/cards/not-found.md
+@@ -0,0 +1,36 @@
++﻿---
++id: not-found
++title: Not Found Page
++owner: unassigned
++state: backlog
++branch: riva/integrated-main
++acceptance:
++  - vite build passes
++  - npm test passes
++  - primary interaction verified
++  - no shared-component regression in holistic smoke pass
++merge_gate: vite build passes, npm test passes, primary interaction verified
++handoff: null
++---
++
++# Card: Not Found Page
++
++This card represents the redesign/verification pass for the Not Found Page feature/page in the Rivly web app.
++
++## Details
++
++- **Status:** \{{ state }}\
++- **Owner:** {{ owner }}
++- **Target Branch:** {{ branch }}
++
++## Acceptance Criteria
++
++{{ acceptance }}
++
++## Merge Gate
++
++{{ merge_gate }}
++
++## Handoff
++
++{{ handoff }}
+diff --git a/docs/superpowers/cards/onboarding.md b/docs/superpowers/cards/onboarding.md
+new file mode 100644
+index 0000000..f146aa5
+--- /dev/null
++++ b/docs/superpowers/cards/onboarding.md
+@@ -0,0 +1,36 @@
++﻿---
++id: onboarding
++title: Onboarding Page
++owner: unassigned
++state: backlog
++branch: riva/integrated-main
++acceptance:
++  - vite build passes
++  - npm test passes
++  - primary interaction verified
++  - no shared-component regression in holistic smoke pass
++merge_gate: vite build passes, npm test passes, primary interaction verified
++handoff: null
++---
++
++# Card: Onboarding Page
++
++This card represents the redesign/verification pass for the Onboarding Page feature/page in the Rivly web app.
++
++## Details
++
++- **Status:** \{{ state }}\
++- **Owner:** {{ owner }}
++- **Target Branch:** {{ branch }}
++
++## Acceptance Criteria
++
++{{ acceptance }}
++
++## Merge Gate
++
++{{ merge_gate }}
++
++## Handoff
++
++{{ handoff }}
+diff --git a/docs/superpowers/cards/privacy-policy.md b/docs/superpowers/cards/privacy-policy.md
+new file mode 100644
+index 0000000..335e5de
+--- /dev/null
++++ b/docs/superpowers/cards/privacy-policy.md
+@@ -0,0 +1,36 @@
++﻿---
++id: privacy-policy
++title: Privacy Policy Page
++owner: unassigned
++state: backlog
++branch: riva/integrated-main
++acceptance:
++  - vite build passes
++  - npm test passes
++  - primary interaction verified
++  - no shared-component regression in holistic smoke pass
++merge_gate: vite build passes, npm test passes, primary interaction verified
++handoff: null
++---
++
++# Card: Privacy Policy Page
++
++This card represents the redesign/verification pass for the Privacy Policy Page feature/page in the Rivly web app.
++
++## Details
++
++- **Status:** \{{ state }}\
++- **Owner:** {{ owner }}
++- **Target Branch:** {{ branch }}
++
++## Acceptance Criteria
++
++{{ acceptance }}
++
++## Merge Gate
++
++{{ merge_gate }}
++
++## Handoff
++
++{{ handoff }}
+diff --git a/docs/superpowers/cards/profile.md b/docs/superpowers/cards/profile.md
+new file mode 100644
+index 0000000..a5168e8
+--- /dev/null
++++ b/docs/superpowers/cards/profile.md
+@@ -0,0 +1,36 @@
++﻿---
++id: profile
++title: Profile Page
++owner: unassigned
++state: backlog
++branch: riva/integrated-main
++acceptance:
++  - vite build passes
++  - npm test passes
++  - primary interaction verified
++  - no shared-component regression in holistic smoke pass
++merge_gate: vite build passes, npm test passes, primary interaction verified
++handoff: null
++---
++
++# Card: Profile Page
++
++This card represents the redesign/verification pass for the Profile Page feature/page in the Rivly web app.
++
++## Details
++
++- **Status:** \{{ state }}\
++- **Owner:** {{ owner }}
++- **Target Branch:** {{ branch }}
++
++## Acceptance Criteria
++
++{{ acceptance }}
++
++## Merge Gate
++
++{{ merge_gate }}
++
++## Handoff
++
++{{ handoff }}
+diff --git a/docs/superpowers/cards/reflect-and-journal.md b/docs/superpowers/cards/reflect-and-journal.md
+new file mode 100644
+index 0000000..99c975d
+--- /dev/null
++++ b/docs/superpowers/cards/reflect-and-journal.md
+@@ -0,0 +1,36 @@
++﻿---
++id: reflect-and-journal
++title: Reflect and Journal Page
++owner: unassigned
++state: backlog
++branch: riva/integrated-main
++acceptance:
++  - vite build passes
++  - npm test passes
++  - primary interaction verified
++  - no shared-component regression in holistic smoke pass
++merge_gate: vite build passes, npm test passes, primary interaction verified
++handoff: null
++---
++
++# Card: Reflect and Journal Page
++
++This card represents the redesign/verification pass for the Reflect and Journal Page feature/page in the Rivly web app.
++
++## Details
++
++- **Status:** \{{ state }}\
++- **Owner:** {{ owner }}
++- **Target Branch:** {{ branch }}
++
++## Acceptance Criteria
++
++{{ acceptance }}
++
++## Merge Gate
++
++{{ merge_gate }}
++
++## Handoff
++
++{{ handoff }}
+diff --git a/docs/superpowers/cards/reset-password.md b/docs/superpowers/cards/reset-password.md
+new file mode 100644
+index 0000000..a0d034c
+--- /dev/null
++++ b/docs/superpowers/cards/reset-password.md
+@@ -0,0 +1,36 @@
++﻿---
++id: reset-password
++title: Reset Password Page
++owner: unassigned
++state: backlog
++branch: riva/integrated-main
++acceptance:
++  - vite build passes
++  - npm test passes
++  - primary interaction verified
++  - no shared-component regression in holistic smoke pass
++merge_gate: vite build passes, npm test passes, primary interaction verified
++handoff: null
++---
++
++# Card: Reset Password Page
++
++This card represents the redesign/verification pass for the Reset Password Page feature/page in the Rivly web app.
++
++## Details
++
++- **Status:** \{{ state }}\
++- **Owner:** {{ owner }}
++- **Target Branch:** {{ branch }}
++
++## Acceptance Criteria
++
++{{ acceptance }}
++
++## Merge Gate
++
++{{ merge_gate }}
++
++## Handoff
++
++{{ handoff }}
+diff --git a/docs/superpowers/cards/settings.md b/docs/superpowers/cards/settings.md
+new file mode 100644
+index 0000000..1c18eef
+--- /dev/null
++++ b/docs/superpowers/cards/settings.md
+@@ -0,0 +1,36 @@
++﻿---
++id: settings
++title: Settings Page
++owner: unassigned
++state: backlog
++branch: riva/integrated-main
++acceptance:
++  - vite build passes
++  - npm test passes
++  - primary interaction verified
++  - no shared-component regression in holistic smoke pass
++merge_gate: vite build passes, npm test passes, primary interaction verified
++handoff: null
++---
++
++# Card: Settings Page
++
++This card represents the redesign/verification pass for the Settings Page feature/page in the Rivly web app.
++
++## Details
++
++- **Status:** \{{ state }}\
++- **Owner:** {{ owner }}
++- **Target Branch:** {{ branch }}
++
++## Acceptance Criteria
++
++{{ acceptance }}
++
++## Merge Gate
++
++{{ merge_gate }}
++
++## Handoff
++
++{{ handoff }}
+diff --git a/docs/superpowers/cards/signup.md b/docs/superpowers/cards/signup.md
+new file mode 100644
+index 0000000..bec33ce
+--- /dev/null
++++ b/docs/superpowers/cards/signup.md
+@@ -0,0 +1,36 @@
++﻿---
++id: signup
++title: Signup Page
++owner: unassigned
++state: backlog
++branch: riva/integrated-main
++acceptance:
++  - vite build passes
++  - npm test passes
++  - primary interaction verified
++  - no shared-component regression in holistic smoke pass
++merge_gate: vite build passes, npm test passes, primary interaction verified
++handoff: null
++---
++
++# Card: Signup Page
++
++This card represents the redesign/verification pass for the Signup Page feature/page in the Rivly web app.
++
++## Details
++
++- **Status:** \{{ state }}\
++- **Owner:** {{ owner }}
++- **Target Branch:** {{ branch }}
++
++## Acceptance Criteria
++
++{{ acceptance }}
++
++## Merge Gate
++
++{{ merge_gate }}
++
++## Handoff
++
++{{ handoff }}
+diff --git a/docs/superpowers/cards/sleep.md b/docs/superpowers/cards/sleep.md
+new file mode 100644
+index 0000000..18238b0
+--- /dev/null
++++ b/docs/superpowers/cards/sleep.md
+@@ -0,0 +1,36 @@
++﻿---
++id: sleep
++title: Sleep Page
++owner: unassigned
++state: backlog
++branch: riva/integrated-main
++acceptance:
++  - vite build passes
++  - npm test passes
++  - primary interaction verified
++  - no shared-component regression in holistic smoke pass
++merge_gate: vite build passes, npm test passes, primary interaction verified
++handoff: null
++---
++
++# Card: Sleep Page
++
++This card represents the redesign/verification pass for the Sleep Page feature/page in the Rivly web app.
++
++## Details
++
++- **Status:** \{{ state }}\
++- **Owner:** {{ owner }}
++- **Target Branch:** {{ branch }}
++
++## Acceptance Criteria
++
++{{ acceptance }}
++
++## Merge Gate
++
++{{ merge_gate }}
++
++## Handoff
++
++{{ handoff }}
+diff --git a/docs/superpowers/cards/study-together.md b/docs/superpowers/cards/study-together.md
+new file mode 100644
+index 0000000..21f7bfc
+--- /dev/null
++++ b/docs/superpowers/cards/study-together.md
+@@ -0,0 +1,36 @@
++﻿---
++id: study-together
++title: Study Together Page
++owner: unassigned
++state: backlog
++branch: riva/integrated-main
++acceptance:
++  - vite build passes
++  - npm test passes
++  - primary interaction verified
++  - no shared-component regression in holistic smoke pass
++merge_gate: vite build passes, npm test passes, primary interaction verified
++handoff: null
++---
++
++# Card: Study Together Page
++
++This card represents the redesign/verification pass for the Study Together Page feature/page in the Rivly web app.
++
++## Details
++
++- **Status:** \{{ state }}\
++- **Owner:** {{ owner }}
++- **Target Branch:** {{ branch }}
++
++## Acceptance Criteria
++
++{{ acceptance }}
++
++## Merge Gate
++
++{{ merge_gate }}
++
++## Handoff
++
++{{ handoff }}
+diff --git a/docs/superpowers/cards/terms-of-service.md b/docs/superpowers/cards/terms-of-service.md
+new file mode 100644
+index 0000000..e8e1e10
+--- /dev/null
++++ b/docs/superpowers/cards/terms-of-service.md
+@@ -0,0 +1,36 @@
++﻿---
++id: terms-of-service
++title: Terms of Service Page
++owner: unassigned
++state: backlog
++branch: riva/integrated-main
++acceptance:
++  - vite build passes
++  - npm test passes
++  - primary interaction verified
++  - no shared-component regression in holistic smoke pass
++merge_gate: vite build passes, npm test passes, primary interaction verified
++handoff: null
++---
++
++# Card: Terms of Service Page
++
++This card represents the redesign/verification pass for the Terms of Service Page feature/page in the Rivly web app.
++
++## Details
++
++- **Status:** \{{ state }}\
++- **Owner:** {{ owner }}
++- **Target Branch:** {{ branch }}
++
++## Acceptance Criteria
++
++{{ acceptance }}
++
++## Merge Gate
++
++{{ merge_gate }}
++
++## Handoff
++
++{{ handoff }}

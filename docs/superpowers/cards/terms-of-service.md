@@ -1,4 +1,4 @@
-﻿---
+---
 id: terms-of-service
 title: Terms of Service Page
 owner: unassigned
@@ -9,7 +9,7 @@ acceptance:
   - npm test passes
   - primary interaction verified
   - no shared-component regression in holistic smoke pass
-merge_gate: riva/integrated-main local-only (no push); no .env/secrets access; <=2 concurrent builds
+merge_gate: work stays inside F:\Personal Assistant\rivly-assistant-worktrees\integrated-main or fresh worktrees branched from it (never rivly-assistant's own checkout, F:\skipwise, or F:\Personal Assistant\app); <=2 concurrent builds; riva/integrated-main stays local (no push); no .env/secrets access
 handoff: null
 ---
 
