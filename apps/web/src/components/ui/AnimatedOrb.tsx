@@ -22,7 +22,7 @@ export function AnimatedOrb({ size = 'lg', variant = 'idle', className = '' }: A
     <div className={`relative ${sizeClasses[size]} ${className}`}>
       {/* Outer glow rings */}
       <motion.div
-        className="absolute inset-0 rounded-full bg-primary/5"
+        className="absolute inset-0 rounded-full bg-[hsl(var(--success)/0.05)]"
         animate={{
           scale: isActive ? [1, 1.3, 1] : isCalm ? [1, 1.15, 1] : [1, 1.2, 1],
           opacity: isActive ? [0.3, 0.1, 0.3] : [0.2, 0.08, 0.2],
@@ -35,7 +35,7 @@ export function AnimatedOrb({ size = 'lg', variant = 'idle', className = '' }: A
       />
       
       <motion.div
-        className="absolute inset-2 rounded-full bg-primary/8"
+        className="absolute inset-2 rounded-full bg-[hsl(var(--success)/0.08)]"
         animate={{
           scale: isActive ? [1, 1.2, 1] : isCalm ? [1, 1.1, 1] : [1, 1.15, 1],
           opacity: isActive ? [0.4, 0.15, 0.4] : [0.25, 0.1, 0.25],
@@ -52,10 +52,10 @@ export function AnimatedOrb({ size = 'lg', variant = 'idle', className = '' }: A
       <motion.div
         className="absolute inset-4 rounded-full overflow-hidden"
         style={{
-          background: isComplete 
-            ? 'radial-gradient(circle at 30% 30%, hsl(var(--primary) / 0.4) 0%, hsl(var(--primary) / 0.2) 50%, hsl(var(--primary) / 0.1) 100%)'
-            : 'radial-gradient(circle at 30% 30%, hsl(var(--primary) / 0.25) 0%, hsl(var(--primary) / 0.12) 50%, hsl(var(--primary) / 0.05) 100%)',
-          boxShadow: 'inset 0 0 40px -10px hsl(var(--primary) / 0.2)',
+          background: isComplete
+            ? 'radial-gradient(circle at 30% 30%, hsl(var(--success) / 0.4) 0%, hsl(var(--success) / 0.2) 50%, hsl(var(--success) / 0.1) 100%)'
+            : 'radial-gradient(circle at 30% 30%, hsl(var(--success) / 0.25) 0%, hsl(var(--success) / 0.12) 50%, hsl(var(--success) / 0.05) 100%)',
+          boxShadow: 'inset 0 0 40px -10px hsl(var(--success) / 0.2)',
         }}
         animate={{
           scale: isActive ? [1, 1.05, 1] : isCalm ? [1, 1.02, 1] : [1, 1.03, 1],
@@ -68,7 +68,7 @@ export function AnimatedOrb({ size = 'lg', variant = 'idle', className = '' }: A
       >
         {/* Inner highlight */}
         <motion.div
-          className="absolute top-4 left-4 w-1/3 h-1/3 rounded-full bg-primary/15 blur-sm"
+          className="absolute top-4 left-4 w-1/3 h-1/3 rounded-full bg-[hsl(var(--success)/0.15)] blur-sm"
           animate={{
             opacity: [0.4, 0.7, 0.4],
             scale: [1, 1.1, 1],
@@ -95,7 +95,7 @@ export function AnimatedOrb({ size = 'lg', variant = 'idle', className = '' }: A
           <div 
             className="w-1/2 h-1/2 rounded-full"
             style={{
-              background: 'radial-gradient(circle, hsl(var(--primary) / 0.3) 0%, transparent 70%)',
+              background: 'radial-gradient(circle, hsl(var(--success) / 0.3) 0%, transparent 70%)',
             }}
           />
         </motion.div>
@@ -107,7 +107,7 @@ export function AnimatedOrb({ size = 'lg', variant = 'idle', className = '' }: A
           {[...Array(6)].map((_, i) => (
             <motion.div
               key={i}
-              className="absolute w-1.5 h-1.5 rounded-full bg-primary/40"
+              className="absolute w-1.5 h-1.5 rounded-full bg-[hsl(var(--success)/0.4)]"
               style={{
                 top: '50%',
                 left: '50%',
@@ -143,7 +143,7 @@ export function AnimatedOrb({ size = 'lg', variant = 'idle', className = '' }: A
             ease: 'easeOut',
           }}
           style={{
-            background: 'radial-gradient(circle, hsl(var(--primary) / 0.3) 0%, transparent 70%)',
+            background: 'radial-gradient(circle, hsl(var(--success) / 0.3) 0%, transparent 70%)',
           }}
         />
       )}

@@ -86,7 +86,7 @@ function WheelColumn({ items, value, onChange, label }: WheelColumnProps) {
         style={{ 
           height: PICKER_HEIGHT,
           width: 80,
-          background: 'linear-gradient(180deg, hsl(var(--secondary) / 0.5) 0%, hsl(var(--secondary) / 0.8) 50%, hsl(var(--secondary) / 0.5) 100%)',
+          background: 'linear-gradient(180deg, hsl(var(--muted) / 0.5) 0%, hsl(var(--muted) / 0.8) 50%, hsl(var(--muted) / 0.5) 100%)',
         }}
       >
         {/* Fade overlays */}

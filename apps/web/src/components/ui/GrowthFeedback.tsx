@@ -65,7 +65,7 @@ export function GrowthFeedback({ show, message, onComplete }: GrowthFeedbackProp
               <motion.div
                 className="absolute inset-0 rounded-full"
                 style={{
-                  background: 'radial-gradient(circle, hsl(var(--secondary) / 0.4) 0%, transparent 70%)',
+                  background: 'radial-gradient(circle, hsl(var(--success) / 0.4) 0%, transparent 70%)',
                 }}
                 animate={{
                   scale: [1, 1.3, 1.2],
@@ -81,7 +81,7 @@ export function GrowthFeedback({ show, message, onComplete }: GrowthFeedbackProp
               <motion.div
                 className="absolute inset-3 rounded-full"
                 style={{
-                  background: 'radial-gradient(circle at 40% 40%, hsl(var(--secondary) / 0.6) 0%, hsl(var(--primary) / 0.3) 70%)',
+                  background: 'radial-gradient(circle at 40% 40%, hsl(var(--success) / 0.6) 0%, hsl(var(--warning) / 0.3) 70%)',
                 }}
                 initial={{ scale: 0.5, opacity: 0 }}
                 animate={{ scale: 1, opacity: 1 }}
@@ -92,7 +92,7 @@ export function GrowthFeedback({ show, message, onComplete }: GrowthFeedbackProp
               {[...Array(5)].map((_, i) => (
                 <motion.div
                   key={i}
-                  className="absolute w-1 h-1 rounded-full bg-secondary"
+                  className="absolute w-1 h-1 rounded-full bg-[hsl(var(--warning))]"
                   style={{
                     top: '50%',
                     left: '50%',

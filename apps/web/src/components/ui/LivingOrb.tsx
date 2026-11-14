@@ -56,7 +56,7 @@ export function LivingOrb({ state = 'idle', onInteraction, className = '' }: Liv
       <motion.div
         className="absolute inset-0 rounded-full"
         style={{
-          background: `radial-gradient(circle, hsl(var(--primary) / ${getGlowIntensity() * 0.3}) 0%, transparent 70%)`,
+          background: `radial-gradient(circle, hsl(var(--success) / ${getGlowIntensity() * 0.3}) 0%, transparent 70%)`,
         }}
         animate={{
           scale: state === 'overwhelmed' ? [1, 1.08, 1] : [1, 1.15, 1],
@@ -73,7 +73,7 @@ export function LivingOrb({ state = 'idle', onInteraction, className = '' }: Liv
       <motion.div
         className="absolute inset-2 rounded-full"
         style={{
-          background: `radial-gradient(circle, hsl(var(--primary) / ${getGlowIntensity() * 0.5}) 0%, transparent 60%)`,
+          background: `radial-gradient(circle, hsl(var(--success) / ${getGlowIntensity() * 0.5}) 0%, transparent 60%)`,
         }}
         animate={{
           scale: state === 'overwhelmed' ? [1, 1.05, 1] : [1, 1.1, 1],
@@ -91,12 +91,12 @@ export function LivingOrb({ state = 'idle', onInteraction, className = '' }: Liv
       <motion.div
         className="absolute inset-4 rounded-full overflow-hidden"
         style={{
-          background: `radial-gradient(circle at 35% 35%, 
-            hsl(var(--primary) / ${getGlowIntensity()}) 0%, 
-            hsl(var(--primary) / ${getGlowIntensity() * 0.5}) 40%, 
-            hsl(var(--secondary) / ${getGlowIntensity() * 0.3}) 70%, 
-            hsl(var(--primary) / ${getGlowIntensity() * 0.15}) 100%)`,
-          boxShadow: `inset 0 0 30px -5px hsl(var(--primary) / ${getGlowIntensity() * 0.5})`,
+          background: `radial-gradient(circle at 35% 35%,
+            hsl(var(--success) / ${getGlowIntensity()}) 0%,
+            hsl(var(--success) / ${getGlowIntensity() * 0.5}) 40%,
+            hsl(var(--success) / ${getGlowIntensity() * 0.3}) 70%,
+            hsl(var(--success) / ${getGlowIntensity() * 0.15}) 100%)`,
+          boxShadow: `inset 0 0 30px -5px hsl(var(--success) / ${getGlowIntensity() * 0.5})`,
         }}
         animate={{
           scale: state === 'overwhelmed' ? [1, 1.01, 1] : [1, 1.03, 1],
@@ -130,7 +130,7 @@ export function LivingOrb({ state = 'idle', onInteraction, className = '' }: Liv
           <motion.div
             className="w-1/2 h-1/2 rounded-full"
             style={{
-              background: `radial-gradient(circle, hsl(var(--primary) / ${getGlowIntensity() * 0.8}) 0%, transparent 60%)`,
+              background: `radial-gradient(circle, hsl(var(--success) / ${getGlowIntensity() * 0.8}) 0%, transparent 60%)`,
             }}
             animate={{
               opacity: state === 'active' ? [0.6, 0.9, 0.6] : [0.4, 0.7, 0.4],
@@ -151,7 +151,7 @@ export function LivingOrb({ state = 'idle', onInteraction, className = '' }: Liv
           <motion.div
             className="absolute inset-4 rounded-full"
             style={{
-              border: '2px solid hsl(var(--primary) / 0.4)',
+              border: '2px solid hsl(var(--success) / 0.4)',
             }}
             initial={{ scale: 1, opacity: 0.6 }}
             animate={{ scale: 1.8, opacity: 0 }}
@@ -170,7 +170,7 @@ export function LivingOrb({ state = 'idle', onInteraction, className = '' }: Liv
                 key={i}
                 className="absolute inset-0 rounded-full"
                 style={{
-                  background: `radial-gradient(circle, hsl(var(--secondary) / 0.3) 0%, transparent 60%)`,
+                  background: `radial-gradient(circle, hsl(var(--warning) / 0.3) 0%, transparent 60%)`,
                 }}
                 initial={{ scale: 1, opacity: 0.6 }}
                 animate={{ scale: 2 + i * 0.3, opacity: 0 }}
@@ -186,7 +186,7 @@ export function LivingOrb({ state = 'idle', onInteraction, className = '' }: Liv
             {[...Array(6)].map((_, i) => (
               <motion.div
                 key={`sparkle-${i}`}
-                className="absolute w-1.5 h-1.5 rounded-full bg-secondary"
+                className="absolute w-1.5 h-1.5 rounded-full bg-[hsl(var(--warning))]"
                 style={{
                   top: '50%',
                   left: '50%',
@@ -215,7 +215,7 @@ export function LivingOrb({ state = 'idle', onInteraction, className = '' }: Liv
           {[...Array(4)].map((_, i) => (
             <motion.div
               key={i}
-              className="absolute w-1 h-1 rounded-full bg-primary/30"
+              className="absolute w-1 h-1 rounded-full bg-[hsl(var(--success)/0.3)]"
               style={{
                 top: '50%',
                 left: '50%',
