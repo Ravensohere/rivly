@@ -1,4 +1,4 @@
-import { useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { AnimatePresence, motion } from 'framer-motion';
 import { Loader2 } from 'lucide-react';
 import { RivaAvatar, type RivaAvatarState } from '@/components/riva/RivaAvatar';
@@ -78,12 +78,27 @@ export function DayPlannerAvatar({ size = 'md', className = '' }: DayPlannerAvat
     setAudioLevel(0);
   }
 
+  // Ported verbatim from RhythmOrb.tsx: react to the *shared* isListening flag (not just this
+  // component's own pointer handlers) so mic-level tracking starts/stops for ANY source that
+  // flips listening state (e.g. RivaCommandBar's independent mic toggle), and so the cleanup
+  // unconditionally tears down the mic/AudioContext on unmount even if listening never stopped
+  // via pointerup/pointerleave (e.g. navigating away mid-hold via AnimatePresence).
+  useEffect(() => {
+    if (isListening) {
+      startAudioTracking();
+    } else {
+      stopAudioTracking();
+    }
+    return () => {
+      stopAudioTracking();
+    };
+  }, [isListening]);
+
   const handlePointerDown = () => {
     pointerDownTime.current = Date.now();
     pointerDownTimerRef.current = setTimeout(() => {
       if (!isListening) {
         startListening();
-        startAudioTracking();
         setShowTooltip(true);
         setTimeout(() => setShowTooltip(false), 2000);
       }
@@ -99,13 +114,11 @@ export function DayPlannerAvatar({ size = 'md', className = '' }: DayPlannerAvat
     if (holdDuration > 500) {
       if (isListening) {
         stopListening();
-        stopAudioTracking();
       }
     } else {
       setIsCommandBarOpen(true);
       if (isListening) {
         stopListening();
-        stopAudioTracking();
       }
     }
     pointerDownTime.current = 0;
@@ -120,7 +133,6 @@ export function DayPlannerAvatar({ size = 'md', className = '' }: DayPlannerAvat
       const holdDuration = Date.now() - pointerDownTime.current;
       if (holdDuration > 500) {
         stopListening();
-        stopAudioTracking();
       }
       pointerDownTime.current = 0;
     }

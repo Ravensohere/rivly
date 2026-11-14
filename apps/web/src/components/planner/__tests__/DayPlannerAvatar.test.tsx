@@ -1,5 +1,5 @@
 import { render, fireEvent, act } from '@testing-library/react';
-import { it, expect, vi, beforeEach } from 'vitest';
+import { it, expect, vi, beforeEach, describe } from 'vitest';
 import { DayPlannerAvatar } from '../DayPlannerAvatar';
 
 const rivaState = {
@@ -34,6 +34,14 @@ beforeEach(() => {
   orbState.currentState = 'neutral';
   orbState.dayColors = [];
   vi.useRealTimers();
+  // Default stub so tests that merely set isListening=true (without caring about audio
+  // tracking) don't trip the mic-tracking effect's real getUserMedia lookup and spam
+  // console.error; the never-resolving promise means startAudioTracking just stays pending.
+  // The dedicated describe block below overrides this with real resolving/rejecting mocks.
+  Object.defineProperty(window.navigator, 'mediaDevices', {
+    value: { getUserMedia: vi.fn(() => new Promise(() => {})) },
+    configurable: true,
+  });
 });
 
 it('opens the command bar on a quick tap (under 500ms)', () => {
@@ -81,4 +89,68 @@ it('passes dayColors as moodColor when present', () => {
   const { container } = render(<DayPlannerAvatar size="md" />);
   const eye = container.querySelectorAll('[style*="border-radius"]')[1] as HTMLElement;
   expect(eye.style.background).not.toBe('rgb(255, 255, 255)');
+});
+
+describe('mic-level audio tracking (reacts to shared isListening, not just own pointer handlers)', () => {
+  const mockTrackStop = vi.fn();
+  const mockStream = { getTracks: () => [{ stop: mockTrackStop }] };
+  const mockClose = vi.fn().mockResolvedValue(undefined);
+  const mockAnalyser = {
+    fftSize: 256,
+    frequencyBinCount: 32,
+    connect: vi.fn(),
+    getByteFrequencyData: vi.fn(),
+  };
+  const mockAudioContextInstance = {
+    createAnalyser: () => mockAnalyser,
+    createMediaStreamSource: () => ({ connect: vi.fn() }),
+    close: mockClose,
+  };
+  const getUserMedia = vi.fn().mockResolvedValue(mockStream);
+
+  beforeEach(() => {
+    mockTrackStop.mockClear();
+    mockClose.mockClear();
+    getUserMedia.mockClear();
+    Object.defineProperty(window.navigator, 'mediaDevices', {
+      value: { getUserMedia },
+      configurable: true,
+    });
+    vi.stubGlobal(
+      'AudioContext',
+      vi.fn(function MockAudioContext() {
+        return mockAudioContextInstance;
+      })
+    );
+  });
+
+  it('starts audio tracking when isListening becomes true via a source other than this component\'s own pointer handlers (e.g. RivaCommandBar\'s toggle)', async () => {
+    const { rerender } = render(<DayPlannerAvatar size="md" />);
+    expect(getUserMedia).not.toHaveBeenCalled();
+
+    // Simulate the shared useRiva() context flipping isListening to true from elsewhere
+    // (e.g. RivaCommandBar's independent mic toggle) — not via this component's pointer events.
+    rivaState.isListening = true;
+    await act(async () => {
+      rerender(<DayPlannerAvatar size="md" />);
+      await Promise.resolve();
+    });
+
+    expect(getUserMedia).toHaveBeenCalledTimes(1);
+  });
+
+  it('stops tracking (MediaStreamTrack.stop + AudioContext.close) on unmount while isListening is true', async () => {
+    rivaState.isListening = true;
+    const { unmount } = render(<DayPlannerAvatar size="md" />);
+
+    await act(async () => {
+      await Promise.resolve();
+    });
+    expect(getUserMedia).toHaveBeenCalledTimes(1);
+
+    unmount();
+
+    expect(mockTrackStop).toHaveBeenCalledTimes(1);
+    expect(mockClose).toHaveBeenCalledTimes(1);
+  });
 });
