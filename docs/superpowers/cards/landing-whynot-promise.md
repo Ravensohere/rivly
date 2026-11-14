@@ -200,5 +200,3 @@ restyle.
 - One fix made after looking at the screenshot: the ledger's description column
   did not align across rows (titles vary in width), so the title span got
   `md:min-w-[185px]`. Re-verified after the fix.
-</content>
-</invoke>

@@ -347,3 +347,22 @@ will have had). Worth settling repo-wide rather than per-card.
    left in place to preserve the call signature. The navbar also links to a
    `#family` anchor that does not exist anywhere on the page — pre-existing,
    unrelated to this card, worth its own card.
+
+---
+
+## 9. Post-review fix
+
+Review finding (Important): `docs/superpowers/cards/landing-whynot-promise.md`
+ended with two lines of stray tool-call scaffolding (`</content>` / `</invoke>`)
+that were committed by accident in `d5d4641` — leftover from writing the card
+through a heredoc. Since this card is the template later cards are shown, the
+junk had to go.
+
+Fixed: the two trailing lines deleted, everything above them untouched (the file
+now ends on the real last line of the PASS 3 verification record). Verified by
+re-grepping `</content>|</invoke>|<invoke name=` across **all** of
+`docs/superpowers/cards/` plus this report, `LandingPage.tsx` and the test file —
+no hits, so no other card picked up the same artifact.
+
+The other review finding (design and product-fit run solo rather than as two
+dispatched agents) was ruled on by the controller: solo stands, no action.
