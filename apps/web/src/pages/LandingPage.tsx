@@ -743,28 +743,28 @@ function LandscapeSVG() {
     <svg viewBox="0 0 480 280" fill="none" style={{ width: '100%', height: '100%' }}>
       <defs>
         <linearGradient id="lSky" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stopColor="#EEF2FF" /><stop offset="100%" stopColor="#F2EDE5" /></linearGradient>
-        <linearGradient id="lG1"  x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stopColor={T.indigo} stopOpacity=".2" /><stop offset="100%" stopColor={T.indigo} stopOpacity="0" /></linearGradient>
-        <linearGradient id="lG2"  x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stopColor={T.indigoL} stopOpacity=".12"  /><stop offset="100%" stopColor={T.indigoL} stopOpacity="0" /></linearGradient>
+        <linearGradient id="lG1"  x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stopColor={T.sage} stopOpacity=".2" /><stop offset="100%" stopColor={T.sage} stopOpacity="0" /></linearGradient>
+        <linearGradient id="lG2"  x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stopColor={T.sage} stopOpacity=".12"  /><stop offset="100%" stopColor={T.sage} stopOpacity="0" /></linearGradient>
       </defs>
       <rect width="480" height="280" fill="url(#lSky)" rx="20" />
       <path d="M0 180 Q80 130 160 158 Q240 108 320 148 Q400 118 480 136 L480 280 L0 280Z" fill="url(#lG1)" />
       <path d="M0 215 Q120 182 240 205 Q360 168 480 190 L480 280 L0 280Z" fill="url(#lG2)" />
       {/* Trees */}
       {[50, 140, 250, 370, 440].map((x, i) => (
-        <g key={i} stroke={T.indigo} strokeWidth="1.4" opacity={0.2 + i * 0.1}>
+        <g key={i} stroke={T.sage} strokeWidth="1.4" opacity={0.2 + i * 0.1}>
           <line x1={x} y1={172 - i * 4} x2={x} y2={155 - i * 4} />
-          <path d={`M${x-9} ${164-i*4} Q${x} ${150-i*4} ${x+9} ${164-i*4}`} fill={`${T.indigo}22`} />
+          <path d={`M${x-9} ${164-i*4} Q${x} ${150-i*4} ${x+9} ${164-i*4}`} fill={`${T.sage}22`} />
         </g>
       ))}
       {/* Focus seeds */}
       {[[120, 100], [280, 80], [380, 110]].map(([cx, cy], i) => (
         <g key={i}>
-          <circle cx={cx} cy={cy} r="6" fill={T.indigo} opacity="0.2" />
-          <circle cx={cx} cy={cy} r="3" fill={T.indigo} opacity="0.5" />
+          <circle cx={cx} cy={cy} r="6" fill={T.sage} opacity="0.2" />
+          <circle cx={cx} cy={cy} r="3" fill={T.sage} opacity="0.5" />
         </g>
       ))}
-      <circle cx="420" cy="42" r="22" fill="none" stroke={T.indigoXL} strokeWidth="1" opacity="0.45" />
-      <circle cx="420" cy="42" r="14" fill={`${T.indigoSub}88`} />
+      <circle cx="420" cy="42" r="22" fill="none" stroke={T.sage} strokeWidth="1" opacity="0.45" />
+      <circle cx="420" cy="42" r="14" fill={`${T.sage}88`} />
       <text x="240" y="260" textAnchor="middle" fontFamily="DM Mono" fontSize="7.5" fill={T.muted} letterSpacing="2" opacity="0.6">YOUR LANDSCAPE GROWS WITH YOU</text>
     </svg>
   );
@@ -861,15 +861,15 @@ function OverwhelmSVG() {
         <rect key={i} x={x} y={20 + i * 12} width={60 + i * 8} height={16} rx="8" fill="white" opacity="0.04" />
       ))}
       {/* Central calm zone */}
-      <circle cx="240" cy="140" r="80" fill={`${T.indigo}20`} stroke={T.indigoL} strokeWidth="1" opacity="0.5" />
-      <circle cx="240" cy="140" r="52" fill={`${T.indigo}30`} />
+      <circle cx="240" cy="140" r="80" fill={`${T.amber}20`} stroke={T.amber} strokeWidth="1" opacity="0.5" />
+      <circle cx="240" cy="140" r="52" fill={`${T.amber}30`} />
       {/* Panic button */}
-      <rect x="196" y="118" width="88" height="44" rx="22" fill={T.indigo} />
+      <rect x="196" y="118" width="88" height="44" rx="22" fill={T.amber} />
       <text x="240" y="145" textAnchor="middle" fontFamily="DM Mono" fontSize="9" fill="white" letterSpacing="1.5">ONE STEP</text>
       {/* Rays */}
       {Array.from({ length: 8 }, (_, i) => {
         const a = (i * 45) * Math.PI / 180;
-        return <line key={i} x1={240 + 88 * Math.cos(a)} y1={140 + 88 * Math.sin(a)} x2={240 + 108 * Math.cos(a)} y2={140 + 108 * Math.sin(a)} stroke={T.indigoXL} strokeWidth="1" opacity="0.3" />;
+        return <line key={i} x1={240 + 88 * Math.cos(a)} y1={140 + 88 * Math.sin(a)} x2={240 + 108 * Math.cos(a)} y2={140 + 108 * Math.sin(a)} stroke={T.amber} strokeWidth="1" opacity="0.3" />;
       })}
       <text x="240" y="264" textAnchor="middle" fontFamily="DM Mono" fontSize="7.5" fill={T.muted} letterSpacing="2">OVERWHELM MODE · JUST ONE STEP</text>
     </svg>
@@ -888,10 +888,10 @@ function WindDownSVG() {
       <path d="M380 48 A28 28 0 1 1 380 104 A18 18 0 1 0 380 48Z" fill="white" opacity="0.85" />
       {/* Concentric rings */}
       {[3, 5, 7].map((i) => (
-        <circle key={i} cx="240" cy="148" r={i * 28} fill="none" stroke={T.indigoXL} strokeWidth="0.6" opacity={0.35 - i * 0.04} />
+        <circle key={i} cx="240" cy="148" r={i * 28} fill="none" stroke={T.sage} strokeWidth="0.6" opacity={0.35 - i * 0.04} />
       ))}
-      <circle cx="240" cy="148" r="22" fill={`${T.indigo}60`} stroke={T.indigoL} strokeWidth="1.2" />
-      <path d="M233 148 L245 141 L245 155 Z" fill={T.indigoXL} opacity="0.9" />
+      <circle cx="240" cy="148" r="22" fill={`${T.sage}60`} stroke={T.sage} strokeWidth="1.2" />
+      <path d="M233 148 L245 141 L245 155 Z" fill={T.sage} opacity="0.9" />
       <text x="240" y="240" textAnchor="middle" fontFamily="DM Mono" fontSize="8" fill={T.muted} letterSpacing="2.5">DAY COMPLETE · REST NOW</text>
     </svg>
   );
@@ -939,7 +939,7 @@ function FamilyCareSVG() {
       <text x="374" y="145" textAnchor="middle" fontFamily="DM Sans" fontSize="13" fill="white">Maa: DONE</text>
       <rect x="46" y="172" width="248" height="40" rx="12" fill="rgba(92,122,91,0.28)" />
       <text x="60" y="196" fontFamily="DM Sans" fontSize="11" fill="white">Riva: Perfect. Stay well today.</text>
-      <text x="240" y="246" textAnchor="middle" fontFamily="DM Mono" fontSize="8" fill={T.indigoXL} letterSpacing="2">FAMILY CARE · PEACE OF MIND</text>
+      <text x="240" y="246" textAnchor="middle" fontFamily="DM Mono" fontSize="8" fill={T.sage} letterSpacing="2">FAMILY CARE · PEACE OF MIND</text>
     </svg>
   );
 }
