@@ -560,10 +560,15 @@ function MarqueeStrip() {
    PROBLEM SECTION  —  Chapter 1
    The relatable hook before the solution
 ───────────────────────────────────────────────────── */
+/* The third row is deliberately not a number: nobody surveys "AI companions
+   that know your 2am", and an em dash is the table convention for no data — a
+   fabricated 0 spends the other two figures' credibility on a sales line.
+   shortcut: provenance is stated row-level below the grid, not per figure;
+   give each figure its own citation once the exact surveys are confirmed. */
 const PAIN_POINTS = [
   { n: '77%',  l: 'of workers', d: 'experience burnout at their current job', accent: '#C47A1A' },
   { n: '1 in 3', l: 'Indians',  d: 'say they have nobody to talk to when things get hard', accent: T.indigo },
-  { n: '0',    l: 'AI companions',  d: 'that know your name, your family, and your 2am', accent: T.sage },
+  { n: '—',    l: 'no data',  d: 'Nobody measures whether your tools notice you at 2am. That\'s the gap.', accent: T.muted, unmeasured: true },
 ];
 
 function ProblemSection({ onChapter }: { onChapter: (n: number) => void }) {
@@ -581,7 +586,8 @@ function ProblemSection({ onChapter }: { onChapter: (n: number) => void }) {
           {['You\'re not lazy.', 'You\'re not undisciplined.', 'You\'re running on empty.'].map((line, i) => (
             <div key={i} style={{ overflow: 'hidden', marginBottom: 8 }}>
               <motion.div className="rv-display"
-                style={{ fontWeight: i === 2 ? 400 : 300, fontStyle: i === 2 ? 'italic' : 'normal', fontSize: 'clamp(2.4rem,5.5vw,6.5rem)', letterSpacing: '-0.022em', lineHeight: 1.0, color: i === 2 ? T.indigo : i === 1 ? T.muted : T.ink }}
+                /* 1.0 clipped Playfair's descenders against the reveal mask. */
+                style={{ fontWeight: i === 2 ? 400 : 300, fontStyle: i === 2 ? 'italic' : 'normal', fontSize: 'clamp(2.4rem,5.5vw,6.5rem)', letterSpacing: '-0.022em', lineHeight: 1.14, color: i === 2 ? T.indigo : i === 1 ? T.muted : T.ink }}
                 initial={{ y: '105%', opacity: 0 }} whileInView={{ y: '0%', opacity: 1 }} viewport={{ once: true }}
                 transition={{ duration: 1.2, ease: E, delay: i * 0.14 }}>
                 {line}
@@ -590,24 +596,31 @@ function ProblemSection({ onChapter }: { onChapter: (n: number) => void }) {
           ))}
         </div>
 
-        {/* Stats */}
+        {/* Evidence — ruled columns on the page ground, not filled tiles */}
         <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', gap: 1, background: T.border }}>
           {PAIN_POINTS.map((p, i) => (
             <motion.div key={i}
-              style={{ background: T.surface, padding: '40px 36px' }}
+              style={{ background: T.bg, padding: '40px 36px' }}
               initial={{ opacity: 0, y: 32 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }}
               transition={{ duration: 0.7, delay: i * 0.12, ease: E }}>
-              <div style={{ fontWeight: 500, fontSize: 'clamp(3rem,5vw,5.5rem)', color: p.accent, letterSpacing: '-0.02em', lineHeight: 1, marginBottom: 12, fontFamily: "'Roboto', serif" }}>{p.n}</div>
-              <div style={{ fontSize: 9, letterSpacing: '.18em', textTransform: 'uppercase', color: T.muted, marginBottom: 8, fontFamily: "'Roboto', sans-serif", fontWeight: 500 }}>{p.l}</div>
-              <div style={{ fontSize: '0.85rem', color: T.muted, lineHeight: 1.75, fontWeight: 400, fontFamily: "'Roboto', sans-serif" }}>{p.d}</div>
+              {/* The dash carries no meaning aloud; the visible label does. */}
+              <div className="rv-display" aria-hidden={p.unmeasured || undefined}
+                style={{ fontWeight: 500, fontSize: 'clamp(3rem,5vw,5.5rem)', color: p.accent, letterSpacing: '-0.02em', lineHeight: 1, marginBottom: 12, opacity: p.unmeasured ? 0.55 : 1 }}>{p.n}</div>
+              <div className="rv-mono" style={{ fontSize: 9, letterSpacing: '.18em', textTransform: 'uppercase', color: T.muted, marginBottom: 8, fontWeight: 500 }}>{p.l}</div>
+              <div className="rv-sans" style={{ fontSize: '0.85rem', color: T.muted, lineHeight: 1.75, fontWeight: 400 }}>{p.d}</div>
             </motion.div>
           ))}
         </div>
 
+        <motion.div className="rv-mono" style={{ marginTop: 20, fontSize: 9, letterSpacing: '.14em', color: T.muted, opacity: 0.6, maxWidth: 560, lineHeight: 1.7 }}
+          initial={{ opacity: 0 }} whileInView={{ opacity: 0.6 }} viewport={{ once: true }} transition={{ duration: 0.8, delay: 0.2 }}>
+          Self-reported figures from published workplace and loneliness surveys — not our own research.
+        </motion.div>
+
         {/* Transition statement */}
-        <motion.div style={{ marginTop: 80, textAlign: 'center' }}
+        <motion.div style={{ marginTop: 'clamp(3.5rem,8vh,5.5rem)', paddingTop: 32, borderTop: `1px solid ${T.border}`, maxWidth: 720 }}
           initial={{ opacity: 0 }} whileInView={{ opacity: 1 }} viewport={{ once: true }} transition={{ duration: 1, delay: 0.3 }}>
-          <p className="rv-display" style={{ fontWeight: 300, fontStyle: 'italic', fontSize: 'clamp(1.4rem,2.6vw,2.8rem)', color: T.muted, letterSpacing: '-0.01em', lineHeight: 1.5 }}>
+          <p className="rv-display" style={{ fontWeight: 300, fontStyle: 'italic', fontSize: 'clamp(1.4rem,2.6vw,2.8rem)', color: T.muted, letterSpacing: '-0.01em', lineHeight: 1.5, margin: 0 }}>
             Every AI answers when you ask. Riva shows up before you do. That's the difference.<br />
             <span style={{ color: T.ink, fontStyle: 'normal', fontWeight: 400 }}>We made something different.</span>
           </p>
