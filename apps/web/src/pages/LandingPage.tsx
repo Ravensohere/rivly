@@ -612,9 +612,12 @@ function ProblemSection({ onChapter }: { onChapter: (n: number) => void }) {
           ))}
         </div>
 
-        <motion.div className="rv-mono" style={{ marginTop: 20, fontSize: 9, letterSpacing: '.14em', color: T.muted, opacity: 0.6, maxWidth: 560, lineHeight: 1.7 }}
-          initial={{ opacity: 0 }} whileInView={{ opacity: 0.6 }} viewport={{ once: true }} transition={{ duration: 0.8, delay: 0.2 }}>
-          Self-reported figures from published workplace and loneliness surveys — not our own research.
+        {/* The honesty disclosure, so it has to be legible on its own: no opacity
+            dimming, 11px, and T.muted's hue four lightness points down because
+            T.muted itself is only 4.40:1 on T.bg. This is 5.04:1 — clears AA. */}
+        <motion.div className="rv-mono" style={{ marginTop: 22, fontSize: 11, letterSpacing: '.1em', color: 'hsl(230, 10%, 44%)', maxWidth: 620, lineHeight: 1.7 }}
+          initial={{ opacity: 0 }} whileInView={{ opacity: 1 }} viewport={{ once: true }} transition={{ duration: 0.8, delay: 0.2 }}>
+          Widely circulated workplace and loneliness figures; primary sources not verified by us.
         </motion.div>
 
         {/* Transition statement */}

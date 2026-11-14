@@ -140,20 +140,59 @@ describe('LandingPage — problem section', () => {
       expect(why.textContent).not.toMatch(/AI companions/i);
     });
 
-    it('states where the figures come from', () => {
+    it('pins the no-data cell so a fake numeral cannot quietly come back', () => {
       const { container } = renderLanding();
       const why = container.querySelector('#why')!;
 
-      expect(why.textContent).toMatch(/not our own research/i);
+      // The em dash is the table convention for "not measured". Swapping it for
+      // a digit would re-make the defect this card removed.
+      const dash = [...why.querySelectorAll('.rv-display')]
+        .find(el => el.textContent?.trim() === '—');
+      expect(dash).toBeTruthy();
+      // Announced by its visible "no data" label, not by the glyph.
+      expect(dash!.getAttribute('aria-hidden')).toBe('true');
     });
 
-    it('left-aligns the coda instead of centring it', () => {
+    it('says the figures are unverified without claiming provenance it cannot back', () => {
       const { container } = renderLanding();
       const why = container.querySelector('#why')!;
 
-      // The interlude's coda is already left-aligned under a hairline; one page,
-      // one treatment for the same rhetorical slot.
+      expect(why.textContent).toMatch(/primary sources not verified by us/i);
+      // Must not assert the figures came from identifiable published surveys —
+      // the 1-in-3 figure could not actually be sourced.
+      expect(why.textContent).not.toMatch(/published .*surveys/i);
+    });
+
+    it('keeps the disclosure readable rather than dimming it to decoration', () => {
+      const { container } = renderLanding();
+      const why = container.querySelector('#why')!;
+
+      const note = [...why.querySelectorAll('.rv-mono')]
+        .find(el => /primary sources not verified/i.test(el.textContent || '')) as HTMLElement;
+      expect(note).toBeTruthy();
+      // An honesty disclosure that fails the AA contrast floor defeats itself.
+      // T.muted on T.bg is only 4.40:1; this is the same hue four lightness
+      // points down, which measures 5.04:1. Dimming it again would undo that.
+      expect(note.style.opacity).not.toBe('0.6');
+      expect(note.style.fontSize).toBe('11px');
+      // jsdom normalises hsl() to rgb(); this is hsl(230, 10%, 44%).
+      expect(note.style.color).toBe('rgb(101, 105, 123)');
+    });
+
+    it('keeps the coda intact and left-aligned under a hairline', () => {
+      const { container } = renderLanding();
+      const why = container.querySelector('#why')!;
+
+      // Assert the positive too: centring is gone AND the coda still exists, so
+      // deleting it outright cannot pass this test.
       expect(why.querySelectorAll('[style*="text-align: center"]')).toHaveLength(0);
+
+      const coda = [...why.querySelectorAll('p.rv-display')]
+        .find(p => /Riva shows up before you do/i.test(p.textContent || ''))!;
+      expect(coda).toBeTruthy();
+      const frame = coda.parentElement as HTMLElement;
+      expect(frame.style.borderTop).toMatch(/1px solid/);
+      expect(frame.style.maxWidth).toBe('720px');
     });
   });
 });

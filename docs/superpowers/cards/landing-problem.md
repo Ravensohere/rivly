@@ -249,3 +249,43 @@ measurement claim it cannot support, in its opening content.
   is row-level, not per-figure. A `shortcut:` comment above `PAIN_POINTS`
   records that exact citations should replace it. Not a blocker — it strictly
   improves on the unsourced status quo — but it is the one open content item.
+
+### PASS 4 — Coordinator review fixes (state: merged, re-verified)
+
+Two Important findings, both fixed; both Minor suggestions taken.
+
+1. **Disclosure contrast (Important).** The provenance note rendered at
+   `fontSize: 9` / `opacity: 0.6` on `T.muted`. Confirmed the reviewer's
+   figure exactly: flattened against `T.bg`, that is **2.22:1** — far under the
+   4.5:1 AA floor, on the one element carrying the card's honesty disclosure.
+   Dropping the opacity and lifting to 11px got it to **4.40:1 — still short**,
+   because `T.muted` itself only reaches 4.40:1 on `T.bg`. So the note now uses
+   `hsl(230, 10%, 44%)` — `T.muted`'s own hue and saturation, four lightness
+   points down — measuring **5.04:1**. Visually near-identical, legible, still
+   subordinate to the 13.6px cell descriptions above it.
+2. **Wording (Important).** "Self-reported figures from published workplace and
+   loneliness surveys — not our own research" asserted a provenance class that
+   could not be backed (no source was identified for the 1-in-3 figure). Now:
+   **"Widely circulated workplace and loneliness figures; primary sources not
+   verified by us."**
+3. **Coda test (Minor, taken).** The old assertion only caught centring and
+   would have passed if the coda were deleted. It now also asserts the positive:
+   the differentiator sentence is still present, its frame has `border-top: 1px
+   solid` and `max-width: 720px`.
+4. **No-data cell test (Minor, taken).** New test pins the em dash itself
+   (`rv-display` element whose text is `—`) and its `aria-hidden="true"`, so
+   re-fabricating a numeral there fails the suite.
+
+Re-verified: `LandingPage.problem.test.tsx` **10/10**; full suite **24 files /
+248 tests, 0 failures**; `npm run build` ✓ in 15.30s, `LandingPage` 77.42 kB
+(gzip 21.77 kB). Re-checked in headless Edge over CDP at 1440x900 and 390x844 —
+note computes to `rgb(101, 105, 123)` at `11px` with flattened opacity `1`,
+text matches the new wording, `focusableInWhy: 0`, no horizontal overflow at
+either width, `consoleErrors: []`. Screenshots re-captured (switched to
+`Page.captureScreenshot` with a `clip` on `#why` plus `captureBeyondViewport`,
+since Lenis kept snapping the scroll back to the hero) and reviewed: the
+disclosure is now plainly readable and the full coda is visible, left-aligned
+under its hairline.
+
+The two uncited figures (77%, 1-in-3) remain open as a human content decision,
+escalated by the coordinator — no code action taken here.

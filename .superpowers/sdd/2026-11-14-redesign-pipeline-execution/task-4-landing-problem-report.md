@@ -327,3 +327,89 @@ agent and was deliberately **not** staged by me.)
    landing-page card lands in parallel.
 4. **No holistic smoke pass yet** — that acceptance line is explicitly a
    post-batch, cross-card step, not something this card can satisfy alone.
+
+---
+
+## 9. Addendum — coordinator review fixes
+
+Both Important findings fixed, both Minor suggestions taken. Commit: see §10.
+
+### Fix 1 (Important) — the disclosure failed AA, and the first fix wasn't enough
+
+Reproduced the reviewer's number exactly. Flattening `color: T.muted` at
+`opacity: 0.6` against `T.bg` gives `rgb(169,168,174)`:
+
+```
+before fix  (opacity .6,  9px):  2.22:1     <- reviewer's ~2.2, confirmed
+after step1 (opacity 1,  11px):  4.40:1     <- STILL FAILS
+after step2 (hsl(230,10%,44%)):  5.04:1     <- clears AA
+```
+
+Dropping the opacity and lifting the size was **not sufficient**: `T.muted`
+itself is only 4.40:1 on `T.bg`, so the prescribed fix would have landed just
+under the floor. The note therefore uses `hsl(230, 10%, 44%)` — `T.muted`'s own
+hue and saturation, four lightness points darker. Inline rather than a new
+token, with a code comment carrying the two ratios so the next person doesn't
+"simplify" it back to `T.muted`.
+
+Worth flagging: the same `T.muted`-on-`T.bg` pairing at 4.40:1 is used widely
+elsewhere on this page (including the stat descriptions directly above this
+note). That is a page-wide AA issue this card did not create and did not fix —
+only the disclosure was in scope.
+
+### Fix 2 (Important) — wording no longer claims provenance it can't back
+
+- Before: "Self-reported figures from published workplace and loneliness
+  surveys — not our own research."
+- After: **"Widely circulated workplace and loneliness figures; primary sources
+  not verified by us."**
+
+A test now pins this *negatively* as well: `expect(why.textContent).not.toMatch(/published .*surveys/i)`,
+so the stronger claim cannot quietly return.
+
+### Fix 3 (Minor, taken) — coda test asserted only the negative
+
+Old: `querySelectorAll('[style*="text-align: center"]')).toHaveLength(0)` — which
+a deleted coda would also pass. Now additionally asserts the positive: the
+differentiator sentence is present, and its frame carries `border-top: 1px
+solid` and `max-width: 720px`.
+
+### Fix 4 (Minor, taken) — the no-data cell is now pinned
+
+New test finds the `rv-display` element whose text is exactly `—` and asserts
+`aria-hidden="true"` on it, so replacing the dash with a fabricated numeral
+fails the suite.
+
+A fifth test was added alongside these, asserting the disclosure's own
+readability (`opacity` not `0.6`, `font-size: 11px`, `color: rgb(101,105,123)`)
+— jsdom normalises `hsl()` to `rgb()`, hence the rgb form with the hsl source in
+a comment.
+
+### Re-verification
+
+- `LandingPage.problem.test.tsx` → **10/10** (was 8; +2 guards, +1 readability).
+- Full suite → **24 files, 248 tests, 0 failures**.
+- `npm run build` → `✓ built in 15.30s`; `LandingPage` 77.42 kB (gzip 21.77 kB).
+- Headless Edge over CDP at 1440x900 and 390x844: `noteText` matches the new
+  wording, `noteColor: rgb(101, 105, 123)`, `noteFontSize: 11px`,
+  `noteFlattenedOpacity: 1`, `focusableInWhy: 0`,
+  `docScrollWidth === docClientWidth` at both widths, `consoleErrors: []`.
+- Screenshots re-captured and reviewed. I had to change *how* they are captured:
+  Lenis kept snapping the scroll back to the hero, so one earlier "desktop"
+  capture was actually a picture of the hero. Now the script reads `#why`'s
+  absolute page rect and passes it as a `clip` to `Page.captureScreenshot` with
+  `captureBeyondViewport: true`, which renders the whole section regardless of
+  scroll position. The new capture shows the full section including the coda —
+  the disclosure is plainly readable and still subordinate to the stat
+  descriptions above it.
+
+**Worth noting as a process finding:** the first visual pass could have been
+fooled by that scroll-snap. The DOM measurements were always correct (they don't
+depend on scroll), but the image was not, and one earlier capture came back
+blank for the same reason. Anyone reusing this script should keep the `clip`
+approach rather than `scrollIntoView`.
+
+### Still open (not mine)
+
+The two uncited figures (77%, 1-in-3) remain a human content decision,
+escalated by the coordinator directly to the user. No code action taken.
