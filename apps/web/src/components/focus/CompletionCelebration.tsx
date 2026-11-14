@@ -27,7 +27,7 @@ function generateParticles(count: number) {
     delay: Math.random() * 0.5,
     duration: 1.5 + Math.random() * 1,
     size: 4 + Math.random() * 8,
-    color: ['hsl(var(--primary))', 'hsl(var(--secondary))', 'hsl(250 70% 70%)', 'hsl(170 70% 60%)'][Math.floor(Math.random() * 4)],
+    color: ['hsl(var(--primary))', 'hsl(var(--success))', 'hsl(var(--warning))', 'hsl(170 70% 60%)'][Math.floor(Math.random() * 4)],
   }));
 }
 
@@ -76,7 +76,7 @@ export function CompletionCelebration({
           initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}
           className="fixed inset-0 z-[100] flex flex-col items-center justify-center"
           style={{
-            background: 'radial-gradient(circle at 50% 40%, hsl(var(--primary) / 0.15) 0%, hsl(var(--background)) 70%)',
+            background: 'radial-gradient(circle at 50% 40%, hsl(var(--success) / 0.15) 0%, hsl(var(--background)) 70%)',
             paddingTop: 'env(safe-area-inset-top, 0px)',
             paddingBottom: 'env(safe-area-inset-bottom, 0px)',
           }}
@@ -96,14 +96,14 @@ export function CompletionCelebration({
           {/* Orb burst */}
           <motion.div className="relative" initial={{ scale: 0 }} animate={{ scale: 1 }} transition={{ type: 'spring', stiffness: 200, damping: 15 }}>
             {[1, 2, 3].map(ring => (
-              <motion.div key={ring} className="absolute inset-0 rounded-full border-2 border-primary/30"
+              <motion.div key={ring} className="absolute inset-0 rounded-full border-2 border-[hsl(var(--success)/0.3)]"
                 initial={{ scale: 1, opacity: 0.6 }} animate={{ scale: 2 + ring * 0.5, opacity: 0 }}
                 transition={{ duration: 1.5, delay: ring * 0.2, ease: 'easeOut' }} style={{ margin: -40 * ring }}
               />
             ))}
             <motion.div className="w-36 h-36 rounded-full relative"
-              style={{ background: 'radial-gradient(circle at 35% 35%, hsl(var(--primary) / 0.6) 0%, hsl(var(--primary) / 0.3) 50%, hsl(var(--secondary) / 0.2) 100%)', boxShadow: '0 0 60px 20px hsl(var(--primary) / 0.3)' }}
-              animate={{ scale: [1, 1.1, 1], boxShadow: ['0 0 60px 20px hsl(var(--primary) / 0.3)', '0 0 80px 30px hsl(var(--primary) / 0.4)', '0 0 60px 20px hsl(var(--primary) / 0.3)'] }}
+              style={{ background: 'radial-gradient(circle at 35% 35%, hsl(var(--success) / 0.6) 0%, hsl(var(--success) / 0.3) 50%, hsl(var(--primary) / 0.2) 100%)', boxShadow: '0 0 60px 20px hsl(var(--success) / 0.3)' }}
+              animate={{ scale: [1, 1.1, 1], boxShadow: ['0 0 60px 20px hsl(var(--success) / 0.3)', '0 0 80px 30px hsl(var(--success) / 0.4)', '0 0 60px 20px hsl(var(--success) / 0.3)'] }}
               transition={{ duration: 2, repeat: Infinity, ease: 'easeInOut' }}
             >
               <motion.div className="absolute inset-0 flex items-center justify-center" initial={{ rotate: 0, scale: 0 }} animate={{ rotate: 360, scale: 1 }} transition={{ duration: 0.8, delay: 0.3 }}>

@@ -32,7 +32,7 @@ function FocusSessionOrb({ progress, isPaused }: { progress: number; isPaused: b
       <motion.div
         className="absolute inset-0 rounded-full"
         style={{
-          background: `radial-gradient(circle, hsl(var(--primary) / ${getGlowIntensity() * 0.4}) 0%, transparent 70%)`,
+          background: `radial-gradient(circle, hsl(var(--success) / ${getGlowIntensity() * 0.4}) 0%, transparent 70%)`,
         }}
         animate={{
           scale: [1, 1.1, 1],
@@ -49,12 +49,12 @@ function FocusSessionOrb({ progress, isPaused }: { progress: number; isPaused: b
       <motion.div
         className="absolute inset-6 rounded-full overflow-hidden"
         style={{
-          background: `radial-gradient(circle at 35% 35%, 
-            hsl(var(--primary) / ${getGlowIntensity()}) 0%, 
-            hsl(var(--primary) / ${getGlowIntensity() * 0.5}) 40%, 
-            hsl(var(--secondary) / ${getGlowIntensity() * 0.3}) 70%, 
-            hsl(var(--primary) / ${getGlowIntensity() * 0.15}) 100%)`,
-          boxShadow: `inset 0 0 30px -5px hsl(var(--primary) / ${getGlowIntensity() * 0.5})`,
+          background: `radial-gradient(circle at 35% 35%,
+            hsl(var(--success) / ${getGlowIntensity()}) 0%,
+            hsl(var(--success) / ${getGlowIntensity() * 0.5}) 40%,
+            hsl(var(--primary) / ${getGlowIntensity() * 0.3}) 70%,
+            hsl(var(--success) / ${getGlowIntensity() * 0.15}) 100%)`,
+          boxShadow: `inset 0 0 30px -5px hsl(var(--success) / ${getGlowIntensity() * 0.5})`,
         }}
         animate={{
           scale: [1, 1.02, 1],
@@ -86,7 +86,7 @@ function FocusSessionOrb({ progress, isPaused }: { progress: number; isPaused: b
           <motion.div
             className="w-1/2 h-1/2 rounded-full"
             style={{
-              background: `radial-gradient(circle, hsl(var(--primary) / ${getGlowIntensity() * 0.8}) 0%, transparent 60%)`,
+              background: `radial-gradient(circle, hsl(var(--success) / ${getGlowIntensity() * 0.8}) 0%, transparent 60%)`,
             }}
             animate={{
               opacity: progress > 0.7 ? [0.6, 0.9, 0.6] : [0.4, 0.7, 0.4],
@@ -173,12 +173,12 @@ export function FocusSession({ duration, purpose, linkedTaskId, onComplete, onCa
       <motion.div
         className="absolute inset-0 overflow-hidden"
         animate={{
-          background: isPaused 
+          background: isPaused
             ? 'radial-gradient(circle at 50% 50%, hsl(var(--muted)) 0%, hsl(var(--background)) 70%)'
             : [
-              'radial-gradient(circle at 50% 50%, hsl(var(--accent)) 0%, hsl(var(--background)) 70%)',
-              'radial-gradient(circle at 50% 60%, hsl(var(--accent)) 0%, hsl(var(--background)) 70%)',
-              'radial-gradient(circle at 50% 50%, hsl(var(--accent)) 0%, hsl(var(--background)) 70%)',
+              'radial-gradient(circle at 50% 50%, hsl(var(--success) / 0.5) 0%, hsl(var(--background)) 70%)',
+              'radial-gradient(circle at 50% 60%, hsl(var(--success) / 0.5) 0%, hsl(var(--background)) 70%)',
+              'radial-gradient(circle at 50% 50%, hsl(var(--success) / 0.5) 0%, hsl(var(--background)) 70%)',
             ],
         }}
         transition={{
@@ -196,7 +196,7 @@ export function FocusSession({ duration, purpose, linkedTaskId, onComplete, onCa
           animate={{ opacity: 1, y: 0 }}
           className="mb-8"
         >
-          <span className="px-4 py-2 rounded-full bg-secondary text-secondary-foreground text-sm font-medium">
+          <span className="px-4 py-2 rounded-full bg-muted text-muted-foreground text-sm font-medium">
             {purpose}
           </span>
         </motion.div>

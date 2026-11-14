@@ -100,7 +100,7 @@ export function FocusLandscapeGrowth({ progress, isPaused, isComplete, className
         {/* Ground */}
         <motion.path
           d="M 40 180 Q 100 170 160 180"
-          stroke="hsl(var(--primary))"
+          stroke="hsl(var(--success))"
           strokeWidth="2"
           strokeOpacity="0.5"
           fill="none"
@@ -125,7 +125,7 @@ export function FocusLandscapeGrowth({ progress, isPaused, isComplete, className
                 y1={branch.y1}
                 x2={branch.x2}
                 y2={branch.y2}
-                stroke="hsl(var(--primary))" // Use primary theme color for tree trunk
+                stroke="hsl(var(--success))" // Sage, to match the real green leaves (was indigo, a visual mismatch for a tree)
                 strokeWidth={branch.width}
                 initial={{ pathLength: 0 }}
                 animate={{ pathLength: normalized }}
@@ -167,7 +167,7 @@ export function FocusLandscapeGrowth({ progress, isPaused, isComplete, className
             cx={10 + progress * 180}
             cy={30 - Math.sin(progress * Math.PI) * 20}
             r={6}
-            fill="hsl(var(--primary))"
+            fill="hsl(var(--warning))"
             fillOpacity={0.4}
             animate={{
                 r: isPaused ? [6, 5, 6] : 6

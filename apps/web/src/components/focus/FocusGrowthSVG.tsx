@@ -22,7 +22,7 @@ export function FocusGrowthSVG({ progress, isPaused, isComplete }: FocusGrowthSV
           cy="100"
           rx="12"
           ry="24"
-          fill="hsl(var(--primary))"
+          fill="hsl(var(--success))"
           fillOpacity={0.6}
           initial={{ scale: 0, opacity: 0 }}
           animate={{ 
@@ -47,7 +47,7 @@ export function FocusGrowthSVG({ progress, isPaused, isComplete }: FocusGrowthSV
     <div className="relative w-64 h-64 mx-auto">
       {/* Background glow */}
       <motion.div
-        className="absolute inset-0 rounded-full bg-primary/10"
+        className="absolute inset-0 rounded-full bg-[hsl(var(--success)/0.1)]"
         animate={{
           scale: isPaused ? [1, 1] : [1, 1.1, 1],
           opacity: isPaused ? 0.3 : [0.3, 0.5, 0.3],
@@ -69,7 +69,7 @@ export function FocusGrowthSVG({ progress, isPaused, isComplete }: FocusGrowthSV
           cy="100"
           r="80"
           fill="none"
-          stroke="hsl(var(--primary))"
+          stroke="hsl(var(--success))"
           strokeWidth="1"
           strokeOpacity={0.2}
           animate={{
@@ -91,7 +91,7 @@ export function FocusGrowthSVG({ progress, isPaused, isComplete }: FocusGrowthSV
         <motion.circle
           cx="100"
           cy="100"
-          fill="hsl(var(--primary))"
+          fill="hsl(var(--success))"
           initial={{ r: 20 }}
           animate={{ 
             r: 20 + progress * 25,
@@ -126,8 +126,8 @@ export function FocusGrowthSVG({ progress, isPaused, isComplete }: FocusGrowthSV
                 cx="100"
                 cy="100"
                 r="4"
-                fill="hsl(var(--primary))"
-                initial={{ 
+                fill="hsl(var(--success))"
+                initial={{
                   x: 0, 
                   y: 0, 
                   opacity: 1,
