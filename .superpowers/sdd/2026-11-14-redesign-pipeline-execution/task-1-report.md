@@ -130,6 +130,99 @@ All 24 routed page files are referenced in `apps/web/src/components/layout/Anima
 - ✓ Includes `worktree` field per skill template
 - ✓ Field reference table documents all card fields
 
-## All Issues Resolved
+---
+
+## Fix Round 2 (Coordinator Review)
+
+**Re-review Finding:** Round 1 fix was incomplete on 2 of 3 findings, and BOM removal claim was disproven by byte-level check.
+
+### Fix 2.1: Complete merge_gate constraints (CRITICAL)
+**Issue:** Round 1 merge_gate omitted "work stays inside the worktree" constraint. Missing one of 4 Global Constraints.
+
+**Fix Applied:** Updated all 31 cards with EXACT Global Constraints text:
+```
+work stays inside F:\Personal Assistant\rivly-assistant-worktrees\integrated-main or fresh worktrees branched from it (never rivly-assistant's own checkout, F:\skipwise, or F:\Personal Assistant\app); <=2 concurrent builds; riva/integrated-main stays local (no push); no .env/secrets access
+```
+
+**Verification Output:**
+```
+merge_gate: work stays inside F:\Personal Assistant\rivly-assistant-worktrees\integrated-main or fresh worktrees branched from it (never rivly-assistant's own checkout, F:\skipwise, or F:\Personal Assistant\app); <=2 concurrent builds; riva/integrated-main stays local (no push); no .env/secrets access
+```
+
+**Status:** ✓ FIXED in commit `2da3d7c`
+
+### Fix 2.2: Replace schema with verbatim JSON (IMPORTANT)
+**Issue:** `_schema.md` was not the verbatim example from `team-agent-orchestration` skill.
+
+**Fix Applied:** Replaced entire content with exact JSON block from skill, added note that this project doesn't use `worktree` field.
+
+**Content now:**
+```json
+{
+  "id": "agent-card-001",
+  "title": "Build dynamic workflow skill",
+  "owner": "codex",
+  "state": "running",
+  "branch": "product/dynamic-workflow-team-orchestration",
+  "worktree": ".",
+  "acceptance": [
+    "Skill exists",
+    "Tests cover required concepts",
+    "Content artifact contains video and article angles"
+  ],
+  "merge_gate": "lint, focused tests, and catalog check pass",
+  "handoff": "path/to/handoff.md"
+}
+```
+
+**Note:** This project's cards do not use the `worktree` field; it is included in the schema above for reference to the source template.
+
+**Status:** ✓ FIXED in commit `2da3d7c`
+
+### Fix 2.3: Actually strip BOM (IMPORTANT)
+**Issue:** Round 1 claim "BOM removed" was FALSE. Byte-level check showed UTF-8 BOM (EF BB BF) still present on all 31 files.
+
+**Fix Applied:** Real byte-level BOM removal - read each file as bytes, stripped first 3 bytes if they matched EF BB BF, wrote back without BOM.
+
+**Verification: Hex dump of first 20 bytes from 5 sample files (BOM GONE):**
+```
+day-planner.md:
+000000 2d 2d 2d 0a 69 64 3a 20 64 61 79 2d 70 6c 61 6e  >---.id: day-plan<
+000010 6e 65 72 0a                                      >ner.<
+
+landing-whynot-promise.md:
+000000 2d 2d 2d 0a 69 64 3a 20 6c 61 6e 64 69 6e 67 2d  >---.id: landing-<
+000010 77 68 79 6e                                      >whyn<
+
+focus.md:
+000000 2d 2d 2d 0a 69 64 3a 20 66 6f 63 75 73 0a 74 69  >---.id: focus.ti<
+000010 74 6c 65 3a                                      >tle:<
+
+login.md:
+000000 2d 2d 2d 0a 69 64 3a 20 6c 6f 67 69 6e 0a 74 69  >---.id: login.ti<
+000010 74 6c 65 3a                                      >tle:<
+
+landing-problem.md:
+000000 2d 2d 2d 0a 69 64 3a 20 6c 61 6e 64 69 6e 67 2d  >---.id: landing-<
+000010 70 72 6f 62                                      >prob<
+```
+
+**Analysis:** All samples start with `2d 2d 2d` (---), NOT `ef bb bf` (BOM). First byte is dash (0x2D), no BOM present.
+
+**Status:** ✓ FIXED in commit `2da3d7c` - All 31 files stripped of BOM
+
+---
+
+## Fix Round 2 Verification
+
+### Step 4 Count Check (Re-run)
+```
+Total .md files: 33
+Card files (33 - 2 for schema/inventory): 31
+Expected from inventory: 31 (24 routed pages + 7 landing sections)
+✓ COUNT CHECK: PASS
+```
+
+### All Issues Resolved
 
 Task 1 is now complete and ready for Task 2 (pilot card `landing-whynot-promise` design/product-fit/build/QA).
