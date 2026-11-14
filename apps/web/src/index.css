@@ -40,13 +40,22 @@
     --primary-foreground:    38 35% 98%;
     --primary-glow:         235 40% 65%;
 
-    /* ── Success: Soft Sage ── */
+    /* ── Success: Soft Sage ──
+       NOTE: --success is a mid-lightness, high-luma hue (green/teal), so a
+       light foreground text/icon on top of it fails AA contrast — unlike
+       --primary (indigo), it does not get darker in disguise at this
+       lightness. --success-foreground must stay a genuinely dark color in
+       BOTH themes (the background barely changes luminance between light
+       and dark mode), not just inverted like --primary-foreground. */
     --success:              165 40% 50%;
-    --success-foreground:    38 35% 98%;
+    --success-foreground:   165 35% 12%;
 
-    /* ── Warning: Warm Amber ── */
+    /* ── Warning: Warm Amber ──
+       Same reasoning as --success above: amber is a very high-luma hue at
+       this lightness, so --warning-foreground must stay genuinely dark in
+       both themes to meet AA contrast when used as solid-fill text/icon. */
     --warning:               38 92% 50%;
-    --warning-foreground:    38 35% 98%;
+    --warning-foreground:    38 60% 12%;
 
     /* ── Secondary: Lavender Mist ── */
     --secondary:            260 30% 94%;
@@ -126,9 +135,9 @@
     --primary-glow:          235 45% 72%;
 
     --success:               165 45% 55%;
-    --success-foreground:    230 22%  8%;
+    --success-foreground:    165 35% 10%;
     --warning:                38 95% 55%;
-    --warning-foreground:    230 22%  8%;
+    --warning-foreground:     38 60% 10%;
 
     --secondary:             260 22% 17%;
     --secondary-foreground:  260 20% 85%;

@@ -92,7 +92,7 @@ export function WindDownSection({
                 }}
                 transition={{ duration: 4, repeat: Infinity, ease: 'easeInOut' }}
               >
-                <Check className="w-7 h-7 text-primary-foreground" />
+                <Check className="w-7 h-7 text-[hsl(var(--success-foreground))]" />
               </motion.div>
             </motion.div>
             

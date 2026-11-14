@@ -236,11 +236,11 @@ export function DailyCheckInModal({ open, onClose, onComplete }: DailyCheckInMod
                   {energyLevels.map(option => (
                     <motion.button key={option.value} variants={itemVariants} whileHover={{ scale: 1.05, y: -2 }} whileTap={{ scale: 0.97 }}
                       onClick={() => setEnergy(option.value)}
-                      className={`flex flex-col items-center gap-2 p-4 rounded-2xl transition-all duration-300 min-w-[5.5rem] ${energy === option.value ? 'bg-[hsl(var(--warning))] text-primary-foreground shadow-lg shadow-[hsl(var(--warning)/0.3)]' : 'bg-secondary hover:bg-secondary/80'}`}
+                      className={`flex flex-col items-center gap-2 p-4 rounded-2xl transition-all duration-300 min-w-[5.5rem] ${energy === option.value ? 'bg-[hsl(var(--warning))] text-[hsl(var(--warning-foreground))] shadow-lg shadow-[hsl(var(--warning)/0.3)]' : 'bg-secondary hover:bg-secondary/80'}`}
                     >
                       {option.icon}
                       <span className="text-sm font-medium">{option.label}</span>
-                      <span className={`text-xs ${energy === option.value ? 'text-primary-foreground/80' : 'text-muted-foreground'}`}>{option.sublabel}</span>
+                      <span className={`text-xs ${energy === option.value ? 'text-[hsl(var(--warning-foreground)/0.8)]' : 'text-muted-foreground'}`}>{option.sublabel}</span>
                     </motion.button>
                   ))}
                 </motion.div>
@@ -301,7 +301,7 @@ export function DailyCheckInModal({ open, onClose, onComplete }: DailyCheckInMod
                   ].map(option => (
                     <motion.button key={option.value} variants={itemVariants} whileHover={{ scale: 1.05, y: -2 }} whileTap={{ scale: 0.97 }}
                       onClick={() => setIntent(intent === option.value ? null : option.value)}
-                      className={`flex items-center gap-2 px-4 py-2.5 rounded-full text-sm font-medium transition-all duration-300 ${intent === option.value ? 'bg-[hsl(var(--success))] text-primary-foreground shadow-lg shadow-[hsl(var(--success)/0.25)]' : 'bg-secondary hover:bg-secondary/80 text-secondary-foreground'}`}
+                      className={`flex items-center gap-2 px-4 py-2.5 rounded-full text-sm font-medium transition-all duration-300 ${intent === option.value ? 'bg-[hsl(var(--success))] text-[hsl(var(--success-foreground))] shadow-lg shadow-[hsl(var(--success)/0.25)]' : 'bg-secondary hover:bg-secondary/80 text-secondary-foreground'}`}
                     >
                       {option.icon}{option.label}
                     </motion.button>
