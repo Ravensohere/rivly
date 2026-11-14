@@ -161,12 +161,6 @@ const GLOBAL_CSS = `
   }
   .rv-ul:hover::after { transform: scaleX(1); transform-origin: left; }
 
-  /* Orb pulse */
-  @keyframes rv-orb-pulse {
-    0%, 100% { box-shadow: 0 0 0 0 rgba(61,59,191,0.4); }
-    50%       { box-shadow: 0 0 0 24px rgba(61,59,191,0); }
-  }
-
   /* Feature card hover */
   .rv-feat-card { transition: transform .5s cubic-bezier(.25,1,.5,1), box-shadow .5s; }
   .rv-feat-card:hover { transform: translateY(-6px); }
@@ -864,7 +858,7 @@ function OverwhelmSVG() {
       <circle cx="240" cy="140" r="80" fill={`${T.amber}20`} stroke={T.amber} strokeWidth="1" opacity="0.5" />
       <circle cx="240" cy="140" r="52" fill={`${T.amber}30`} />
       {/* Panic button */}
-      <rect x="196" y="118" width="88" height="44" rx="22" fill={T.amber} />
+      <rect x="196" y="118" width="88" height="44" rx="22" fill={T.indigo} />
       <text x="240" y="145" textAnchor="middle" fontFamily="DM Mono" fontSize="9" fill="white" letterSpacing="1.5">ONE STEP</text>
       {/* Rays */}
       {Array.from({ length: 8 }, (_, i) => {
@@ -963,7 +957,7 @@ function GoalsSVG() {
       ))}
       <circle cx="430" cy="50" r="13" fill="none" stroke={T.indigoXL} strokeWidth="1" opacity="0.5" />
       <circle cx="430" cy="50" r="6" fill={`${T.indigoL}55`} />
-      <text x="240" y="260" textAnchor="middle" fontFamily="DM Mono" fontSize="7.5" fill={T.muted} letterSpacing="2" opacity="0.6">GOALS · THE BIGGER PICTURE</text>
+      <text x="240" y="260" textAnchor="middle" fontFamily="DM Mono" fontSize="7.5" fill={T.muted} letterSpacing="2" opacity="0.6">WEEKLY GOALS · TRACKED AUTOMATICALLY</text>
     </svg>
   );
 }
@@ -980,7 +974,7 @@ const FEATURES = [
   { num: '06', tag: 'Morning',           title: 'Morning Bridge',         body: 'A gentle transition from sleep to intention. Log mood, energy, sleep quality. Let Riva set the tone for your day before the chaos begins.',                                   Visual: MorningBridgeSVG },
   { num: '07', tag: 'Evening',           title: 'Wind Down Ritual',       body: 'Close the loop every evening. Review, reflect, release. The day is complete — let it go. Tomorrow begins in peace, not anxiety.',                                             Visual: WindDownSVG     },
   { num: '08', tag: 'Family Care',       title: 'Riva cares for everyone you love.', body: "Add your parents to Riva's world. She sends medicine reminders, answers their questions, and alerts you if something needs your attention. Peace of mind for the whole family.", Visual: FamilyCareSVG },
-  { num: '09', tag: 'Goals',             title: 'Goals, Not Just To-Dos',  body: "A separate space for what matters over weeks and months — not another line on today's task list. Create a goal, track it independently, mark it done when it's actually done. Your to-dos and your direction, kept apart on purpose.", Visual: GoalsSVG },
+  { num: '09', tag: 'Goals',             title: 'Goals That Track Themselves', body: "Set weekly targets — focus minutes, tasks completed, focus sessions, wind-down nights — and dial them in with a slider. Progress updates on its own from what you actually do, including every to-do you check off. Hit 100% and it's achieved automatically.", Visual: GoalsSVG },
 ];
 
 function FeaturesSection({ onChapter }: { onChapter: (n: number) => void }) {
