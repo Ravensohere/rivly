@@ -9,7 +9,7 @@ acceptance:
   - npm test passes
   - primary interaction verified
   - no shared-component regression in holistic smoke pass
-merge_gate: vite build passes, npm test passes, primary interaction verified
+merge_gate: riva/integrated-main local-only (no push); no .env/secrets access; <=2 concurrent builds
 handoff: null
 ---
 
@@ -19,18 +19,21 @@ This card represents the redesign/verification pass for the Landing Page - Probl
 
 ## Details
 
-- **Status:** \{{ state }}\
-- **Owner:** {{ owner }}
-- **Target Branch:** {{ branch }}
+- **Status:** backlog
+- **Owner:** unassigned
+- **Target Branch:** riva/integrated-main
 
 ## Acceptance Criteria
 
-{{ acceptance }}
+- vite build passes
+- npm test passes
+- primary interaction verified
+- no shared-component regression in holistic smoke pass
 
 ## Merge Gate
 
-{{ merge_gate }}
+riva/integrated-main local-only (no push); no .env/secrets access; <=2 concurrent builds
 
 ## Handoff
 
-{{ handoff }}
+None
