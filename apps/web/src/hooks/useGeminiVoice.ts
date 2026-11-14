@@ -31,7 +31,7 @@ function deriveWsBaseUrl(): string {
   const raw =
     import.meta.env.VITE_API_URL?.replace(/\/api$/, '') ||
     import.meta.env.VITE_WORKER_URL ||
-    'https://vivly-backend.gnvenkatapathiraju.workers.dev';
+    'https://rivly-api.ravenso-here.workers.dev';
 
   // http → ws, https → wss
   return raw.replace(/^https:/, 'wss:').replace(/^http:/, 'ws:');

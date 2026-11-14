@@ -18,7 +18,7 @@ export interface WaitlistEntry {
 
 export const getWaitlistStatus = async (email: string): Promise<WaitlistStatus | null> => {
   try {
-    const workerUrl = import.meta.env.VITE_WORKER_URL || 'https://rivly-api.gnvenkatapathiraju.workers.dev';
+    const workerUrl = import.meta.env.VITE_WORKER_URL || 'https://rivly-api.ravenso-here.workers.dev';
     const response = await fetch(`${workerUrl}/api/waitlist/status?email=${encodeURIComponent(email)}`, {
       method: 'GET',
       headers: {

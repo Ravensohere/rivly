@@ -8,7 +8,7 @@ import { AdminDashboard as WaitlistAdmin } from './AdminDashboard';
 import { useAuthContext } from '@/contexts/AuthContext';
 import { supabase } from '@/integrations/supabase/client';
 
-const ADMIN_API_URL = import.meta.env.VITE_WORKER_URL || 'https://rivly-api.gnvenkatapathiraju.workers.dev';
+const ADMIN_API_URL = import.meta.env.VITE_WORKER_URL || 'https://rivly-api.ravenso-here.workers.dev';
 const ADMIN_EMAILS = ['gnvenkatapathiraju@gmail.com', 'ravenso.here@gmail.com'];
 
 interface AdminStats {
