@@ -518,7 +518,7 @@ export default function InsightsPage() {
           <motion.div
             initial={{ opacity: 0, scale: 0.95 }}
             animate={{ opacity: 1, scale: 1 }}
-            className="mb-6 p-4 rounded-2xl bg-gradient-to-br from-primary/10 to-accent/10 border border-primary/20"
+            className="mb-6 p-4 rounded-2xl bg-gradient-to-br from-[hsl(var(--success)/0.1)] to-accent/10 border border-[hsl(var(--success)/0.2)]"
           >
             <div className="flex items-center gap-4">
               <div className="text-4xl">
@@ -542,7 +542,7 @@ export default function InsightsPage() {
             initial={{ opacity: 0, y: 16 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.07, duration: 0.5 }}
-            className="mb-6 rounded-2xl border border-primary/20 bg-gradient-to-br from-primary/5 to-accent/5 overflow-hidden"
+            className="mb-6 rounded-2xl border border-[hsl(var(--success)/0.2)] bg-gradient-to-br from-[hsl(var(--success)/0.05)] to-accent/5 overflow-hidden"
           >
             <div className="px-4 pt-4 pb-2 flex items-center justify-between">
               <div>

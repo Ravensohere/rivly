@@ -318,8 +318,8 @@ export default function ProfilePage() {
 
             <div className="flex items-center justify-between py-2 border-b border-border/30">
               <div className="flex items-center gap-3">
-                <div className="w-9 h-9 rounded-xl bg-primary/10 flex items-center justify-center">
-                  <Target className="w-4 h-4 text-primary" />
+                <div className="w-9 h-9 rounded-xl bg-[hsl(var(--success)/0.1)] flex items-center justify-center">
+                  <Target className="w-4 h-4 text-[hsl(var(--success))]" />
                 </div>
                 <span className="text-sm text-muted-foreground">Focus Sessions</span>
               </div>
@@ -338,8 +338,8 @@ export default function ProfilePage() {
 
             <div className="flex items-center justify-between py-2">
               <div className="flex items-center gap-3">
-                <div className="w-9 h-9 rounded-xl bg-primary/10 flex items-center justify-center">
-                  <Star className="w-4 h-4 text-primary" />
+                <div className="w-9 h-9 rounded-xl bg-[hsl(var(--warning)/0.1)] flex items-center justify-center">
+                  <Star className="w-4 h-4 text-[hsl(var(--warning))]" />
                 </div>
                 <span className="text-sm text-muted-foreground">Longest Streak</span>
               </div>
