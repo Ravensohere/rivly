@@ -48,17 +48,17 @@ export function NightAnxietySection({ entry, onSave }: NightAnxietySectionProps)
             className="text-center py-8"
           >
             <motion.div
-              className="inline-flex items-center justify-center w-14 h-14 rounded-full bg-primary/15 mb-4"
-              animate={{ 
+              className="inline-flex items-center justify-center w-14 h-14 rounded-full bg-[hsl(var(--success)/0.15)] mb-4"
+              animate={{
                 boxShadow: [
-                  '0 0 0 0 hsl(var(--primary) / 0)',
-                  '0 0 0 15px hsl(var(--primary) / 0.1)',
-                  '0 0 0 0 hsl(var(--primary) / 0)',
+                  '0 0 0 0 hsl(var(--success) / 0)',
+                  '0 0 0 15px hsl(var(--success) / 0.1)',
+                  '0 0 0 0 hsl(var(--success) / 0)',
                 ],
               }}
               transition={{ duration: 2.5, repeat: saved ? 1 : 0 }}
             >
-              <Check className="w-7 h-7 text-primary" />
+              <Check className="w-7 h-7 text-[hsl(var(--success))]" />
             </motion.div>
             <p className="text-foreground font-medium">It's safe here. You can rest.</p>
             {remind && (

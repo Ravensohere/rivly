@@ -71,22 +71,23 @@ export function WindDownSection({
                 className="absolute inset-0 rounded-full"
                 animate={{
                   boxShadow: [
-                    '0 0 0 0 hsl(var(--primary) / 0)',
-                    '0 0 0 12px hsl(var(--primary) / 0.1)',
-                    '0 0 0 24px hsl(var(--primary) / 0)',
+                    '0 0 0 0 hsl(var(--success) / 0)',
+                    '0 0 0 12px hsl(var(--success) / 0.1)',
+                    '0 0 0 24px hsl(var(--success) / 0)',
                   ],
                 }}
                 transition={{ duration: 3, repeat: Infinity, ease: 'easeOut' }}
               />
-              
-              {/* Inner moon circle */}
+
+              {/* Inner moon circle — sage, not indigo: this is the "day closed, rest now" calm
+                  moment, and nothing here should read as an alert or a brand CTA. */}
               <motion.div
-                className="w-14 h-14 rounded-full flex items-center justify-center bg-primary"
+                className="w-14 h-14 rounded-full flex items-center justify-center bg-[hsl(var(--success))]"
                 animate={{
                   boxShadow: [
-                    '0 0 20px 5px hsl(var(--primary) / 0.2)',
-                    '0 0 30px 10px hsl(var(--primary) / 0.3)',
-                    '0 0 20px 5px hsl(var(--primary) / 0.2)',
+                    '0 0 20px 5px hsl(var(--success) / 0.2)',
+                    '0 0 30px 10px hsl(var(--success) / 0.3)',
+                    '0 0 20px 5px hsl(var(--success) / 0.2)',
                   ],
                 }}
                 transition={{ duration: 4, repeat: Infinity, ease: 'easeInOut' }}
@@ -125,7 +126,7 @@ export function WindDownSection({
             className="space-y-4"
           >
             <div className="p-4 rounded-2xl bg-secondary border border-border/30">
-              <p className="text-primary text-sm mb-3 flex items-center gap-2 font-semibold">
+              <p className="text-[hsl(var(--success))] text-sm mb-3 flex items-center gap-2 font-semibold">
                 <Sparkles className="w-4 h-4" />
                 Wind-Down Ritual
               </p>
