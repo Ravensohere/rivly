@@ -261,8 +261,8 @@ export function GoalsSection() {
         {/* Header */}
         <div className="flex items-center justify-between px-4 py-3 bg-secondary/30 border-b border-border/30">
           <div className="flex items-center gap-3">
-            <div className="w-10 h-10 rounded-xl bg-primary/10 flex items-center justify-center">
-              <Target className="w-5 h-5 text-primary" />
+            <div className="w-10 h-10 rounded-xl bg-[hsl(var(--success)/0.1)] flex items-center justify-center">
+              <Target className="w-5 h-5 text-[hsl(var(--success))]" />
             </div>
             <div>
               <h3 className="font-semibold text-foreground">Weekly Goals</h3>

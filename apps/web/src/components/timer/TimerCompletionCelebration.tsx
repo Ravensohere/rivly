@@ -27,7 +27,7 @@ function generateParticles(count: number) {
     delay: Math.random() * 0.5,
     duration: 1.5 + Math.random() * 1,
     size: 4 + Math.random() * 8,
-    color: ['hsl(var(--primary))', 'hsl(var(--secondary))', 'hsl(250 70% 70%)', 'hsl(170 70% 60%)'][Math.floor(Math.random() * 4)],
+    color: ['hsl(var(--primary))', 'hsl(var(--success))', 'hsl(var(--warning))', 'hsl(170 70% 60%)'][Math.floor(Math.random() * 4)],
   }));
 }
 
@@ -105,7 +105,7 @@ export function TimerCompletionCelebration({
           className="fixed inset-0 z-[100] flex flex-col items-center justify-center"
           style={{
             background: 'hsl(var(--background))',
-            backgroundImage: 'radial-gradient(circle at 50% 40%, hsl(var(--primary) / 0.15) 0%, transparent 70%)',
+            backgroundImage: 'radial-gradient(circle at 50% 40%, hsl(var(--success) / 0.15) 0%, transparent 70%)',
             paddingTop: 'env(safe-area-inset-top)',
             paddingBottom: 'env(safe-area-inset-bottom)',
           }}
@@ -133,13 +133,13 @@ export function TimerCompletionCelebration({
           {/* Orb */}
           <motion.div className="relative" initial={{ scale: 0 }} animate={{ scale: 1 }} transition={{ type: 'spring', stiffness: 200 }}>
             {[1, 2, 3].map(ring => (
-              <motion.div key={ring} className="absolute inset-0 rounded-full border-2 border-primary/30"
+              <motion.div key={ring} className="absolute inset-0 rounded-full border-2 border-[hsl(var(--success)/0.3)]"
                 initial={{ scale: 1, opacity: 0.6 }} animate={{ scale: 2 + ring * 0.5, opacity: 0 }}
                 transition={{ duration: 1.5, delay: ring * 0.2 }} style={{ margin: -40 * ring }}
               />
             ))}
             <motion.div className="w-40 h-40 rounded-full flex items-center justify-center"
-              style={{ background: 'radial-gradient(circle at 35% 35%, hsl(var(--primary) / 0.7) 0%, hsl(var(--primary) / 0.3) 100%)', boxShadow: '0 0 60px 20px hsl(var(--primary) / 0.3)' }}
+              style={{ background: 'radial-gradient(circle at 35% 35%, hsl(var(--success) / 0.7) 0%, hsl(var(--success) / 0.3) 100%)', boxShadow: '0 0 60px 20px hsl(var(--success) / 0.3)' }}
               animate={{ scale: [1, 1.08, 1] }} transition={{ duration: 2, repeat: Infinity }}
             >
               <Sparkles className="w-16 h-16 text-primary-foreground" />

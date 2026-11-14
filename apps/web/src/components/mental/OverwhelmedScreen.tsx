@@ -104,9 +104,9 @@ export function OverwhelmedScreen({
         className="absolute inset-0"
         animate={{
           background: [
-            'radial-gradient(circle at 50% 50%, hsl(var(--secondary) / 0.15) 0%, transparent 60%)',
-            'radial-gradient(circle at 45% 55%, hsl(var(--secondary) / 0.1) 0%, transparent 65%)',
-            'radial-gradient(circle at 55% 45%, hsl(var(--secondary) / 0.15) 0%, transparent 60%)',
+            'radial-gradient(circle at 50% 50%, hsl(var(--success) / 0.15) 0%, transparent 60%)',
+            'radial-gradient(circle at 45% 55%, hsl(var(--success) / 0.1) 0%, transparent 65%)',
+            'radial-gradient(circle at 55% 45%, hsl(var(--success) / 0.15) 0%, transparent 60%)',
           ],
         }}
         transition={{
@@ -151,7 +151,7 @@ export function OverwhelmedScreen({
               <motion.div
                 className="absolute inset-0 rounded-full"
                 style={{
-                  background: 'radial-gradient(circle, hsl(var(--primary) / 0.1) 0%, transparent 70%)',
+                  background: 'radial-gradient(circle, hsl(var(--success) / 0.1) 0%, transparent 70%)',
                 }}
                 animate={{
                   scale: breathPhase === 'in' ? [1, 1.4] : breathPhase === 'hold' ? 1.4 : [1.4, 1],
@@ -167,7 +167,7 @@ export function OverwhelmedScreen({
               <motion.div
                 className="absolute inset-2 rounded-full flex items-center justify-center"
                 style={{
-                  background: 'radial-gradient(circle at 40% 40%, hsl(var(--secondary) / 0.4) 0%, hsl(var(--primary) / 0.15) 70%)',
+                  background: 'radial-gradient(circle at 40% 40%, hsl(var(--success) / 0.4) 0%, hsl(var(--success) / 0.15) 70%)',
                 }}
                 animate={{
                   scale: breathPhase === 'in' ? [1, 1.25] : breathPhase === 'hold' ? 1.25 : [1.25, 1],

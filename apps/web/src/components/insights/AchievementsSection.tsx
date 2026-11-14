@@ -84,7 +84,7 @@ function AchievementBadge({ achievement, size = 'md', showProgress = false, onCl
         <motion.div
           initial={{ scale: 0 }}
           animate={{ scale: 1 }}
-          className="absolute -top-1 -right-1 w-4 h-4 bg-primary rounded-full flex items-center justify-center"
+          className="absolute -top-1 -right-1 w-4 h-4 bg-[hsl(var(--warning))] rounded-full flex items-center justify-center"
         >
           <Sparkles className="w-2.5 h-2.5 text-primary-foreground" />
         </motion.div>
@@ -139,7 +139,7 @@ function AchievementDetail({ achievement }: AchievementDetailProps) {
               {achievement.name}
             </h4>
             {achievement.isUnlocked && !achievement.seen && (
-              <span className="px-1.5 py-0.5 text-[10px] font-medium bg-primary text-primary-foreground rounded-full">
+              <span className="px-1.5 py-0.5 text-[10px] font-medium bg-[hsl(var(--warning))] text-primary-foreground rounded-full">
                 NEW
               </span>
             )}
@@ -246,7 +246,7 @@ export function AchievementsSection() {
                   <motion.span
                     initial={{ scale: 0 }}
                     animate={{ scale: 1 }}
-                    className="px-2 py-0.5 text-xs font-medium bg-primary text-primary-foreground rounded-full"
+                    className="px-2 py-0.5 text-xs font-medium bg-[hsl(var(--warning))] text-primary-foreground rounded-full"
                   >
                     {newAchievements.length} new
                   </motion.span>
