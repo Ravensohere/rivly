@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useRef, useState } from 'react';
 import { PageTransition } from '@/components/ui/PageTransition';
-import { NixiAvatar, NixiAvatarState } from '@/components/riva/NixiAvatar';
+import { RivaAvatar, RivaAvatarState } from '@/components/riva/RivaAvatar';
 import { AvatarCustomizer } from '@/components/riva/AvatarCustomizer';
 import { AssistantPanel, type AssistantActivity } from '@/components/desktop/AssistantPanel';
 import { ApprovalsPanel, Approval, TerminalsPanel, usePolled } from '@/components/desktop/RemoteConsole';
@@ -117,7 +117,7 @@ export default function DesktopControlPage() {
   const showRecorderFallback = !speech.supported && !!LOCAL_DESKTOP_URL;
   const baseAvatarState = useAvatarStateFromCommands(commands, sending);
   const [assistantActivity, setAssistantActivity] = useState<AssistantActivity>('idle');
-  const avatarState: NixiAvatarState =
+  const avatarState: RivaAvatarState =
     tab === 'assistant' && assistantActivity !== 'idle'
       ? assistantActivity
       : speech.listening || recorder.recording
@@ -165,7 +165,7 @@ export default function DesktopControlPage() {
         >
           <Settings2 className="w-4 h-4" />
         </button>
-        <NixiAvatar
+        <RivaAvatar
           state={avatarState}
           size={120}
           pillColor={avatarSettings.pillColor}
@@ -217,9 +217,9 @@ export default function DesktopControlPage() {
                 onClick={() => setTab(id)}
                 className={`flex-1 py-1.5 rounded-full transition-colors ${
                   tab === id
-                    ? 'bg-orange-400 text-white'
+                    ? 'bg-primary text-primary-foreground'
                     : id === 'approvals' && pendingApprovals > 0
-                      ? 'text-orange-400 font-medium'
+                      ? 'text-primary font-medium'
                       : 'text-muted-foreground'
                 }`}
               >
@@ -245,7 +245,7 @@ export default function DesktopControlPage() {
                     disabled={sending}
                     size="icon"
                     variant={speech.listening ? 'default' : 'outline'}
-                    className={`rounded-full shrink-0 ${speech.listening ? 'bg-orange-400 hover:bg-orange-500 text-white' : ''}`}
+                    className={`rounded-full shrink-0 ${speech.listening ? 'bg-primary hover:bg-primary/90 text-primary-foreground' : ''}`}
                     title={speech.listening ? 'Stop listening' : 'Speak a command'}
                   >
                     <Mic className="w-4 h-4" />
@@ -257,7 +257,7 @@ export default function DesktopControlPage() {
                     disabled={sending || recorder.busy}
                     size="icon"
                     variant={recorder.recording ? 'default' : 'outline'}
-                    className={`rounded-full shrink-0 ${recorder.recording ? 'bg-orange-400 hover:bg-orange-500 text-white' : ''}`}
+                    className={`rounded-full shrink-0 ${recorder.recording ? 'bg-primary hover:bg-primary/90 text-primary-foreground' : ''}`}
                     title={recorder.recording ? 'Stop and transcribe' : recorder.busy ? 'Transcribing…' : 'Record a command'}
                   >
                     <Mic className="w-4 h-4" />
@@ -339,7 +339,7 @@ function PairingForm({ onPaired }: { onPaired: (s: RelaySettings) => void }) {
 const STATUS_STYLE: Record<DesktopCommand['status'], { dot: string; text: string; label: string }> = {
   pending: { dot: 'bg-muted-foreground', text: 'text-muted-foreground', label: 'Pending' },
   claimed: { dot: 'bg-amber-500', text: 'text-amber-500', label: 'Running' },
-  completed: { dot: 'bg-orange-400', text: 'text-orange-400', label: 'Done' },
+  completed: { dot: 'bg-success', text: 'text-success', label: 'Done' },
   failed: { dot: 'bg-destructive', text: 'text-destructive', label: 'Failed' },
 };
 
@@ -374,7 +374,7 @@ function summarize(o: Record<string, unknown> | undefined) {
 
 /** Drives the avatar from the newest command's real lifecycle. Success (heart eyes) shows for a few seconds
  * after a command finishes while this page is open, then settles back to idle. */
-function useAvatarStateFromCommands(commands: DesktopCommand[], sending: boolean): NixiAvatarState {
+function useAvatarStateFromCommands(commands: DesktopCommand[], sending: boolean): RivaAvatarState {
   const latest = commands[0];
   const seen = useRef<{ id: string | null; status: string | null; first: boolean }>({ id: null, status: null, first: true });
   const [celebrate, setCelebrate] = useState(false);
