@@ -1,7 +1,7 @@
 import { supabase } from '@/integrations/supabase/client';
 
 // Change this to your deployed worker URL when going to production
-const API_BASE_URL = import.meta.env.VITE_API_URL || 'https://vivly-backend.gnvenkatapathiraju.workers.dev/api';
+const API_BASE_URL = import.meta.env.VITE_API_URL || 'https://rivly-api.ravenso-here.workers.dev/api';
 
 /**
  * Perform an authenticated fetch to the Cloudflare Worker API
