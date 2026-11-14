@@ -944,6 +944,30 @@ function FamilyCareSVG() {
   );
 }
 
+function GoalsSVG() {
+  const milestones = [
+    { x: 90,  y: 210, done: true },
+    { x: 190, y: 160, done: true },
+    { x: 290, y: 120, done: false },
+    { x: 390, y: 70,  done: false },
+  ];
+  return (
+    <svg viewBox="0 0 480 280" fill="none" style={{ width: '100%', height: '100%' }}>
+      <rect width="480" height="280" fill={T.surface} rx="20" />
+      <path d="M50 230 L90 210 L190 160 L290 120 L390 70 L430 50" stroke={T.indigoL} strokeWidth="1.4" strokeDasharray="2 4" opacity="0.5" fill="none" />
+      {milestones.map((m, i) => (
+        <g key={i}>
+          <circle cx={m.x} cy={m.y} r="9" fill={m.done ? T.indigoL : 'white'} stroke={T.indigoL} strokeWidth="1.5" />
+          {m.done && <path d={`M${m.x - 3} ${m.y} L${m.x - 1} ${m.y + 2.5} L${m.x + 4} ${m.y - 3.5}`} stroke="white" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" fill="none" />}
+        </g>
+      ))}
+      <circle cx="430" cy="50" r="13" fill="none" stroke={T.indigoXL} strokeWidth="1" opacity="0.5" />
+      <circle cx="430" cy="50" r="6" fill={`${T.indigoL}55`} />
+      <text x="240" y="260" textAnchor="middle" fontFamily="DM Mono" fontSize="7.5" fill={T.muted} letterSpacing="2" opacity="0.6">GOALS · THE BIGGER PICTURE</text>
+    </svg>
+  );
+}
+
 /* ─────────────────────────────────────────────────────
    FEATURES  — Chapter 4
 ───────────────────────────────────────────────────── */
@@ -956,6 +980,7 @@ const FEATURES = [
   { num: '06', tag: 'Morning',           title: 'Morning Bridge',         body: 'A gentle transition from sleep to intention. Log mood, energy, sleep quality. Let Riva set the tone for your day before the chaos begins.',                                   Visual: MorningBridgeSVG },
   { num: '07', tag: 'Evening',           title: 'Wind Down Ritual',       body: 'Close the loop every evening. Review, reflect, release. The day is complete — let it go. Tomorrow begins in peace, not anxiety.',                                             Visual: WindDownSVG     },
   { num: '08', tag: 'Family Care',       title: 'Riva cares for everyone you love.', body: "Add your parents to Riva's world. She sends medicine reminders, answers their questions, and alerts you if something needs your attention. Peace of mind for the whole family.", Visual: FamilyCareSVG },
+  { num: '09', tag: 'Goals',             title: 'Goals, Not Just To-Dos',  body: "A separate space for what matters over weeks and months — not another line on today's task list. Create a goal, track it independently, mark it done when it's actually done. Your to-dos and your direction, kept apart on purpose.", Visual: GoalsSVG },
 ];
 
 function FeaturesSection({ onChapter }: { onChapter: (n: number) => void }) {
@@ -1032,7 +1057,7 @@ function FeaturesSection({ onChapter }: { onChapter: (n: number) => void }) {
 ───────────────────────────────────────────────────── */
 const RIVA_FEATURES = [
   { icon: <Sun size={18} />,       title: 'Morning Briefing',   desc: 'Personalized audio after check-in. Riva analyzes your mood, energy, sleep, and intention — then speaks to you in a natural voice.' },
-  { icon: <Zap size={18} />,       title: 'Rhythm Orb',         desc: 'A central interactive orb that senses your flow state. Click for real-time guidance. "Your rhythm is steady. Trust your intuition today."' },
+  { icon: <Zap size={18} />,       title: 'Rhythm Orb',         desc: 'Four real expressions — focused, overwhelmed, settled, neutral — driven by your actual tasks and focus sessions, not a performance. The orb shows what\'s really going on, not a generic "sensing your flow."' },
   { icon: <Mic size={18} />,       title: 'Voice Commands',     desc: '"Create a task to call mom." "Start a focus session." "Take me to insights." Context-aware commands, even offline.' },
   { icon: <Brain size={18} />,     title: 'Focus Intelligence', desc: 'Tracks your focus history and flow state. Suggests when to work, when to rest, and when to take a breath — based on you, not averages.' },
   { icon: <Headphones size={18} />,title: 'She Reaches Out',    desc: "Riva doesn't wait to be asked. She messages you first - morning check-ins, Sunday nudges, and a quiet 'everything okay?' when you've gone quiet. She shows up." },
