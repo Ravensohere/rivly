@@ -172,8 +172,8 @@ export function DailyCheckInModal({ open, onClose, onComplete }: DailyCheckInMod
           paddingRight: 'calc(env(safe-area-inset-right, 0px) + 1rem)',
         }}
       >
-        <motion.div className="absolute inset-0 bg-gradient-to-br from-background via-background/98 to-primary/5" initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ duration: 0.5 }} />
-        <motion.div className="absolute top-1/4 left-1/4 w-64 h-64 rounded-full bg-primary/5 blur-3xl" animate={{ scale: [1, 1.2, 1], opacity: [0.3, 0.5, 0.3] }} transition={{ duration: 8, repeat: Infinity, ease: 'easeInOut' }} />
+        <motion.div className="absolute inset-0 bg-gradient-to-br from-background via-background/98 to-[hsl(var(--success)/0.05)]" initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ duration: 0.5 }} />
+        <motion.div className="absolute top-1/4 left-1/4 w-64 h-64 rounded-full bg-[hsl(var(--success)/0.05)] blur-3xl" animate={{ scale: [1, 1.2, 1], opacity: [0.3, 0.5, 0.3] }} transition={{ duration: 8, repeat: Infinity, ease: 'easeInOut' }} />
         <motion.div className="absolute bottom-1/4 right-1/4 w-48 h-48 rounded-full bg-accent/10 blur-3xl" animate={{ scale: [1.2, 1, 1.2], opacity: [0.2, 0.4, 0.2] }} transition={{ duration: 6, repeat: Infinity, ease: 'easeInOut' }} />
 
         <motion.div
@@ -182,7 +182,7 @@ export function DailyCheckInModal({ open, onClose, onComplete }: DailyCheckInMod
           transition={{ duration: 0.5, ease: [0.32, 0.72, 0, 1] }}
           className="relative w-full max-w-[min(92vw,26rem)] max-h-[90dvh] overflow-y-auto bg-card/95 backdrop-blur-xl rounded-3xl shadow-2xl p-6 border border-border/50"
         >
-          <div className="absolute inset-0 rounded-3xl bg-gradient-to-br from-primary/5 via-transparent to-accent/5 pointer-events-none" />
+          <div className="absolute inset-0 rounded-3xl bg-gradient-to-br from-[hsl(var(--success)/0.05)] via-transparent to-accent/5 pointer-events-none" />
 
           {/* Header */}
           <motion.div className="relative flex justify-between items-center mb-5" initial={{ opacity: 0, y: -10 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.2, duration: 0.4 }}>
@@ -236,7 +236,7 @@ export function DailyCheckInModal({ open, onClose, onComplete }: DailyCheckInMod
                   {energyLevels.map(option => (
                     <motion.button key={option.value} variants={itemVariants} whileHover={{ scale: 1.05, y: -2 }} whileTap={{ scale: 0.97 }}
                       onClick={() => setEnergy(option.value)}
-                      className={`flex flex-col items-center gap-2 p-4 rounded-2xl transition-all duration-300 min-w-[5.5rem] ${energy === option.value ? 'bg-primary text-primary-foreground shadow-lg shadow-primary/30' : 'bg-secondary hover:bg-secondary/80'}`}
+                      className={`flex flex-col items-center gap-2 p-4 rounded-2xl transition-all duration-300 min-w-[5.5rem] ${energy === option.value ? 'bg-[hsl(var(--warning))] text-primary-foreground shadow-lg shadow-[hsl(var(--warning)/0.3)]' : 'bg-secondary hover:bg-secondary/80'}`}
                     >
                       {option.icon}
                       <span className="text-sm font-medium">{option.label}</span>
@@ -301,7 +301,7 @@ export function DailyCheckInModal({ open, onClose, onComplete }: DailyCheckInMod
                   ].map(option => (
                     <motion.button key={option.value} variants={itemVariants} whileHover={{ scale: 1.05, y: -2 }} whileTap={{ scale: 0.97 }}
                       onClick={() => setIntent(intent === option.value ? null : option.value)}
-                      className={`flex items-center gap-2 px-4 py-2.5 rounded-full text-sm font-medium transition-all duration-300 ${intent === option.value ? 'bg-primary text-primary-foreground shadow-lg shadow-primary/25' : 'bg-secondary hover:bg-secondary/80 text-secondary-foreground'}`}
+                      className={`flex items-center gap-2 px-4 py-2.5 rounded-full text-sm font-medium transition-all duration-300 ${intent === option.value ? 'bg-[hsl(var(--success))] text-primary-foreground shadow-lg shadow-[hsl(var(--success)/0.25)]' : 'bg-secondary hover:bg-secondary/80 text-secondary-foreground'}`}
                     >
                       {option.icon}{option.label}
                     </motion.button>
