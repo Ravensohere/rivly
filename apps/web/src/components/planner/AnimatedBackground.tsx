@@ -50,11 +50,13 @@ export function AnimatedBackground({ mode = 'normal' }: AnimatedBackgroundProps)
         }}
       />
       
-      {/* Animated gradient blob 2 - Secondary accent */}
+      {/* Animated gradient blob 2 - was --secondary (hue 260, same violet family as --primary's 235 —
+          no real hue distinction, flagged by riva-app-wide-color-balance plan). Sage gives this
+          ambient layer actual color variety, and reads calm in every mode incl. 'overwhelmed'. */}
       <motion.div
         className="absolute bottom-0 -right-1/4 w-1/2 h-1/2 rounded-full blur-3xl"
         style={{
-          background: 'radial-gradient(circle, hsl(var(--secondary) / 0.35) 0%, transparent 70%)',
+          background: 'radial-gradient(circle, hsl(var(--success) / 0.35) 0%, transparent 70%)',
           opacity: mode === 'overwhelmed' ? 0.1 : 0.2,
         }}
         animate={{
@@ -70,11 +72,12 @@ export function AnimatedBackground({ mode = 'normal' }: AnimatedBackgroundProps)
         }}
       />
 
-      {/* Third blob - Center warmth */}
+      {/* Third blob - Center warmth. Sage, not --warning: this component also renders in
+          'overwhelmed' mode, where amber would read as alarming rather than calming. */}
       <motion.div
         className="absolute top-1/3 left-1/3 w-1/3 h-1/3 rounded-full blur-3xl"
         style={{
-          background: 'radial-gradient(circle, hsl(var(--primary) / 0.1) 0%, transparent 60%)',
+          background: 'radial-gradient(circle, hsl(var(--success) / 0.1) 0%, transparent 60%)',
           opacity: mode === 'overwhelmed' ? 0.05 : 0.15,
         }}
         animate={{
@@ -95,12 +98,12 @@ export function AnimatedBackground({ mode = 'normal' }: AnimatedBackgroundProps)
         className="absolute inset-0"
         animate={{
           background: [
-            'linear-gradient(135deg, hsl(var(--primary) / 0.015) 0%, transparent 40%, hsl(var(--secondary) / 0.015) 100%)',
-            'linear-gradient(180deg, hsl(var(--primary) / 0.02) 0%, transparent 50%, hsl(var(--secondary) / 0.01) 100%)',
-            'linear-gradient(225deg, hsl(var(--primary) / 0.015) 0%, transparent 40%, hsl(var(--secondary) / 0.02) 100%)',
-            'linear-gradient(270deg, hsl(var(--primary) / 0.02) 0%, transparent 50%, hsl(var(--secondary) / 0.015) 100%)',
-            'linear-gradient(315deg, hsl(var(--primary) / 0.015) 0%, transparent 40%, hsl(var(--secondary) / 0.015) 100%)',
-            'linear-gradient(135deg, hsl(var(--primary) / 0.015) 0%, transparent 40%, hsl(var(--secondary) / 0.015) 100%)',
+            'linear-gradient(135deg, hsl(var(--primary) / 0.015) 0%, transparent 40%, hsl(var(--success) / 0.015) 100%)',
+            'linear-gradient(180deg, hsl(var(--primary) / 0.02) 0%, transparent 50%, hsl(var(--success) / 0.01) 100%)',
+            'linear-gradient(225deg, hsl(var(--primary) / 0.015) 0%, transparent 40%, hsl(var(--success) / 0.02) 100%)',
+            'linear-gradient(270deg, hsl(var(--primary) / 0.02) 0%, transparent 50%, hsl(var(--success) / 0.015) 100%)',
+            'linear-gradient(315deg, hsl(var(--primary) / 0.015) 0%, transparent 40%, hsl(var(--success) / 0.015) 100%)',
+            'linear-gradient(135deg, hsl(var(--primary) / 0.015) 0%, transparent 40%, hsl(var(--success) / 0.015) 100%)',
           ],
         }}
         transition={{

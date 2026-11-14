@@ -38,7 +38,7 @@ export function DayHeader({
       {/* Animated gradient accent line */}
       <motion.div className="absolute bottom-0 left-0 right-0" style={{ height: '1px' }}
         animate={{ opacity: [0.2, 0.5, 0.2] }} transition={{ duration: 4, repeat: Infinity, ease: 'easeInOut' }}>
-        <div style={{ height: '100%', background: 'linear-gradient(90deg, transparent 0%, hsl(var(--primary) / 0.4) 35%, hsl(260 35% 65% / 0.35) 65%, transparent 100%)' }} />
+        <div style={{ height: '100%', background: 'linear-gradient(90deg, transparent 0%, hsl(var(--primary) / 0.35) 35%, hsl(var(--success) / 0.3) 65%, transparent 100%)' }} />
       </motion.div>
 
       <div className="relative">

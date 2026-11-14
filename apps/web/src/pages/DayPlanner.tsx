@@ -788,7 +788,7 @@ export default function DayPlanner() {
             filter: 'blur(40px)',
           }}
         />
-        {/* Aurora blob — lower right, lavender */}
+        {/* Aurora blob — lower right, sage (real hue variety against the upper-left indigo blob) */}
         <motion.div
           animate={{ scale: [1, 1.1, 1], x: [0, -14, 0], y: [0, 12, 0] }}
           transition={{ duration: 16, repeat: Infinity, ease: 'easeInOut', delay: 4 }}
@@ -796,7 +796,7 @@ export default function DayPlanner() {
             position: 'absolute', bottom: '8vh', right: '-14vw',
             width: '65vw', height: '65vw', maxWidth: '32rem', maxHeight: '32rem',
             borderRadius: '50%',
-            background: 'radial-gradient(circle, hsl(260 35% 72% / 0.1) 0%, hsl(220 40% 70% / 0.06) 50%, transparent 70%)',
+            background: 'radial-gradient(circle, hsl(165 35% 68% / 0.1) 0%, hsl(175 30% 72% / 0.06) 50%, transparent 70%)',
             filter: 'blur(50px)',
           }}
         />
@@ -856,7 +856,7 @@ export default function DayPlanner() {
 
         {/* Accent line */}
         <motion.div style={{ height: '1px' }} animate={{ opacity: [0.2, 0.5, 0.2] }} transition={{ duration: 4, repeat: Infinity, ease: 'easeInOut' }}>
-          <div style={{ height: '100%', background: 'linear-gradient(90deg, transparent 0%, hsl(var(--primary) / 0.4) 40%, hsl(260 35% 65% / 0.3) 65%, transparent 100%)' }} />
+          <div style={{ height: '100%', background: 'linear-gradient(90deg, transparent 0%, hsl(var(--primary) / 0.35) 40%, hsl(var(--success) / 0.3) 65%, transparent 100%)' }} />
         </motion.div>
       </header>
 

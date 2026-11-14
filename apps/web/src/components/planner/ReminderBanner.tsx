@@ -29,7 +29,7 @@ export function ReminderBanner({ reminder, onSnooze, onDismiss, onOpen }: Remind
             <div 
               className="relative overflow-hidden rounded-2xl border border-border/30 backdrop-blur-xl shadow-lg"
               style={{
-                background: 'linear-gradient(135deg, hsl(var(--primary) / 0.15) 0%, hsl(var(--background) / 0.95) 100%)',
+                background: 'linear-gradient(135deg, hsl(var(--warning) / 0.15) 0%, hsl(var(--background) / 0.95) 100%)',
               }}
             >
               {/* Animated glow */}
@@ -37,9 +37,9 @@ export function ReminderBanner({ reminder, onSnooze, onDismiss, onOpen }: Remind
                 className="absolute inset-0 pointer-events-none"
                 animate={{
                   background: [
-                    'radial-gradient(circle at 20% 50%, hsl(var(--primary) / 0.2) 0%, transparent 50%)',
-                    'radial-gradient(circle at 80% 50%, hsl(var(--primary) / 0.2) 0%, transparent 50%)',
-                    'radial-gradient(circle at 20% 50%, hsl(var(--primary) / 0.2) 0%, transparent 50%)',
+                    'radial-gradient(circle at 20% 50%, hsl(var(--warning) / 0.2) 0%, transparent 50%)',
+                    'radial-gradient(circle at 80% 50%, hsl(var(--warning) / 0.2) 0%, transparent 50%)',
+                    'radial-gradient(circle at 20% 50%, hsl(var(--warning) / 0.2) 0%, transparent 50%)',
                   ],
                 }}
                 transition={{ duration: 3, repeat: Infinity, ease: 'easeInOut' }}
@@ -59,9 +59,9 @@ export function ReminderBanner({ reminder, onSnooze, onDismiss, onOpen }: Remind
                   <motion.div
                     animate={{ scale: [1, 1.1, 1] }}
                     transition={{ duration: 1.5, repeat: Infinity, ease: 'easeInOut' }}
-                    className="w-10 h-10 rounded-xl bg-primary/20 flex items-center justify-center flex-shrink-0"
+                    className="w-10 h-10 rounded-xl bg-[hsl(var(--warning)/0.2)] flex items-center justify-center flex-shrink-0"
                   >
-                    <Clock className="w-5 h-5 text-primary" />
+                    <Clock className="w-5 h-5 text-[hsl(var(--warning))]" />
                   </motion.div>
 
                   <div className="flex-1 min-w-0 pr-6">
