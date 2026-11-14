@@ -1166,19 +1166,56 @@ function RivaSection({ onChapter }: { onChapter: (n: number) => void }) {
   );
 }
 
+/* The claim this section used to shout ("every AI answers when you ask…") is
+   already made by ProblemSection's closing line, so it shows the artifact
+   instead: a prompt field nobody filled in, next to a message that arrived
+   anyway. Nothing here is focusable — it is a specimen, not a control. */
 function WhyNotSection() {
   return (
     <section id="why-not" style={{ background: T.bg, borderTop: `1px solid ${T.border}`, borderBottom: `1px solid ${T.border}`, padding: '12vh clamp(1.5rem,5vw,4rem)' }}>
-      <div style={{ maxWidth: 980, margin: '0 auto', textAlign: 'center' }}>
-        <p className="rv-display" style={{ fontWeight: 400, fontSize: 'clamp(1.9rem,4vw,4rem)', lineHeight: 1.35, letterSpacing: '-0.015em', color: T.ink, margin: 0 }}>
-          ChatGPT answers when you ask.<br />
-          Gemini answers when you ask.<br />
-          <span style={{ color: T.indigo, fontStyle: 'italic' }}>Riva shows up before you do.</span>
-        </p>
-        <p className="rv-display" style={{ marginTop: 28, fontWeight: 400, fontSize: 'clamp(1.1rem,2vw,2rem)', lineHeight: 1.5, color: T.muted, fontStyle: 'italic' }}>
-          That's not a feature difference.<br />
-          That's a relationship difference.
-        </p>
+      <div style={{ maxWidth: 1000, margin: '0 auto' }}>
+        <motion.div style={{ fontSize: 8.5, letterSpacing: '.26em', textTransform: 'uppercase', color: T.muted, marginBottom: 'clamp(2.5rem,6vh,4rem)', fontFamily: "'Roboto', sans-serif", fontWeight: 500 }}
+          initial={{ opacity: 0, y: 10 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }}>
+          Interlude · The difference
+        </motion.div>
+
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(290px,1fr))', gap: 'clamp(2.5rem,5vw,4.5rem)', alignItems: 'start' }}>
+          {/* The prompt you have to fill in */}
+          <motion.div initial={{ opacity: 0, y: 18 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ duration: 0.7, ease: E }}>
+            <div className="rv-mono" style={{ fontSize: 8.5, letterSpacing: '.2em', textTransform: 'uppercase', color: T.muted, marginBottom: 18 }}>
+              Every other assistant
+            </div>
+            <div style={{ display: 'flex', alignItems: 'center', gap: 14, padding: '18px 20px', borderRadius: 14, border: `1px solid ${T.border}`, background: T.surface }}>
+              <span className="rv-sans" style={{ flex: 1, fontSize: '0.86rem', color: T.muted, opacity: 0.45 }}>Ask me anything…</span>
+              <ArrowUpRight size={15} aria-hidden style={{ color: T.muted, opacity: 0.28, flexShrink: 0 }} />
+            </div>
+            <div className="rv-mono" style={{ fontSize: 9, letterSpacing: '.14em', color: T.muted, opacity: 0.6, marginTop: 14 }}>
+              waits for you to type
+            </div>
+          </motion.div>
+
+          {/* The message that arrived without being asked for */}
+          <motion.div initial={{ opacity: 0, y: 18 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ duration: 0.7, delay: 0.14, ease: E }}>
+            <div className="rv-mono" style={{ fontSize: 8.5, letterSpacing: '.2em', textTransform: 'uppercase', color: T.indigo, marginBottom: 18 }}>
+              Riva
+            </div>
+            <div style={{ padding: '22px 24px', borderRadius: '16px 16px 16px 4px', border: `1px solid ${T.indigoL}44`, background: T.indigoSub }}>
+              <p className="rv-display" style={{ fontWeight: 400, fontSize: 'clamp(1rem,1.7vw,1.4rem)', lineHeight: 1.55, letterSpacing: '-0.01em', color: T.ink, margin: 0 }}>
+                Didn't see your check-in this morning. Rough start, or just a slow one?
+              </p>
+            </div>
+            <div className="rv-mono" style={{ fontSize: 9, letterSpacing: '.14em', color: T.indigo, opacity: 0.75, marginTop: 14 }}>
+              08:41 · she messaged first
+            </div>
+          </motion.div>
+        </div>
+
+        <motion.p className="rv-display"
+          style={{ marginTop: 'clamp(3rem,7vh,5rem)', paddingTop: 28, borderTop: `1px solid ${T.border}`, maxWidth: 640, fontWeight: 400, fontStyle: 'italic', fontSize: 'clamp(1rem,1.8vw,1.5rem)', lineHeight: 1.6, color: T.muted }}
+          initial={{ opacity: 0 }} whileInView={{ opacity: 1 }} viewport={{ once: true }} transition={{ duration: 0.8, delay: 0.25 }}>
+          That's not a feature difference.{' '}
+          <span style={{ color: T.ink, fontStyle: 'normal' }}>That's a relationship difference.</span>
+        </motion.p>
       </div>
     </section>
   );
@@ -1197,9 +1234,9 @@ function PromiseSection({ onChapter }: { onChapter: (n: number) => void }) {
   useEffect(() => scrollYProgress.on('change', v => setShowCards(v > 0.45)), [scrollYProgress]);
 
   const items = [
-    { icon: <Sun size={20} />,  t: 'Space to focus',   d: 'One session. One intention. Distraction-aware. Flow starts here.' },
-    { icon: <Moon size={20} />, t: 'Space to rest',    d: 'Recovery is progress. Wind down without guilt. You earned this.' },
-    { icon: <Wind size={20} />, t: 'Space to reflect', d: 'No judgment. No rankings. Just you and your day, honestly.' },
+    { icon: <Sun size={16} />,  t: 'Space to focus',   d: 'One session. One intention. Nothing else asking for you.' },
+    { icon: <Moon size={16} />, t: 'Space to rest',    d: 'Recovery counts as progress — no earning it first.' },
+    { icon: <Wind size={16} />, t: 'Space to reflect', d: 'No judgment, no rankings. Just you and your day.' },
   ];
 
   return (
@@ -1219,34 +1256,37 @@ function PromiseSection({ onChapter }: { onChapter: (n: number) => void }) {
             style={{ fontWeight: 400, fontSize: 'clamp(2.8rem,9vw,9rem)', lineHeight: 0.9, letterSpacing: '-0.025em', color: T.ink, justifyContent: 'center' }}
           />
 
-          <motion.div 
-            initial={{ opacity: 0, y: 24, filter: 'blur(8px)' }}
-            animate={showCards ? { opacity: 1, y: 0, filter: 'blur(0px)' } : { opacity: 0, y: 24, filter: 'blur(8px)' }}
+          {/* A ruled ledger, not a fourth icon-card grid: the page already has
+              two of those above. Shorter stacked than filled cards, which is
+              what keeps this chapter inside the 100dvh sticky frame on phones. */}
+          <motion.div
+            initial={{ opacity: 0, filter: 'blur(8px)' }}
+            animate={showCards ? { opacity: 1, filter: 'blur(0px)' } : { opacity: 0, filter: 'blur(8px)' }}
             transition={{ duration: 0.8, ease: E }}
-            className="grid grid-cols-1 md:grid-cols-3 gap-3 md:gap-4 mb-8 md:mb-12"
+            className="mb-8 md:mb-12 text-left"
+            style={{ borderTop: `1px solid ${T.border}` }}
           >
             {items.map((item, i) => (
-              <motion.div key={i} data-h="true"
-                initial={{ opacity: 0, y: 24 }}
-                animate={showCards ? { opacity: 1, y: 0 } : { opacity: 0, y: 24 }}
+              <motion.div key={i}
+                initial={{ opacity: 0, y: 16 }}
+                animate={showCards ? { opacity: 1, y: 0 } : { opacity: 0, y: 16 }}
                 transition={{ duration: 0.65, delay: i * 0.12, ease: E }}
-                className="p-5 md:p-8 rounded-2xl md:rounded-[22px] text-left transition-all duration-300"
-                style={{ border: `1px solid ${T.border}`, background: T.bg }}
-                whileHover={{ y: -5, boxShadow: `0 18px 52px -8px rgba(61,59,191,0.12)`, borderColor: T.indigoL }}>
-                <div className="mb-3 md:mb-4" style={{ color: T.indigo }}>{item.icon}</div>
-                <div className="rv-display mb-2 md:mb-3" style={{ fontWeight: 500, fontSize: '1.15rem', color: T.ink, letterSpacing: '-0.01em' }}>{item.t}</div>
-                <div className="rv-sans" style={{ fontWeight: 400, fontSize: '0.8rem', lineHeight: 1.6, color: T.muted }}>{item.d}</div>
+                className="flex flex-wrap items-center gap-x-4 md:gap-x-7 gap-y-1 py-4 md:py-6"
+                style={{ borderBottom: `1px solid ${T.border}` }}>
+                <span className="rv-mono" style={{ fontSize: 9, letterSpacing: '.18em', color: T.indigo, opacity: 0.5, flexShrink: 0 }}>{`0${i + 1}`}</span>
+                <span style={{ color: T.indigo, opacity: 0.5, display: 'flex', flexShrink: 0 }}>{item.icon}</span>
+                {/* fixed title column so the descriptions align down the page */}
+                <span className="rv-display md:min-w-[185px]" style={{ fontWeight: 500, fontSize: 'clamp(1rem,1.5vw,1.2rem)', color: T.ink, letterSpacing: '-0.01em', flexShrink: 0 }}>{item.t}</span>
+                <span className="rv-sans basis-full md:basis-auto md:flex-1" style={{ fontWeight: 400, fontSize: '0.8rem', lineHeight: 1.6, color: T.muted }}>{item.d}</span>
               </motion.div>
             ))}
           </motion.div>
 
-          <motion.div 
-            initial={{ opacity: 0, y: 24 }}
-            animate={showCards ? { opacity: 1, y: 0 } : { opacity: 0, y: 24 }}
-            transition={{ duration: 0.9, delay: 0.3, ease: E }}
-            className="p-6 md:p-11 rounded-2xl md:rounded-[26px]"
-            style={{ border: `1px solid ${T.indigoL}44`, background: T.indigoSub }}>
-            <p className="rv-display" style={{ fontWeight: 400, fontStyle: 'italic', lineHeight: 1.4, fontSize: 'clamp(1.1rem,2.2vw,2rem)', color: T.ink, margin: 0 }}>
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={showCards ? { opacity: 1, y: 0 } : { opacity: 0, y: 20 }}
+            transition={{ duration: 0.9, delay: 0.3, ease: E }}>
+            <p className="rv-display" style={{ fontWeight: 400, fontStyle: 'italic', lineHeight: 1.5, fontSize: 'clamp(1.05rem,2vw,1.85rem)', color: T.muted, maxWidth: 760, margin: '0 auto' }}>
               "Some days you'll do more. Some days you'll simply show up.{' '}
               <strong style={{ fontStyle: 'normal', fontWeight: 500, color: T.indigo }}>Both count.</strong>"
             </p>
