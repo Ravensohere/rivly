@@ -1064,12 +1064,25 @@ const RIVA_FEATURES = [
   { icon: <Leaf size={18} />,      title: 'Grows With You',     desc: 'Riva gets smarter about your patterns over time. After 30 conversations, she knows you. After 60, she feels like a friend who has known you for years. Your patterns, your story. Never sold, never shared.' },
 ];
 
+// Slow mood cycle for the hero orb — one real color at a time, never blended,
+// held well past rv-orb-pulse's old 3s cadence (Review Focus: calm, not chaotic).
+const ORB_MOODS = [T.indigo, T.sage, T.amber, T.indigoL];
+const ORB_MOOD_HOLD_MS = 4200;
+const ORB_MOOD_FADE_S = 1.6;
+
 function RivaSection({ onChapter }: { onChapter: (n: number) => void }) {
   const outer = useRef<HTMLDivElement>(null);
   const { scrollYProgress } = useScroll({ target: outer, offset: ['start 0.8', 'center 0.3'] });
 
   const orbScale = useTransform(scrollYProgress, [0, 1], [0.7, 1.1]);
   const orbOp    = useTransform(scrollYProgress, [0, 0.4], [0, 1]);
+
+  const [moodIdx, setMoodIdx] = useState(0);
+  useEffect(() => {
+    const id = setInterval(() => setMoodIdx((i) => (i + 1) % ORB_MOODS.length), ORB_MOOD_HOLD_MS);
+    return () => clearInterval(id);
+  }, []);
+  const orbColor = ORB_MOODS[moodIdx];
 
   return (
     <section id="riva-ai" ref={outer} style={{ background: T.night, padding: '14vh 0', overflow: 'hidden', position: 'relative' }}>
@@ -1095,13 +1108,17 @@ function RivaSection({ onChapter }: { onChapter: (n: number) => void }) {
             Chapter 05 · Your Rhythm Guide
           </motion.div>
 
-          {/* Orb */}
+          {/* Orb — slow-cycles through real mood colors, one at a time (Task 3) */}
           <motion.div style={{ scale: orbScale, opacity: orbOp, display: 'inline-block', marginBottom: 40, position: 'relative' }}>
-            <div style={{ width: 100, height: 100, borderRadius: '50%', background: `radial-gradient(circle at 38% 38%, ${T.indigoL}, ${T.indigo})`, boxShadow: `0 0 0 0 ${T.indigo}55`, animation: 'rv-orb-pulse 3s ease-in-out infinite', display: 'flex', alignItems: 'center', justifyContent: 'center', margin: '0 auto' }}>
-             
-            </div>
-            <div style={{ position: 'absolute', inset: -18, borderRadius: '50%', border: `1px solid ${T.indigoL}22` }} />
-            <div style={{ position: 'absolute', inset: -36, borderRadius: '50%', border: `1px solid ${T.indigoXL}12` }} />
+            <div style={{
+              width: 100, height: 100, borderRadius: '50%',
+              background: `radial-gradient(circle at 38% 38%, ${orbColor}, ${orbColor})`,
+              boxShadow: `0 0 32px 4px ${orbColor}`,
+              transition: `background ${ORB_MOOD_FADE_S}s ease, box-shadow ${ORB_MOOD_FADE_S}s ease`,
+              display: 'flex', alignItems: 'center', justifyContent: 'center', margin: '0 auto',
+            }} />
+            <div style={{ position: 'absolute', inset: -18, borderRadius: '50%', border: `1px solid ${orbColor}`, opacity: 0.2, transition: `border-color ${ORB_MOOD_FADE_S}s ease` }} />
+            <div style={{ position: 'absolute', inset: -36, borderRadius: '50%', border: `1px solid ${orbColor}`, opacity: 0.1, transition: `border-color ${ORB_MOOD_FADE_S}s ease` }} />
           </motion.div>
 
           <div style={{ overflow: 'hidden', marginBottom: 8 }}>
