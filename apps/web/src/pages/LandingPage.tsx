@@ -1036,7 +1036,9 @@ function FeaturesSection({ onChapter }: { onChapter: (n: number) => void }) {
         {/* Header */}
         <div style={{ padding: '0 clamp(1.5rem,5vw,4rem)', paddingTop: '4.5rem', paddingBottom: '1.4rem', display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexShrink: 0, borderBottom: `1px solid ${T.border}` }}>
           <div style={{ display: 'flex', alignItems: 'center', gap: 16 }}>
-            <span style={{ fontSize: 8.5, letterSpacing: '.24em', textTransform: 'uppercase', color: T.indigo, fontFamily: "'Roboto', sans-serif", fontWeight: 500 }}>Features · Chapter 04</span>
+            {/* 8.5 -> 9: matches the chapter-label size Problem/Manifesto/Contrast
+                already converged on; this was the odd one out. */}
+            <span style={{ fontSize: 9, letterSpacing: '.24em', textTransform: 'uppercase', color: T.indigo, fontFamily: "'Roboto', sans-serif", fontWeight: 500 }}>Features · Chapter 04</span>
           </div>
           <div style={{ display: 'flex', gap: 18 }}>
             {FEATURES.map((f, i) => (
@@ -1059,7 +1061,11 @@ function FeaturesSection({ onChapter }: { onChapter: (n: number) => void }) {
               style={{ gap: 'clamp(2.5rem,5vw,6rem)' }}>
 
               <div>
-                <span style={{ fontSize: 8.5, letterSpacing: '.2em', textTransform: 'uppercase', color: T.indigo, padding: '5px 14px', borderRadius: 99, border: `1px solid ${T.indigoL}55`, background: T.indigoSub, display: 'inline-block', marginBottom: 22, fontFamily: "'Roboto', sans-serif", fontWeight: 500 }}>
+                {/* color: T.indigo on background: T.indigoSub measured 3.86:1,
+                    fails AA (4.5 floor); hsl(235, 45%, 44%) on the same
+                    T.indigoSub measures 6.37:1 — same hue, darkened to pass.
+                    fontSize 8.5 -> 9 matches Problem/Manifesto/Contrast. */}
+                <span style={{ fontSize: 9, letterSpacing: '.2em', textTransform: 'uppercase', color: 'hsl(235, 45%, 44%)', padding: '5px 14px', borderRadius: 99, border: `1px solid ${T.indigoL}55`, background: T.indigoSub, display: 'inline-block', marginBottom: 22, fontFamily: "'Roboto', sans-serif", fontWeight: 500 }}>
                   {FEATURES[active].tag}
                 </span>
                 <h2 className="rv-display" style={{ fontWeight: 400, fontSize: 'clamp(2.8rem,5vw,5.8rem)', lineHeight: 1.02, letterSpacing: '-0.02em', color: T.ink, marginBottom: 22, marginTop: 0 }}>
