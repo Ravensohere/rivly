@@ -721,7 +721,11 @@ function ContrastSection({ onChapter }: { onChapter: (n: number) => void }) {
       <div style={{ position: 'sticky', top: 0, height: '100dvh', overflow: 'hidden', display: 'flex' }}>
         {/* Left */}
         <div style={{ flex: 1, background: T.cream, display: 'flex', flexDirection: 'column', justifyContent: 'center', padding: '0 clamp(2rem,5vw,4rem)', overflow: 'hidden', position: 'relative' }}>
-          <div style={{ fontSize: 8.5, letterSpacing: '.26em', textTransform: 'uppercase', color: T.muted, marginBottom: 32, fontFamily: "'Roboto', sans-serif", fontWeight: 500 }}>Chapter 03 · The default world</div>
+          {/* T.muted on T.cream measures 4.05:1 (fails AA 4.5:1) — computed via
+              sRGB relative luminance, not assumed. hsl(230,10%,40%) on the same
+              cream is 5.38:1. Size bumped 8.5->9px to match the fix already
+              landed on this file's other chapter markers (Problem, Manifesto). */}
+          <div style={{ fontSize: 9, letterSpacing: '.26em', textTransform: 'uppercase', color: 'hsl(230, 10%, 40%)', marginBottom: 32, fontFamily: "'Roboto', sans-serif", fontWeight: 500 }}>Chapter 03 · The default world</div>
           <AnimatePresence mode="wait">
             <motion.div key={`bad-${active}`}
               initial={{ opacity: 0, y: 18, filter: 'blur(6px)' }} animate={{ opacity: 1, y: 0, filter: 'blur(0px)' }} exit={{ opacity: 0, y: -18, filter: 'blur(4px)' }}
@@ -740,7 +744,11 @@ function ContrastSection({ onChapter }: { onChapter: (n: number) => void }) {
 
         {/* Right — Rivly */}
         <motion.div style={{ width: rightW, background: T.indigo, display: 'flex', flexDirection: 'column', justifyContent: 'center', padding: '0 clamp(2rem,5vw,4rem)', flexShrink: 0, overflow: 'hidden' }}>
-          <div style={{ fontSize: 8.5, letterSpacing: '.26em', textTransform: 'uppercase', color: T.indigoXL, marginBottom: 32, fontFamily: "'Roboto', sans-serif", fontWeight: 500 }}>The Rivly rhythm</div>
+          {/* T.indigoXL on T.indigo measures 2.12:1 (fails AA hard) — computed
+              via sRGB relative luminance. #FAFAF7 (already used for this panel's
+              headline text below) on T.indigo is 4.67:1; any transparency on
+              white drops back under 4.5:1, so this stays fully opaque. */}
+          <div style={{ fontSize: 9, letterSpacing: '.26em', textTransform: 'uppercase', color: '#FAFAF7', marginBottom: 32, fontFamily: "'Roboto', sans-serif", fontWeight: 500 }}>The Rivly rhythm</div>
           <AnimatePresence mode="wait">
             <motion.div key={`good-${active}`}
               initial={{ opacity: 0, y: 18, filter: 'blur(6px)' }} animate={{ opacity: 1, y: 0, filter: 'blur(0px)' }} exit={{ opacity: 0, y: -18, filter: 'blur(4px)' }}
