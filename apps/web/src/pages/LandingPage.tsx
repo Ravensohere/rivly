@@ -1396,7 +1396,9 @@ function CTASection({ onChapter }: { onChapter: (n: number) => void }) {
       </div>
 
       <div style={{ position: 'relative', zIndex: 1, padding: '0 clamp(1.5rem,5vw,4rem)' }}>
-        <motion.div style={{ fontSize: 8.5, letterSpacing: '.26em', textTransform: 'uppercase', color: T.muted, marginBottom: 32, fontFamily: "'Roboto', sans-serif", fontWeight: 500 }}
+        {/* fontSize 9 matches the five sibling sections' label convention (was 8.5);
+            color hsl(230,10%,42%) (was T.muted): T.muted on T.bg measured 4.38:1, fails AA; this measures 5.42:1 */}
+        <motion.div style={{ fontSize: 9, letterSpacing: '.26em', textTransform: 'uppercase', color: 'hsl(230, 10%, 42%)', marginBottom: 32, fontFamily: "'Roboto', sans-serif", fontWeight: 500 }}
           initial={{ opacity: 0, y: 10 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }}>
           Chapter 07 · Your story begins
         </motion.div>
@@ -1412,8 +1414,14 @@ function CTASection({ onChapter }: { onChapter: (n: number) => void }) {
           </div>
         ))}
 
-        <motion.p className="rv-sans" style={{ fontWeight: 400, fontSize: '0.96rem', color: T.muted, margin: '48px 0 44px', letterSpacing: '0.01em' }}
+        {/* color hsl(230,10%,42%) (was T.muted): T.muted on T.bg measured 4.38:1, fails AA; this measures 5.42:1 */}
+        <motion.p className="rv-sans" style={{ fontWeight: 400, fontSize: '0.96rem', color: 'hsl(230, 10%, 42%)', margin: '48px 0 44px', letterSpacing: '0.01em' }}
           initial={{ opacity: 0 }} whileInView={{ opacity: 1 }} viewport={{ once: true }} transition={{ delay: 0.5, duration: 0.8 }}>
+          {/* FIXME(product): "thousands of calm achievers" is an unverified headcount claim that
+              contradicts this same button's "Join the Waitlist" copy below (and the Hero/Navbar's
+              identical "Join Waitlist" CTAs) — a page consistently framed as gated/not-yet-open
+              access elsewhere. Flagged per landing-cta card PASS 2, not rewritten or replaced with
+              an invented number. Needs a human product decision. */}
           Join thousands of calm achievers. No card required.
         </motion.p>
 
