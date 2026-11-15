@@ -1108,7 +1108,26 @@ const RIVA_FEATURES = [
   { icon: <Zap size={18} />,       title: 'Rhythm Orb',         desc: 'Four real expressions — focused, overwhelmed, settled, neutral — driven by your actual tasks and focus sessions, not a performance. The orb shows what\'s really going on, not a generic "sensing your flow."' },
   { icon: <Mic size={18} />,       title: 'Voice Commands',     desc: '"Create a task to call mom." "Start a focus session." "Take me to insights." Context-aware commands, even offline.' },
   { icon: <Brain size={18} />,     title: 'Focus Intelligence', desc: 'Tracks your focus history and flow state. Suggests when to work, when to rest, and when to take a breath — based on you, not averages.' },
+  // FIXME(landing-riva product-fit, 2026-11-15): "Sunday nudges" and the
+  // "'everything okay?' when you've gone quiet" claim are not backed by any
+  // shipped feature — grepped apps/web, worker/, supabase/functions and
+  // supabase/migrations for day-of-week-scheduled messaging or inactivity/
+  // silence detection; zero hits. Only real proactive messaging is
+  // useRivaLogic.ts's time-of-day CARE_MESSAGES and the once-daily
+  // useMorningBridgeNudge.ts check-in toast — neither is Sunday- or
+  // silence-triggered. Escalated in docs/superpowers/cards/landing-riva.md
+  // for a product decision (cut/soften/build); not rewritten unilaterally.
+  // The same "Sunday" claim is duplicated in this section's header
+  // paragraph a few lines below — see the matching FIXME there.
   { icon: <Headphones size={18} />,title: 'She Reaches Out',    desc: "Riva doesn't wait to be asked. She messages you first - morning check-ins, Sunday nudges, and a quiet 'everything okay?' when you've gone quiet. She shows up." },
+  // FIXME(landing-riva product-fit, 2026-11-15): "After 30 conversations...
+  // After 60..." are invented precise thresholds — no conversation-count
+  // field/counter of any kind exists in worker/src/services/ai/groq.ts's
+  // memory object (userFacts/recentInteractions/preferredTags/lastMode).
+  // The underlying "gets smarter over time" claim is real (memory does
+  // grow and feed every prompt); the specific numbers are not. Escalated
+  // in docs/superpowers/cards/landing-riva.md for a product decision; not
+  // rewritten unilaterally.
   { icon: <Leaf size={18} />,      title: 'Grows With You',     desc: 'Riva gets smarter about your patterns over time. After 30 conversations, she knows you. After 60, she feels like a friend who has known you for years. Your patterns, your story. Never sold, never shared.' },
 ];
 
@@ -1151,7 +1170,8 @@ function RivaSection({ onChapter }: { onChapter: (n: number) => void }) {
       <div style={{ maxWidth: 1100, margin: '0 auto', padding: '0 clamp(1.5rem,5vw,4rem)', position: 'relative', zIndex: 1 }}>
         {/* Header */}
         <div style={{ textAlign: 'center', marginBottom: 72 }}>
-          <motion.div style={{ fontSize: 8.5, letterSpacing: '.26em', textTransform: 'uppercase', color: T.indigoXL, marginBottom: 24, fontFamily: "'Roboto', sans-serif", fontWeight: 500 }}
+          {/* fontSize 9 matches Problem/Manifesto/Contrast/Features' converged small-caps label size (was 8.5) */}
+          <motion.div style={{ fontSize: 9, letterSpacing: '.26em', textTransform: 'uppercase', color: T.indigoXL, marginBottom: 24, fontFamily: "'Roboto', sans-serif", fontWeight: 500 }}
             initial={{ opacity: 0 }} whileInView={{ opacity: 1 }} viewport={{ once: true }}>
             Chapter 05 · Your Rhythm Guide
           </motion.div>
@@ -1184,6 +1204,12 @@ function RivaSection({ onChapter }: { onChapter: (n: number) => void }) {
             </motion.div>
           </div>
 
+          {/* FIXME(landing-riva product-fit, 2026-11-15): "messages you first
+              on Sunday evenings" is not backed by any shipped feature — same
+              fabrication as the "Sunday nudges" claim in RIVA_FEATURES[4]
+              above (see that entry's FIXME for the grep evidence). Escalated
+              in docs/superpowers/cards/landing-riva.md; not rewritten
+              unilaterally. */}
           <motion.p className="rv-sans" style={{ fontWeight: 400, fontSize: '0.92rem', color: 'rgba(255,255,255,0.45)', maxWidth: 520, margin: '0 auto', lineHeight: 2 }}
             initial={{ opacity: 0 }} whileInView={{ opacity: 1 }} viewport={{ once: true }} transition={{ delay: 0.4, duration: 0.8 }}>
             Riva isn't a productivity bot. She's the companion who remembers what you told her last Tuesday, messages you first on Sunday evenings, and is still awake when everyone else is asleep. Warmth, not judgement. Presence, not features.
@@ -1201,7 +1227,8 @@ function RivaSection({ onChapter }: { onChapter: (n: number) => void }) {
               transition={{ duration: 0.6, delay: i * 0.08, ease: E }}>
               <div style={{ color: T.indigoXL, marginBottom: 16 }}>{f.icon}</div>
               <div className="rv-display" style={{ fontWeight: 400, fontSize: '1.2rem', color: 'white', marginBottom: 10, letterSpacing: '-0.01em' }}>{f.title}</div>
-              <div className="rv-sans" style={{ fontWeight: 400, fontSize: '0.8rem', lineHeight: 1.85, color: 'rgba(255,255,255,0.38)' }}>{f.desc}</div>
+              {/* color alpha 0.5 (was 0.38): 0.38 on T.nightSub measured 3.56:1, fails AA; 0.5 measures 5.18:1 */}
+              <div className="rv-sans" style={{ fontWeight: 400, fontSize: '0.8rem', lineHeight: 1.85, color: 'rgba(255,255,255,0.5)' }}>{f.desc}</div>
             </motion.div>
           ))}
         </div>
@@ -1213,7 +1240,9 @@ function RivaSection({ onChapter }: { onChapter: (n: number) => void }) {
             "Your rhythm is steady.{' '}
             <span style={{ color: T.indigoXL }}>Trust your intuition today.</span>"
           </p>
-          <div className="rv-mono" style={{ fontSize: 8, letterSpacing: '.2em', textTransform: 'uppercase', color: T.indigoXL, opacity: 0.5, marginTop: 20 }}>— Riva, your rhythm guide</div>
+          {/* fontSize 9 matches sibling sections' small-caps label size (was 8); opacity 0.75 (was 0.5):
+              T.indigoXL @ 0.5 on this quote panel's background measured 2.89:1, fails AA; 0.75 measures 4.91:1 */}
+          <div className="rv-mono" style={{ fontSize: 9, letterSpacing: '.2em', textTransform: 'uppercase', color: T.indigoXL, opacity: 0.75, marginTop: 20 }}>— Riva, your rhythm guide</div>
         </motion.div>
       </div>
     </section>
