@@ -1,13 +1,11 @@
-import React, { useState, useEffect, useCallback, useMemo } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Heart, Brain, Loader2, Volume2, VolumeX, CalendarClock, Wind, Plus, CalendarIcon, Sparkles, Trash2 } from 'lucide-react';
+import { Loader2, Volume2, VolumeX, CalendarClock, Trash2 } from 'lucide-react';
 import { format, isToday } from 'date-fns';
 import { useNavigate } from 'react-router-dom';
 import { PageTransition } from '@/components/ui/PageTransition';
-import { DayHeader } from '@/components/planner/DayHeader';
 import { CalendarView } from '@/components/planner/CalendarView';
 import { TimelineView } from '@/components/planner/TimelineView';
-import { AnimatedBackground } from '@/components/planner/AnimatedBackground';
 import { FloatingActionButton } from '@/components/planner/FloatingActionButton';
 import { AddBlockDialog } from '@/components/planner/AddBlockDialog';
 import { AddTaskDialog } from '@/components/planner/AddTaskDialog';
@@ -24,9 +22,7 @@ import { DateSelector } from '@/components/planner/DateSelector';
 import { ViewToggle } from '@/components/planner/ViewToggle';
 import { CalendarModal } from '@/components/calendar/CalendarModal';
 import { EventFormModal } from '@/components/calendar/EventFormModal';
-import { EventsList } from '@/components/calendar/EventsList';
 import { MorningBridgeDisplayCard } from '@/components/sleep/MorningBridgeDisplayCard';
-import { MorningVoicePrompt } from '@/components/sleep/MorningVoicePrompt';
 import { useTimeBlocks } from '@/hooks/useTimeBlocks';
 import { useTasks } from '@/hooks/useTasks';
 import { useCheckIn } from '@/hooks/useCheckIn';
@@ -42,14 +38,12 @@ import { useGoogleCalendarSimple } from '@/hooks/useGoogleCalendarSimple';
 import { mapLegacyCategory } from '@/types/thoughts';
 import { EditTaskDialog } from '@/components/planner/EditTaskDialog';
 import { EditBlockDialog } from '@/components/planner/EditBlockDialog';
-import { getLocalDateKey, parseDateKey, formatDateKeyDisplay } from '@/lib/dateUtils';
+import { getLocalDateKey, parseDateKey } from '@/lib/dateUtils';
 import { getPlanOptions, suggestPlanKind, type PlanKind } from '@/services/PlanningEngine';
 import { getOverdueTasks, computeReschedule, RescheduleItem } from '@/services/SmartReschedule';
-import { suggestFlowBlocks } from '@/services/FlowBlocksSuggestion';
 import { BreathworkPauseModal } from '@/components/mental/BreathworkPauseModal';
 import { NextBlockPanel } from '@/components/planner/NextBlockPanel';
 import { useToast } from '@/hooks/use-toast';
-import { supabase } from "@/integrations/supabase/client";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from '@/components/ui/dialog';
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
 import { Calendar } from '@/components/ui/calendar';
@@ -115,15 +109,6 @@ export default function DayPlanner() {
     return () => window.removeEventListener('keydown', handleKeyDown);
   }, []);
   
-  // Responsive globe size � must be before any early return
-  const [globeSize, setGlobeSize] = useState(260);
-  useEffect(() => {
-    const update = () => setGlobeSize(Math.min(400, Math.max(240, Math.round(window.innerWidth * 0.22))));
-    update();
-    window.addEventListener('resize', update);
-    return () => window.removeEventListener('resize', update);
-  }, []);
-
   // Onboarding nudges
   const { 
     shouldShowAddTaskNudge,
@@ -204,9 +189,9 @@ export default function DayPlanner() {
   }, [toggleTask, startBlock, tasks, toast]);
 
   const { hasCheckedInToday, saveCheckIn, getCheckInForDate } = useCheckIn();
-  const { addThought, activeCount: parkedThoughtsCount } = useParkedThoughts();
+  const { addThought } = useParkedThoughts();
   const { getCompletedSessionsCount, sessions: focusSessions } = useFocusSessions();
-  const { getEventsForDate, isLoading: eventsLoading } = useEvents();
+  const { getEventsForDate } = useEvents();
   const { isConnected, fetchGoogleEvents, createGoogleEvent, googleEvents } = useGoogleCalendarSimple();
   
   // Events ledger for analytics tracking
@@ -1180,69 +1165,5 @@ export default function DayPlanner() {
         </DialogContent>
       </Dialog>
     </PageTransition>
-  );
-}
-
-/* ════════════════════════════════════════════════════
-   SUB-COMPONENTS (scoped to this page)
-════════════════════════════════════════════════════ */
-
-/** Floating stat card */
-function StatCard({ icon, value, label, color }: { icon: string; value: string; label: string; color: string }) {
-  return (
-    <motion.div
-      whileHover={{ y: -3, scale: 1.03 }}
-      style={{
-        flex: 1, borderRadius: '1rem',
-        background: 'hsl(var(--card))',
-        border: '1px solid hsl(var(--border) / 0.35)',
-        boxShadow: 'var(--shadow-soft)',
-        padding: 'clamp(0.85rem, 1.6vh, 1.4rem) clamp(0.7rem, 1.2vw, 1.1rem)',
-        display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 'clamp(0.15rem, 0.4vh, 0.3rem)',
-        transition: 'all 0.35s cubic-bezier(0.22,1,0.36,1)',
-      }}
-    >
-      <span style={{ fontSize: 'clamp(0.9rem, 1.4vw, 1.2rem)', color, lineHeight: 1 }}>{icon}</span>
-      <span style={{ fontFamily: "Roboto, sans-serif", fontSize: 'clamp(1.5rem, 2.8vw, 2.4rem)', fontWeight: 700, color: 'hsl(var(--foreground))', lineHeight: 1 }}>{value}</span>
-      <span style={{ fontFamily: "'DM Mono', monospace", fontSize: 'clamp(0.6rem, 0.85vw, 0.75rem)', letterSpacing: '0.12em', textTransform: 'uppercase', color: 'hsl(var(--muted-foreground) / 0.6)' }}>{label}</span>
-    </motion.div>
-  );
-}
-
-/** Quick action pill */
-function QuickActionPill({ icon, label, tint, bg, border, onClick, pulse, rotate, badge }: {
-  icon: React.ReactNode; label: string; tint: string; bg: string; border: string;
-  onClick: () => void; pulse?: boolean; rotate?: boolean; badge?: string;
-}) {
-  return (
-    <motion.button
-      whileHover={{ scale: 1.03, y: -2 }}
-      whileTap={{ scale: 0.94 }}
-      onClick={onClick}
-      style={{
-        flex: 1, display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 'clamp(0.42rem, 0.8vw, 0.65rem)',
-        padding: 'clamp(0.8rem, 1.4vh, 1.2rem) clamp(0.6rem, 1vw, 0.9rem)', borderRadius: 'clamp(0.85rem, 1.2vw, 1.1rem)',
-        background: bg, border: `1px solid ${border}`,
-        position: 'relative', cursor: 'pointer', transition: 'all 0.28s ease',
-      }}
-    >
-      {badge && (
-        <span style={{
-          position: 'absolute', top: '-0.4rem', right: '-0.4rem',
-          width: '1rem', height: '1rem', borderRadius: '50%',
-          background: 'hsl(var(--primary))', color: '#fff',
-          display: 'flex', alignItems: 'center', justifyContent: 'center',
-          fontFamily: "'DM Mono', monospace", fontSize: '0.45rem',
-        }}>{badge}</span>
-      )}
-      <motion.span
-        style={{ color: tint, display: 'flex' }}
-        animate={pulse ? { scale: [1, 1.2, 1] } : rotate ? { rotate: [0, 8, -8, 0] } : {}}
-        transition={{ duration: pulse ? 3 : 4, repeat: Infinity, ease: 'easeInOut' }}
-      >
-        {icon}
-      </motion.span>
-      <span style={{ fontFamily: "Roboto, sans-serif", fontSize: 'clamp(0.78rem, 1.1vw, 1rem)', fontWeight: 500, color: tint }}>{label}</span>
-    </motion.button>
   );
 }
