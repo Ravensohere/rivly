@@ -129,7 +129,11 @@ export default function AlarmRingingPage() {
     return (
       <div className="min-h-screen bg-gradient-to-b from-primary/20 to-background flex items-center justify-center p-4">
         <div className="text-center">
-          <p className="text-muted-foreground">Alarm not found</p>
+          {/* text-muted-foreground measures 4.38:1 on this bg, under the 4.5:1 AA floor
+              for normal text (same inherited token near-miss as landing-cta's T.muted/
+              T.bg pair) — darkened locally to hsl(230,10%,42%) (light) = 4.8-5.42:1,
+              hsl(230,10%,55%) unchanged for dark mode which already passes at ~5.14:1 */}
+          <p className="text-[hsl(230,10%,42%)] dark:text-[hsl(230,10%,55%)]">Alarm not found</p>
           <Button onClick={() => navigate('/')} className="mt-4">
             Go Home
           </Button>
@@ -213,7 +217,11 @@ export default function AlarmRingingPage() {
           transition={{ delay: 0.1 }}
           className="mb-2"
         >
-          <p className="text-xl text-muted-foreground">
+          {/* text-muted-foreground measures 4.38:1 on this bg, under the 4.5:1 AA floor
+              for normal text — darkened locally to hsl(230,10%,42%) (light) = 4.8-5.42:1
+              depending on gradient position; hsl(230,10%,55%) unchanged for dark mode,
+              which already passes at ~5.14:1 */}
+          <p className="text-xl text-[hsl(230,10%,42%)] dark:text-[hsl(230,10%,55%)]">
             {alarm.label || 'Alarm'}
           </p>
         </motion.div>
@@ -225,8 +233,8 @@ export default function AlarmRingingPage() {
           transition={{ delay: 0.2 }}
           className="flex items-center gap-3 mb-8"
         >
-          <Clock className="w-4 h-4 text-muted-foreground" />
-          <span className="text-sm text-muted-foreground">
+          <Clock className="w-4 h-4 text-[hsl(230,10%,42%)] dark:text-[hsl(230,10%,55%)]" />
+          <span className="text-sm text-[hsl(230,10%,42%)] dark:text-[hsl(230,10%,55%)]">
             Set for {formatTimeDisplay(alarm.time)}
           </span>
           <span className="text-xs px-2 py-0.5 rounded-full bg-primary/15 text-primary">
@@ -239,7 +247,7 @@ export default function AlarmRingingPage() {
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           transition={{ delay: 0.3 }}
-          className="flex items-center gap-2 mb-12 text-sm text-muted-foreground"
+          className="flex items-center gap-2 mb-12 text-sm text-[hsl(230,10%,42%)] dark:text-[hsl(230,10%,55%)]"
         >
           <Volume2 className="w-4 h-4" />
           <span className="capitalize">{alarm.sound.replace('-', ' ')}</span>
@@ -265,6 +273,13 @@ export default function AlarmRingingPage() {
             className="flex flex-col gap-4 w-full max-w-xs"
           >
             {/* Snooze buttons */}
+            {/* FIXME(alarm-ringing card): always offers a fixed 5/10/15m choice and
+                never reads/highlights alarm.snoozeMinutes — the per-alarm snooze
+                duration the user already configured in AlarmEditorSheet. That stored
+                preference is dead at the one moment it should matter. Not changed
+                here (behavior change outside this card's design/contrast scope);
+                flagged for a product decision: default-select it, drop it from the
+                editor, or confirm offering a choice here is intentional. */}
             <div className="flex gap-2">
               {[5, 10, 15].map((mins) => (
                 <Button
