@@ -1,5 +1,5 @@
 import { useRef, useState, useEffect, useCallback } from 'react';
-import { ReactLenis, useLenis } from '@studio-freight/react-lenis';
+import { ReactLenis } from '@studio-freight/react-lenis';
 
 function useIsDesktop() {
   const [isDesktop, setIsDesktop] = useState(false);
@@ -366,9 +366,14 @@ function Navbar({ dark }: { dark?: boolean }) {
       </Link>
 
       <div className="hidden md:flex items-center gap-10">
+        {/* color: dark variant rgba(255,255,255,0.5) (was 0.4) on T.night measured
+            3.83:1, fails AA; 0.5 measures 5.34:1 — same opacity fix already applied
+            to RivaSection's feature-grid desc text on this background. Light variant
+            hsl(230,10%,42%) (was T.muted): T.muted on T.bg measured 4.38:1, fails AA;
+            this measures 5.42:1. */}
         {['Why', 'Features', 'Riva AI', 'Family', 'Promise'].map(l => (
           <a key={l} href={`#${l.toLowerCase().replace(' ', '-')}`} className="rv-sans rv-ul" data-h="true"
-            style={{ fontSize: 11, letterSpacing: '.12em', textTransform: 'uppercase', color: dark ? 'rgba(255,255,255,0.4)' : T.muted, textDecoration: 'none', fontWeight: 500 }}>
+            style={{ fontSize: 11, letterSpacing: '.12em', textTransform: 'uppercase', color: dark ? 'rgba(255,255,255,0.5)' : 'hsl(230, 10%, 42%)', textDecoration: 'none', fontWeight: 500 }}>
             {l}
           </a>
         ))}
@@ -380,7 +385,8 @@ function Navbar({ dark }: { dark?: boolean }) {
         </Link>
       ) : (
         <div style={{ display: 'flex', alignItems: 'center', gap: '1rem' }}>
-          <Link to="/login" className="rv-sans text-xs font-medium" style={{ color: dark ? 'rgba(255,255,255,0.7)' : T.muted, textDecoration: 'none', transition: 'color 0.2s' }} onMouseEnter={(e) => e.currentTarget.style.color = dark ? '#fff' : T.ink} onMouseLeave={(e) => e.currentTarget.style.color = dark ? 'rgba(255,255,255,0.7)' : T.muted}>Log in</Link>
+          {/* color (light variant) hsl(230,10%,42%) (was T.muted): same measured fix as the nav links above */}
+          <Link to="/login" className="rv-sans text-xs font-medium" style={{ color: dark ? 'rgba(255,255,255,0.7)' : 'hsl(230, 10%, 42%)', textDecoration: 'none', transition: 'color 0.2s' }} onMouseEnter={(e) => e.currentTarget.style.color = dark ? '#fff' : T.ink} onMouseLeave={(e) => e.currentTarget.style.color = dark ? 'rgba(255,255,255,0.7)' : 'hsl(230, 10%, 42%)'}>Log in</Link>
           <Mag href="https://ravenso.in/#/" className="h-9 px-6 rounded-full text-xs font-semibold border" style={{ color: dark ? '#fff' : T.ink, borderColor: dark ? 'rgba(255,255,255,0.2)' : T.ink, background: dark ? 'rgba(255,255,255,0.06)' : 'transparent', fontFamily: "'Roboto', sans-serif" }}>
             Join Waitlist
           </Mag>
@@ -441,7 +447,10 @@ function Hero({ onChapter }: { onChapter: (n: number) => void }) {
       {/* Eyebrow */}
       <motion.div style={{ position: 'absolute', top: '22vh', left: 'clamp(1.5rem,5vw,4rem)', opacity: fadeOp }}
         initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 1.1, ease: E, delay: 0.05 }}>
-        <span style={{ fontSize: 9, letterSpacing: '.24em', textTransform: 'uppercase', color: T.indigo, padding: '6px 16px', borderRadius: 99, border: `1px solid ${T.indigo}44`, background: T.indigoSub, fontFamily:"'Roboto', sans-serif", fontWeight: 500 }}>
+        {/* color hsl(235,45%,44%) (was T.indigo): T.indigo on T.indigoSub measured
+            3.86:1, fails AA; this measures 6.37:1 — same fix FeaturesSection
+            already applied to the identical pairing. */}
+        <span style={{ fontSize: 9, letterSpacing: '.24em', textTransform: 'uppercase', color: 'hsl(235, 45%, 44%)', padding: '6px 16px', borderRadius: 99, border: `1px solid ${T.indigo}44`, background: T.indigoSub, fontFamily:"'Roboto', sans-serif", fontWeight: 500 }}>
           YOUR AI LIFE COMPANION · RIVLY
         </span>
       </motion.div>
@@ -491,7 +500,8 @@ function Hero({ onChapter }: { onChapter: (n: number) => void }) {
       <motion.div style={{ opacity: fadeOp, position: 'absolute', bottom: '5vh', left: 0, right: 0, padding: '0 clamp(1.5rem,5vw,4rem)', zIndex: 2 }}
         initial={{ opacity: 0, y: 24 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 1.2, ease: E, delay: 1 }}>
         <div style={{ display: 'flex', flexWrap: 'wrap', alignItems: 'flex-end', justifyContent: 'space-between', gap: 24 }}>
-          <p className="rv-sans" style={{ fontWeight: 400, fontSize: 'clamp(0.82rem,1.05vw,0.96rem)', lineHeight: 1.7, maxWidth: 'min(340px, 100%)', color: T.muted, letterSpacing: '0.01em' }}>
+          {/* color hsl(230,10%,42%) (was T.muted): T.muted on T.bg measured 4.38:1, fails AA; this measures 5.42:1 */}
+          <p className="rv-sans" style={{ fontWeight: 400, fontSize: 'clamp(0.82rem,1.05vw,0.96rem)', lineHeight: 1.7, maxWidth: 'min(340px, 100%)', color: 'hsl(230, 10%, 42%)', letterSpacing: '0.01em' }}>
             The only AI that knows you, checks on you, and shows up before you ask.
             Live with intention. Rest without guilt. Never feel alone at 2am.
           </p>
@@ -518,7 +528,8 @@ function Hero({ onChapter }: { onChapter: (n: number) => void }) {
       <motion.div style={{ position: 'absolute', bottom: '2.5vh', left: '50%', transform: 'translateX(-50%)', display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 8, zIndex: 2 }}
         initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 2.2, duration: 1.2 }}>
         <div className="rv-scroll-bar" style={{ width: 1, height: 48, background: `linear-gradient(to bottom, ${T.indigo}, transparent)` }} />
-        <span className="rv-mono" style={{ fontSize: 7, letterSpacing: '.28em', textTransform: 'uppercase', color: T.muted }}>Scroll</span>
+        {/* color hsl(230,10%,42%) (was T.muted): same measured fix as the subcopy above */}
+        <span className="rv-mono" style={{ fontSize: 7, letterSpacing: '.28em', textTransform: 'uppercase', color: 'hsl(230, 10%, 42%)' }}>Scroll</span>
       </motion.div>
     </section>
   );
@@ -1462,7 +1473,10 @@ function Footer() {
           </a>
         ))}
       </div>
-      <span className="rv-sans" style={{ fontSize: 10, color: T.muted, opacity: 0.35, fontWeight: 500 }}>© 2026 Rivly</span>
+      {/* opacity removed (was 0.35): T.muted dimmed to 0.35 on T.surface measured
+          ~1.56:1, fails AA hard; un-dimmed T.muted on T.surface measures 4.56:1 and
+          passes — matches the sibling footer links above, which set no opacity. */}
+      <span className="rv-sans" style={{ fontSize: 10, color: T.muted, fontWeight: 500 }}>© 2026 Rivly</span>
     </footer>
   );
 }
@@ -1504,6 +1518,14 @@ export default function LandingPage() {
     <ReactLenis root options={{ duration: 1.55, smoothWheel: isDesktop, easing: (t: number) => Math.min(1, 1.001 - Math.pow(2, -10 * t)) }}>
       <style dangerouslySetInnerHTML={{ __html: GLOBAL_CSS }} />
       <div className="rv-body" style={{ minHeight: '100dvh', background: T.bg }}>
+        {/* FIXME(product): the description's "your family" clause and the "Family
+            Care" keyword both repeat the FEATURES[7] "Family Care" claim (parent
+            accounts, automated medicine reminders, Q&A) that landing-features'
+            PASS 2 confirmed does not exist anywhere in the codebase (apps/web/src,
+            worker/src) — see docs/superpowers/cards/landing-features.md and the
+            matching in-source FIXME at FEATURES[7] above. This page-level SEO copy
+            repeats the same unverified claim outside that section's scope; flagged
+            here rather than rewritten, per the same escalate-don't-rewrite rule. */}
         <SEO
           title="Rivly - Meet Riva, Your AI Life Companion"
           description="Riva knows your goals, your schedule, and your family and checks in before you ask. Not a planner. Your Life OS. Built in India."
