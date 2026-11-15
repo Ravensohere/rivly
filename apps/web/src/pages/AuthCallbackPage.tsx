@@ -51,6 +51,10 @@ export default function AuthCallbackPage() {
           setStatus('success');
           
           // Redirect after a brief delay to show success and let AuthContext catch up
+          // FIXME: not cleared on unmount — if the user navigates away within this window
+          // (back button, a link, a toast route), this timer still fires and force-navigates
+          // to /app out from under whatever they just navigated to. Pre-existing, narrow
+          // (1-1.5s) window, not fixed here (contrast-only card scope). See auth-callback.md.
           setTimeout(() => {
             console.log('[AuthCallback] Navigating to /app with reload');
             // Force a hard reload as requested to ensure fresh state
