@@ -1013,7 +1013,15 @@ const FEATURES = [
   { num: '05', tag: 'Crisis Mode',       title: 'Overwhelm Mode',         body: 'The panic button that actually works. Simplifies everything down to one small, doable step. Because sometimes the only way out is through — gently.',                         Visual: OverwhelmSVG    },
   { num: '06', tag: 'Morning',           title: 'Morning Bridge',         body: 'A gentle transition from sleep to intention. Log mood, energy, sleep quality. Let Riva set the tone for your day before the chaos begins.',                                   Visual: MorningBridgeSVG },
   { num: '07', tag: 'Evening',           title: 'Wind Down Ritual',       body: 'Close the loop every evening. Review, reflect, release. The day is complete — let it go. Tomorrow begins in peace, not anxiety.',                                             Visual: WindDownSVG     },
+  // FIXME: UNVERIFIED FEATURE CLAIM, safety-adjacent — this describes a "Family Care" feature
+  // (parent accounts, automated medicine reminders, Q&A) that does not exist anywhere in the
+  // codebase (apps/web/src, worker/src) as of the redesign-pipeline audit. See
+  // docs/superpowers/cards/landing-features.md PASS 2 for the full check. Do not ship/deploy
+  // this claim without either building the feature or rewriting this copy.
   { num: '08', tag: 'Family Care',       title: 'Riva cares for everyone you love.', body: "Add your parents to Riva's world. She sends medicine reminders, answers their questions, and alerts you if something needs your attention. Peace of mind for the whole family.", Visual: FamilyCareSVG },
+  // FIXME: PARTIALLY FALSE CLAIM — "all 4 metrics update on their own" is false for one of the
+  // four: useGoals.ts's windDownNights is hardcoded to 0 ("Would need sleep data integration"),
+  // it never actually tracks. See docs/superpowers/cards/landing-features.md PASS 2.
   { num: '09', tag: 'Goals',             title: 'Goals That Track Themselves', body: "Set weekly targets — focus minutes, tasks completed, focus sessions, wind-down nights — and dial them in with a slider. Progress updates on its own from what you actually do, including every to-do you check off. Hit 100% and it's achieved automatically.", Visual: GoalsSVG },
 ];
 
