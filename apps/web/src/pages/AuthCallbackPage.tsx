@@ -100,7 +100,13 @@ export default function AuthCallbackPage() {
               <Loader2 className="w-8 h-8 text-primary animate-spin" />
             </div>
             <h1 className="text-xl font-semibold text-foreground">Signing you in...</h1>
-            <p className="text-sm text-muted-foreground">Please wait a moment</p>
+            {/* text-muted-foreground on this page's bg-background measures 4.40:1 (computed
+                sRGB->linear->luminance->WCAG), under the 4.5:1 AA floor for 14px text — same
+                shared-token failure already fixed in landing-cta / alarm-ringing. The darkened
+                light-mode shade below measures 5.43:1 here; dark mode's existing value already
+                passes (5.14:1) and is left unchanged via the dark: variant. Reused at all three
+                text-muted-foreground sites on this page. */}
+            <p className="text-sm text-[hsl(230,10%,42%)] dark:text-[hsl(230,10%,55%)]">Please wait a moment</p>
           </>
         )}
 
@@ -110,7 +116,7 @@ export default function AuthCallbackPage() {
               <CheckCircle2 className="w-8 h-8 text-green-500" />
             </div>
             <h1 className="text-xl font-semibold text-foreground">Welcome to Rivly!</h1>
-            <p className="text-sm text-muted-foreground">Redirecting you now...</p>
+            <p className="text-sm text-[hsl(230,10%,42%)] dark:text-[hsl(230,10%,55%)]">Redirecting you now...</p>
           </>
         )}
 
@@ -120,7 +126,7 @@ export default function AuthCallbackPage() {
               <AlertCircle className="w-8 h-8 text-destructive" />
             </div>
             <h1 className="text-xl font-semibold text-foreground">Sign in failed</h1>
-            <p className="text-sm text-muted-foreground max-w-xs mx-auto">{errorMessage}</p>
+            <p className="text-sm text-[hsl(230,10%,42%)] dark:text-[hsl(230,10%,55%)] max-w-xs mx-auto">{errorMessage}</p>
             <button
               onClick={() => navigate('/', { replace: true })}
               className="text-sm text-primary hover:underline mt-4"
