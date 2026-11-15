@@ -124,7 +124,10 @@ export default function CalendarCallbackPage() {
               <Loader2 className="w-8 h-8 text-primary animate-spin" />
             </div>
             <h1 className="text-xl font-semibold text-foreground">Connecting Calendar...</h1>
-            <p className="text-sm text-muted-foreground">Please wait a moment</p>
+            {/* text-muted-foreground is 4.40:1 on this page's flat bg-background, below the 4.5:1 AA
+                floor for 14px text; hsl(230,10%,42%) measures 5.43:1 (verified sRGB->linear->luminance),
+                same fix already applied on alarm-ringing/auth-callback for this shared token */}
+            <p className="text-sm text-[hsl(230,10%,42%)] dark:text-[hsl(230,10%,55%)]">Please wait a moment</p>
           </>
         )}
 
@@ -134,7 +137,7 @@ export default function CalendarCallbackPage() {
               <Calendar className="w-8 h-8 text-green-500" />
             </div>
             <h1 className="text-xl font-semibold text-foreground">Calendar Connected!</h1>
-            <p className="text-sm text-muted-foreground">Your events will now appear in Rivly</p>
+            <p className="text-sm text-[hsl(230,10%,42%)] dark:text-[hsl(230,10%,55%)]">Your events will now appear in Rivly</p>
           </>
         )}
 
@@ -144,7 +147,7 @@ export default function CalendarCallbackPage() {
               <AlertCircle className="w-8 h-8 text-destructive" />
             </div>
             <h1 className="text-xl font-semibold text-foreground">Connection failed</h1>
-            <p className="text-sm text-muted-foreground max-w-xs mx-auto">{errorMessage}</p>
+            <p className="text-sm text-[hsl(230,10%,42%)] dark:text-[hsl(230,10%,55%)] max-w-xs mx-auto">{errorMessage}</p>
             <button
               onClick={() => navigate('/settings', { replace: true })}
               className="text-sm text-primary hover:underline mt-4"
