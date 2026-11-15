@@ -260,7 +260,19 @@ export default function AlarmRingingPage() {
             animate={{ scale: 1, opacity: 1 }}
             className="mb-8 px-6 py-3 rounded-full bg-muted"
           >
-            <p className="text-muted-foreground">Snoozed - will ring again soon</p>
+            {/* text-muted-foreground on bg-muted measures 4.03:1 (light mode) — under
+                the 4.5:1 AA floor for normal text, same inherited token failure as the
+                other 4 sites on this page; darkened locally to hsl(230,10%,42%) =
+                4.98:1, same already-vetted shade reused for consistency.
+                Dark mode: the existing text-muted-foreground/bg-muted pairing was
+                already measuring 4.33:1 (also under 4.5:1) before this fix and is
+                unchanged by it — a pre-existing, inherited dark-mode near-miss on this
+                specific muted-pill background (distinct from the page's dark
+                background, which the other 4 sites' dark value already clears at
+                5.14:1); flagged here, not silently "fixed" with an unreviewed new
+                dark-mode value, since the brief's fix pattern for this card is the
+                light-mode value only. */}
+            <p className="text-[hsl(230,10%,42%)] dark:text-[hsl(230,10%,55%)]">Snoozed - will ring again soon</p>
           </motion.div>
         )}
 

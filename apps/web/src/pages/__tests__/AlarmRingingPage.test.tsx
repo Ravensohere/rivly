@@ -224,5 +224,26 @@ describe('AlarmRingingPage', () => {
       expect(row?.className).toContain('text-[hsl(230,10%,42%)]');
       expect(row?.className).toContain('dark:text-[hsl(230,10%,55%)]');
     });
+
+    it('renders the "alarm not found" message with the darkened, AA-passing muted color', () => {
+      renderAt('/alarm/ringing');
+
+      const message = screen.getByText(/Alarm not found/i);
+      expect(message.className).toContain('text-[hsl(230,10%,42%)]');
+      expect(message.className).toContain('dark:text-[hsl(230,10%,55%)]');
+    });
+
+    it('renders the snoozed-state message with the darkened, AA-passing muted color once snoozed is actually triggered', () => {
+      renderAt('/alarm/ringing?id=alarm-1');
+
+      // Actually trigger the snoozed state (not just assert text presence) --
+      // this is the 5th site sharing the same muted-foreground token failure,
+      // on the bg-muted pill rather than the page's gradient background.
+      fireEvent.click(screen.getByRole('button', { name: '10m' }));
+
+      const message = screen.getByText(/Snoozed - will ring again soon/i);
+      expect(message.className).toContain('text-[hsl(230,10%,42%)]');
+      expect(message.className).toContain('dark:text-[hsl(230,10%,55%)]');
+    });
   });
 });

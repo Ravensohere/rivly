@@ -174,3 +174,54 @@ bell/clock/button structure are untouched.
 - The `alarm.snoozeMinutes` gap is a genuine, pre-existing product-logic
   inconsistency (not introduced by this card) that needs a human
   decision; flagged via FIXME + card handoff, intentionally not fixed.
+
+## Fix report (post-review, PASS 4)
+
+**Reviewer finding:** a 5th occurrence of the same contrast defect at
+`AlarmRingingPage.tsx:263` — the "Snoozed - will ring again soon" message
+inside the `bg-muted` pill, `text-muted-foreground` on `bg-muted` =
+4.03:1, under the 4.5:1 AA floor. Missed because the `snoozed` state was
+never actually triggered in the CDP visual check (never reached an
+authenticated session) or asserted by color in the test suite (the
+original snooze test only checked text presence).
+
+**Independently re-verified:** confirmed `rgb(110,114,135)` on
+`rgb(239,236,231)` (`--muted` light, converted from `hsl(38,20%,92%)`) =
+**4.034:1** — matches the reviewer's number exactly.
+
+**Fix applied:** same pattern as the other 4 sites —
+`text-[hsl(230,10%,42%)] dark:text-[hsl(230,10%,55%)]`. Verified against
+this specific background: `rgb(96,100,118)` on `rgb(239,236,231)` =
+**4.976:1** — passes.
+
+**New finding surfaced while fixing (disclosed, not silently patched):**
+unlike the other 4 sites, this site's dark-mode pairing is against
+`--muted` dark (`rgb(31,34,45)`), not `--background` dark
+(`rgb(16,17,25)`) — a lighter dark-mode token. The existing (unchanged)
+dark `--muted-foreground` value on it computes to **4.33:1**, also under
+AA, and was already failing before this card touched anything; the
+`dark:` variant carries it forward unchanged per the reviewer's "same
+pattern" instruction rather than inventing a new, unreviewed dark-mode
+value. Flagged in the card handoff and via an in-source comment at the
+site as a pre-existing, shared-token-level near-miss needing a separate
+decision — not fixed by this diff.
+
+**Test added:** a new test that actually clicks a snooze button to enter
+the `snoozed` state, then asserts the rendered message's `className`
+contains the fixed color classes (addressing the reviewer's root-cause
+note directly — color, not just text presence). Also added one
+previously-missing color-assertion test for the "alarm not found"
+fallback message (caught during this same pass; it was fixed in the
+original diff but never had its own color test).
+
+**Re-run:**
+- Focused file: **17/17 passed** (was 15/15).
+- Full suite: `cd apps/web && npx vitest run` → **30/30 files, 308/308
+  tests passed** (was 306/306).
+- Build: `npm run build` → `✓ built in 11.47s`, no errors;
+  `AlarmRingingPage` chunk **6.62 kB** (was 6.59 kB).
+
+**Files changed (this pass):** `apps/web/src/pages/AlarmRingingPage.tsx`
+(1 more className fix + comment), `apps/web/src/pages/__tests__/AlarmRingingPage.test.tsx`
+(2 more tests), `docs/superpowers/cards/alarm-ringing.md` (PASS 4
+section + handoff update), this report.

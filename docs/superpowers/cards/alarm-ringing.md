@@ -10,7 +10,7 @@ acceptance:
   - primary interaction verified
   - no shared-component regression in holistic smoke pass
 merge_gate: work stays inside F:\Personal Assistant\rivly-assistant-worktrees\integrated-main or fresh worktrees branched from it (never rivly-assistant's own checkout, F:\skipwise, or F:\Personal Assistant\app); <=2 concurrent builds; riva/integrated-main stays local (no push); no .env/secrets access
-handoff: see "## Handoff" below (PASS 1 = design, PASS 2 = product-fit, PASS 3 = build record) — PASS 2 found one real product-logic gap (the alarm's configured `snoozeMinutes` preference is never read by this page) — flagged with a card note + in-source FIXME, not silently fixed (behavior change outside this card's design/contrast scope). No fabricated/false UI claims found; dismiss/snooze both verified to work as implied.
+handoff: see "## Handoff" below (PASS 1 = design, PASS 2 = product-fit, PASS 3 = build record, PASS 4 = post-review fix record) — PASS 2 found one real product-logic gap (the alarm's configured `snoozeMinutes` preference is never read by this page) — flagged with a card note + in-source FIXME, not silently fixed (behavior change outside this card's design/contrast scope). No fabricated/false UI claims found; dismiss/snooze both verified to work as implied. PASS 4: review found a 5th instance of the same contrast defect (the snoozed-state pill message, `text-muted-foreground` on `bg-muted` = 4.03:1) missed by PASS 1-3 because the `snoozed` UI state was never actually triggered during the visual check or in a color-assertion test — fixed, plus a newly-discovered dark-mode-only near-miss on that same site (4.33:1, pre-existing, unchanged, flagged not fixed).
 ---
 
 # Card: Alarm Ringing Page
@@ -371,4 +371,74 @@ escalation for a human product decision.**
   the exact site (`AlarmRingingPage.tsx`, above the `[5, 10, 15]` array).
   This needs a human product decision before any further work on this
   screen's snooze picker.
+
+### PASS 4 — Post-review fix (a 5th missed site)
+
+**Finding (reviewer-reported, independently re-verified).** A fifth
+occurrence of the exact same `text-muted-foreground` contrast failure
+existed at `AlarmRingingPage.tsx:263` (pre-fix line), the "Snoozed - will
+ring again soon" message inside the `bg-muted` pill shown once `snoozed`
+is `true`. PASS 1-3 fixed four sites ("at all four sites") but missed
+this fifth one — root cause: the `snoozed` UI state was never actually
+triggered during the CDP visual check (no authenticated session was
+reached, so the live check never got past the login redirect) nor
+asserted by color in the original test suite (the original `stops the
+sound and shows the snoozed state` test only asserted the message's
+*text* was present, not its *className*/color).
+
+**Re-verified independently** (same sRGB → linear → luminance → WCAG
+method used throughout this card): `--muted-foreground` light
+(`rgb(110,114,135)`) on `--muted` light (`hsl(38,20%,92%)` →
+`rgb(239,236,231)`, confirmed by converting the token directly — not
+assumed from the reviewer's number) = **4.034:1**, confirming the
+reviewer's 4.03:1 and the under-AA-floor finding.
+
+**Fix applied:** same pattern as the other four sites —
+`text-muted-foreground` → `text-[hsl(230,10%,42%)]
+dark:text-[hsl(230,10%,55%)]`. Verified the light-mode fix value against
+*this* specific background (not just reused blindly): `rgb(96,100,118)`
+on `rgb(239,236,231)` = **4.976:1** — passes with margin.
+
+**New finding surfaced while re-verifying (disclosed, not silently
+fixed):** unlike the other four sites — where dark mode's unchanged
+`text-muted-foreground` value already passed against the page's dark
+*background* (5.14:1) — this fifth site's text sits on `bg-muted`, a
+different, lighter dark-mode token (`hsl(230,18%,15%)` →
+`rgb(31,34,45)`, lighter than the dark `--background` at `rgb(16,17,25)`).
+Computed: dark `--muted-foreground` (`rgb(129,133,152)`) on dark
+`--muted` (`rgb(31,34,45)`) = **4.33:1** — also under the 4.5:1 AA floor,
+and this was already true *before* this card touched anything (the
+`dark:` variant carries forward the exact same pre-existing value). This
+is a pre-existing, inherited, shared-token-level near-miss on the
+`muted-foreground`/`muted` pairing specifically (distinct from the
+already-passing `muted-foreground`/`background` pairing the other four
+sites rely on), not introduced or fixed by this diff. Per this card's
+standing instruction not to unilaterally invent a new, unreviewed
+dark-mode value outside the "same pattern" the reviewer asked for, it is
+flagged here (and via an in-source comment at the site) rather than
+silently patched with an ad-hoc shade. **Escalated, not fixed** — needs
+either a shared-token-level decision (same category as `landing-cta`'s
+and this card's own PASS 2 token-level observations) or a follow-up
+card.
+
+**Test added:** `renders the snoozed-state message with the darkened,
+AA-passing muted color once snoozed is actually triggered` — clicks a
+real snooze button (`fireEvent.click(... '10m' ...)`) to actually enter
+the `snoozed` state, then asserts the rendered message's `className`
+contains the new color classes (not just that the text is present) —
+exactly addressing the reviewer's root-cause note. Also added one
+analogous test for the "alarm not found" fallback message's color
+(sites 1-4 had 3 of 4 covered by color assertions; the fallback color fix
+had not been test-covered either, caught during this same pass).
+
+**Re-run, full suite:** `cd apps/web && npx vitest run` →
+**30/30 files, 308/308 tests passed** (up from 306; +2 new color-assertion
+tests: the snoozed-pill color test the reviewer required, plus the
+previously-uncovered "alarm not found" color test). Focused file:
+**17/17 passed** (up from 15).
+
+**Build:** `npm run build` → `✓ built in 11.47s`, no errors;
+`AlarmRingingPage` chunk **6.62 kB** (gzip-equivalent change negligible;
+was 6.59 kB), consistent with one more fixed className + comment block.
+
 - **state: merged.**

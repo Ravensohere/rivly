@@ -68,4 +68,8 @@ Task 4, landing-riva: complete (commits b26006a..8768aa4, review clean, no fix l
 Task 4, landing-cta: ESCALATED TO USER — "Join thousands of calm achievers" directly contradicts the same CTA's "Join the Waitlist" copy (implies an existing user base when the product is pre-launch/waitlist-stage). Same phrase also appears verbatim in Hero and Navbar sections (not yet redesigned, not this card's scope). Flagged in-card + in-source per established policy, not fixed — human call on whether to drop the headcount framing page-wide or confirm a real number exists.
 Task 4, landing-cta: complete (commits 8768aa4..4d89ddd, review clean, no fix loop needed)
 
-MILESTONE: all 7 landing-page section cards complete. Full landing page (ProblemSection through CTASection) redesigned, reviewed, merged into riva/integrated-main. 5 fabricated/contradictory marketing claims found across the page (see ESCALATED TO USER entries above), all flagged in-card + in-source, none silently rewritten. Moving to the 24 standalone page cards next.
+Task 4, alarm-ringing: ESCALATED TO USER (pre-existing product-logic gap, not marketing copy this time) — the ringing screen never reads the alarm's configured `snoozeMinutes`; always shows a fixed 5/10/15m picker regardless of what the user set. Flagged in-card + in-source, not fixed. Separately verified: unauth direct navigation to `/alarm/ringing` redirects cleanly to `/login`, 0 console errors.
+
+MILESTONE: all 7 landing-page section cards complete.
+
+Task 4, alarm-ringing: fix round 1/5 in progress — review found 1 Important (missed 5th contrast site, "Snoozed" pill text at 4.03:1). Full landing page (ProblemSection through CTASection) redesigned, reviewed, merged into riva/integrated-main. 5 fabricated/contradictory marketing claims found across the page (see ESCALATED TO USER entries above), all flagged in-card + in-source, none silently rewritten. Moving to the 24 standalone page cards next.
