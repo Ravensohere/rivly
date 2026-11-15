@@ -16,11 +16,39 @@
 **Ruling:** Task1's inventory treats `WhyNotSection` + `PromiseSection` as one combined row/card, `landing-whynot-promise` — they're one user-facing unit (the why-not setup immediately followed by the promise/feature cards the user asked about), matching what Task2 was written against. The other 6 landing sections (`ProblemSection`, `ManifestoSection`, `ContrastSection`, `FeaturesSection`, `RivaSection`, `CTASection`) each get their own card. Landing-section card count is 7, not 8; total inventory ~38, not ~39. Cost if wrong: Task1 produces an extra/misnamed card file, caught immediately when Task2 tries to read `landing-whynot-promise.md` and it's missing — cheap to fix, not a silent failure.
 
 ## Tasks
-- [ ] Task 1: Inventory pass and card schema (fix round 2 in progress)
+- [x] Task 1: Inventory pass and card schema
 
 Task 1: fix round 1/5 (1 addressed, 2 open — merge_gate missing worktree-containment clause on all 31 cards; _schema.md still not verbatim; BOM still present on all 31 files despite report falsely claiming removal; commits 9c616a4..9f86ae2)
+Task 1: fix round 2/5 (3 addressed, 0 open; commits 9f86ae2..8f16edd)
+Task 1: minor (deferred): all 31 cards' `## Merge Gate` prose body still has the stale round-1 3-constraint text, out of sync with the now-correct 4-constraint YAML front-matter above it — cosmetic inconsistency, sweep up before final whole-branch review.
+Task 1: complete (commits 7f5f3a2..8f16edd, review clean after 2 fix rounds)
 
 Task 1: minor (deferred): `_inventory.md` uses three tables (routed/landing/unrouted) instead of the brief's single flat slug|source|kind table; unrouted table swaps `kind` for `reason`. Readable, not the exact shape requested — final whole-branch review to triage.
-- [ ] Task 2: Prove the pipeline on pilot card (landing-whynot-promise)
-- [ ] Task 3: Holistic smoke pass procedure
-- [ ] Task 4: Batch-run the remaining cards
+- [x] Task 2: Prove the pipeline on pilot card (landing-whynot-promise)
+
+Task 2: fix round 1/5 (1 addressed, 0 open; commits 0f5f5b4..3f4db77)
+Task 2: complete (commits 8f16edd..3f4db77, review clean after 1 fix round)
+
+Task 2: Ruling: brief Steps 1-2 said "dispatch a fresh agent" for design and product-fit separately; implementer (correctly, per controller's own dispatch instructions) did both solo as two labeled passes instead, given rate-limit cost pressure. Reviewer flagged this as a precedent risk since this card is the template for Task 4. Ruling: stays solo going forward — the per-task reviewer's own independent "Product-Fit Assessment" section (already produced every review, demonstrated this round) substitutes for a separate product-fit sub-agent. No separate dispatch needed in Task 4.
+Task 2: minor (deferred): test "leaves nothing clickable..." is misfiled in the `redesign` describe block but is actually a baseline guard (passed before the change too) — move to baseline block, cosmetic.
+Task 2: minor (deferred): closing quote color dropped from `T.ink` to `T.muted` on `T.surface`, landing at ~4.5:1 contrast (AA threshold) at mobile text size — not a new pairing (already used elsewhere on page) but demotes this specific element; cheap to bump back to `T.ink`.
+Task 2: minor (deferred, no action needed): jsdom stubs correctly kept per-file (not yet in `vitest.setup.ts`) since this is the first card needing them — promote on the second card that needs them.
+
+Ruling: `docs/superpowers/` and `.superpowers/sdd/` are fully gitignored by this repo's own `.gitignore:170` ("Internal planning/handover docs, not needed to build the app") with no negation. SDD pipeline artifacts (cards, specs, plans, ledger) are committed anyway via `git add -f` — intentional, since the plan requires them committed for traceability. Applies to all future tasks touching these paths.
+- [x] Task 3: Holistic smoke pass procedure
+
+Task 3: fix round 1/5 (3 addressed, 0 open; commits 84b175c..bf97b37)
+Task 3: minor (deferred): LandingPage.tsx lines 48-50 refer to footer-adjacent pages by route only, not the corrected slugs — harmless style nit.
+Task 3: complete (commits 3f4db77..bf97b37, review clean after 1 fix round)
+- [ ] Task 4: Batch-run the remaining cards — in progress
+
+Task 4: minor (deferred, page-wide, not card-specific): `T.muted` on `T.bg` is 4.40:1, just under the 4.5:1 AA floor for normal text — used widely across LandingPage.tsx, not introduced by any one card. Worth a dedicated token-fix card after Task 4's batch finishes, not blocking any individual card.
+
+Task 4, landing-problem: ESCALATED TO USER (not an agent-resolvable finding) — two marketing figures on the Problem section (`77%`, `1 in 3`) are uncited; the India "1 in 3" loneliness figure's source could not be identified by the implementer. The honest provenance note it shipped ("Self-reported figures from published... surveys") implies sourcing that doesn't exist yet. Needs a human decision: confirm/find real sources, or drop the figures. Not blocking merge of this card (it's an existing problem the card surfaced, not introduced).
+
+Task 4: Ruling: plan's Task 4 Step 1 assumed 2-card parallel batches, but subagent-driven-development's core rule forbids dispatching multiple implementation subagents in parallel (conflict risk) regardless of file overlap. SDD skill wins: cards run sequentially, one full dispatch→review→fix→merge cycle per card. This already satisfies "≤2 concurrent builds" since nothing runs concurrently. Slower, safer; no plan change needed otherwise.
+Task 4, landing-problem: fix round 1/5 (4 addressed — 2 Important, 2 Minor taken — 0 open; commits dc7812a..0057278)
+Task 4, landing-problem: complete (commits bf97b37..0057278, review clean after 1 fix round)
+
+Task 4, landing-manifesto: FOUND AND FIXED (in-scope, load-bearing): the new signature block's `signOp` opacity motion value (`useTransform(scrollYProgress, [0.45,0.6], [0,1])`) stayed stuck at `opacity: 0` across the whole scroll range in a real browser, while its paired `signY` transform updated correctly. Root-caused to pre-existing behavior (reproduced identically with the old pill row's `statsOp`, byte-for-byte the same call, via `git stash` + rebuild) — a direct, non-zero-start, array-based `useTransform` on `scrollYProgress` doesn't update reliably once sibling array-based transforms off the same source already exist. Fixed by chaining through one function-based pass-through transform first (mirrors `WordReveal`'s own working pattern). Fixed because it directly gated whether this card's own content is visible; not a page-wide refactor. Means the three deleted pills were themselves invisible in production before this card — a previously-unknown defect, now moot since they're removed.
+Task 4, landing-manifesto: complete (review pending)

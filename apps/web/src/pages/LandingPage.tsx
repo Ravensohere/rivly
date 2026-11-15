@@ -643,8 +643,17 @@ function ManifestoSection({ onChapter }: { onChapter: (n: number) => void }) {
   const bgTint  = useTransform(scrollYProgress, [0, 1], ['rgba(237,237,252,0)', 'rgba(237,237,252,0.55)']);
   const eyeOp   = useTransform(scrollYProgress, [0, 0.1], [0, 1]);
   const textProgress = useTransform(scrollYProgress, [0, 0.4], [0, 1]);
-  const statsOp = useTransform(scrollYProgress, [0.45, 0.6], [0, 1]);
-  const statsY  = useTransform(scrollYProgress, [0.45, 0.6], [24, 0]);
+  /* signBase: an identity pass-through. A range-array useTransform bound
+     directly to scrollYProgress never updates past its initial value once
+     scrollYProgress already has sibling array-based transforms reading a
+     [0, …] range (eyeOp, textProgress, bgTint above) — pre-existing bug,
+     reproduced identically with the old stat-row's statsOp/statsY. Deriving
+     through one function-based transform first (the pattern WordReveal's
+     per-word opacity already uses) sidesteps it; signY needs no such
+     chaining because non-opacity transform output isn't affected. */
+  const signBase = useTransform(scrollYProgress, (v) => v);
+  const signOp  = useTransform(signBase, [0.45, 0.6], [0, 1]);
+  const signY   = useTransform(scrollYProgress, [0.45, 0.6], [24, 0]);
 
   return (
     <div id="manifesto" ref={outer} style={{ position: 'relative', height: '300vh' }}>
@@ -653,7 +662,7 @@ function ManifestoSection({ onChapter }: { onChapter: (n: number) => void }) {
 
         <div style={{ position: 'relative', zIndex: 1, textAlign: 'center', maxWidth: 900 }}>
           <motion.div style={{ opacity: eyeOp, marginBottom: 36 }}>
-            <span style={{ fontSize: 9, letterSpacing: '.26em', textTransform: 'uppercase', color: T.indigo, fontFamily: "'Roboto', sans-serif", fontWeight: 500 }}>Our manifesto · Chapter 02</span>
+            <span style={{ fontSize: 9, letterSpacing: '.26em', textTransform: 'uppercase', color: T.indigo, fontFamily: "'Roboto', sans-serif", fontWeight: 500 }}>Chapter 02 · Our Manifesto</span>
           </motion.div>
 
           <WordReveal
@@ -663,13 +672,20 @@ function ManifestoSection({ onChapter }: { onChapter: (n: number) => void }) {
             style={{ fontWeight: 400, fontSize: 'clamp(1.75rem,3.6vw,3.8rem)', lineHeight: 1.35, letterSpacing: '-0.01em', color: T.ink, justifyContent: 'center' }}
           />
 
-          <motion.div style={{ opacity: statsOp, y: statsY, marginTop: 52, display: 'flex', gap: 12, flexWrap: 'wrap', justifyContent: 'center' }}>
-            {[['73%', 'lower task anxiety'], ['0', 'streaks to break'], ['1', 'session at a time']].map(([n, l], i) => (
-              <div key={i} style={{ display: 'flex', alignItems: 'center', gap: 12, padding: '11px 22px', borderRadius: 99, border: `1px solid ${T.border}`, background: T.surface }}>
-                <span className="rv-display" style={{ fontWeight: 400, fontSize: '1.6rem', color: T.indigo }}>{n}</span>
-                <span className="rv-mono" style={{ fontSize: 8.5, letterSpacing: '.12em', textTransform: 'uppercase', color: T.muted }}>{l}</span>
-              </div>
-            ))}
+          {/* Vacated stat-row slot: three unverifiable numerals (a fabricated
+              73% anxiety figure, a "0 streaks" claim the shipped achievements
+              and rhythm-score code contradicts, a duplicate of the MQ2
+              marquee line) replaced with an attributed principle. Honest in
+              that it asserts nothing falsifiable, and on the page's hairline
+              register rather than a filled pill, so the last 40% of the
+              300vh track still has something to reveal. */}
+          <motion.div style={{ opacity: signOp, y: signY, marginTop: 52, paddingTop: 28, borderTop: `1px solid ${T.border}`, maxWidth: 560, marginLeft: 'auto', marginRight: 'auto' }}>
+            <p className="rv-mono" style={{ fontSize: 11, letterSpacing: '.03em', color: 'hsl(230, 10%, 44%)', lineHeight: 1.7, margin: 0 }}>
+              Our working principle — not a metric, and not a promise about your results.
+            </p>
+            <p className="rv-sans" style={{ fontSize: '0.8rem', color: T.muted, marginTop: 14, letterSpacing: '0.02em' }}>
+              — The Rivly team
+            </p>
           </motion.div>
         </div>
       </div>
