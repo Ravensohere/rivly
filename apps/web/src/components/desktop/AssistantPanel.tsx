@@ -59,7 +59,17 @@ const clock = (d: Date) => d.toLocaleTimeString([], { hour: 'numeric', minute: '
 /** Chat with the desktop assistant (same router and models as the notch) plus model and voice settings.
  * Styled after the Flowzo Figma: orange accent, white rounded cards with pastel side bars, a Messages-style
  * thread and a round orange send button. */
-export function AssistantPanel({ ctx, onActivity }: { ctx: DesktopContext; onActivity?: (a: AssistantActivity) => void }) {
+export function AssistantPanel({
+  ctx,
+  online,
+  onActivity,
+}: {
+  ctx: DesktopContext;
+  /** Real reachability from the page's own presence poll — without this the status line below
+   * hardcoded "Online on your PC" even while the top-level banner says the desktop is offline. */
+  online: boolean;
+  onActivity?: (a: AssistantActivity) => void;
+}) {
   const [turns, setTurns] = useState<Turn[]>([]);
   const [text, setText] = useState('');
   const [busy, setBusy] = useState(false);
@@ -197,7 +207,15 @@ export function AssistantPanel({ ctx, onActivity }: { ctx: DesktopContext; onAct
             {name}
           </h2>
           <p className="text-xs text-neutral-500">
-            {speech.listening ? 'Listening…' : busy ? 'Thinking…' : talking ? 'Speaking…' : 'Online on your PC'}
+            {speech.listening
+              ? 'Listening…'
+              : busy
+                ? 'Thinking…'
+                : talking
+                  ? 'Speaking…'
+                  : online
+                    ? 'Online on your PC'
+                    : 'Offline — start the assistant on your PC'}
           </p>
         </div>
         <button
@@ -247,14 +265,17 @@ export function AssistantPanel({ ctx, onActivity }: { ctx: DesktopContext; onAct
                 style={{ background: turn.error ? '#F28B8B' : BAR[turn.model ?? ''] ?? '#8EC5FF' }}
               />
               <span className={turn.error ? 'text-red-600' : ''}>{turn.text}</span>
-              <div className="mt-1 flex items-center justify-between gap-3 text-[10px] uppercase tracking-wide text-neutral-400">
+              {/* text-neutral-400 on this card's flat white bg measures ~2.52:1 (verified by hand),
+                  well below AA; text-neutral-500 (already used elsewhere in this file on the same
+                  white bg) measures ~4.73:1 and passes. */}
+              <div className="mt-1 flex items-center justify-between gap-3 text-[10px] uppercase tracking-wide text-neutral-500">
                 <span>{turn.model ?? ''}</span>
                 <span>{turn.at ? clock(turn.at) : ''}</span>
               </div>
             </div>
           ),
         )}
-        {busy && <p className="self-start text-sm text-neutral-400">{name} is thinking…</p>}
+        {busy && <p className="self-start text-sm text-neutral-500">{name} is thinking…</p>}
         <div ref={endRef} />
       </div>
 
@@ -265,7 +286,7 @@ export function AssistantPanel({ ctx, onActivity }: { ctx: DesktopContext; onAct
           onKeyDown={(e) => e.key === 'Enter' && void send()}
           placeholder={`Message ${name}`}
           disabled={busy}
-          className="flex-1 min-w-0 h-11 rounded-full border border-neutral-300 bg-white px-4 text-sm text-neutral-900 placeholder:text-neutral-400 outline-none focus:border-primary"
+          className="flex-1 min-w-0 h-11 rounded-full border border-neutral-300 bg-white px-4 text-sm text-neutral-900 placeholder:text-neutral-500 outline-none focus:border-primary"
         />
         {speech.supported && (
           <button

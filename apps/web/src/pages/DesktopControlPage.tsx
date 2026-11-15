@@ -174,7 +174,10 @@ export default function DesktopControlPage() {
           trackCursor={avatarSettings.trackCursor}
         />
         <h1 className="text-xl font-medium">Send to desktop</h1>
-        <p className="text-sm text-muted-foreground text-center">
+        {/* text-muted-foreground measures ~4.4:1 on this page's flat bg-background, below the 4.5:1
+            AA floor for 14px text; hsl(230,10%,42%) measures ~5.3:1 (verified sRGB->linear->luminance
+            by hand) — same fix already applied to this shared token on calendar-callback/alarm-ringing/auth-callback */}
+        <p className="text-sm text-[hsl(230,10%,42%)] dark:text-[hsl(230,10%,55%)] text-center">
           Tell it what to do — it runs on your computer, wherever you are.
         </p>
       </div>
@@ -185,14 +188,20 @@ export default function DesktopControlPage() {
         <PairingForm onPaired={setPairing} />
       ) : (
         <>
-          <div className="w-full flex items-center justify-between text-xs text-muted-foreground px-1">
+          <div className="w-full flex items-center justify-between text-xs text-[hsl(230,10%,42%)] dark:text-[hsl(230,10%,55%)] px-1">
             <span className="flex items-center gap-2">
               <span className={`w-2 h-2 rounded-full ${online ? 'bg-green-500' : 'bg-destructive'}`} />
               {online
                 ? mode === 'cloud'
                   ? 'Desktop online — controlling it from anywhere'
                   : 'Desktop online (same machine)'
-                : 'Desktop offline — commands will wait until it reconnects'}
+                : mode === 'cloud'
+                  ? // cloudRelay.sendCommand queues a row on the Worker regardless of desktop presence
+                    // (cloudRelay.ts) — it genuinely does wait.
+                    'Desktop offline — commands will wait until it reconnects'
+                  : // localDesktop.ts is a bare fetch straight to the desktop backend with no queue —
+                    // sending now will just throw, not wait. Don't promise behavior that doesn't exist.
+                    'Desktop offline — start the assistant on your PC to send commands'}
             </span>
             {mode === 'cloud' && (
               <button type="button" className="underline hover:text-foreground" onClick={() => setPairing(null)}>
@@ -220,7 +229,7 @@ export default function DesktopControlPage() {
                     ? 'bg-primary text-primary-foreground'
                     : id === 'approvals' && pendingApprovals > 0
                       ? 'text-primary font-medium'
-                      : 'text-muted-foreground'
+                      : 'text-[hsl(230,10%,42%)] dark:text-[hsl(230,10%,55%)]'
                 }`}
               >
                 {label}
@@ -272,7 +281,7 @@ export default function DesktopControlPage() {
               <div className="w-full flex flex-col gap-2">
                 {commandsPoll.error && <p className="text-xs text-destructive">{commandsPoll.error}</p>}
                 {commands.length === 0 ? (
-                  <p className="text-sm text-muted-foreground text-center">No commands sent yet.</p>
+                  <p className="text-sm text-[hsl(230,10%,42%)] dark:text-[hsl(230,10%,55%)] text-center">No commands sent yet.</p>
                 ) : (
                   commands.map((c) => <CommandRow key={c.id} command={c} />)
                 )}
@@ -280,7 +289,7 @@ export default function DesktopControlPage() {
             </>
           )}
 
-          {tab === 'assistant' && ctx && <AssistantPanel ctx={ctx} onActivity={setAssistantActivity} />}
+          {tab === 'assistant' && ctx && <AssistantPanel ctx={ctx} online={online} onActivity={setAssistantActivity} />}
 
           {tab === 'office' && ctx && <OfficePanel ctx={ctx} />}
 
@@ -321,7 +330,9 @@ function PairingForm({ onPaired }: { onPaired: (s: RelaySettings) => void }) {
     <div className="w-full rounded-2xl border border-border bg-card/60 p-4 flex flex-col gap-3">
       <div>
         <p className="text-sm font-medium">Pair with your desktop</p>
-        <p className="text-xs text-muted-foreground mt-1">
+        {/* bg-card/60 blended over bg-background measures ~4.45:1, just under the 4.5:1 AA floor
+            (verified by hand: alpha-composite the two flat tokens, then sRGB->linear->luminance) */}
+        <p className="text-xs text-[hsl(230,10%,42%)] dark:text-[hsl(230,10%,55%)] mt-1">
           On your PC open <code className="px-1 rounded bg-accent">/desktop-relay/pair-page</code> on the assistant
           backend and scan the QR code with your phone. Or paste the three values it shows here.
         </p>
@@ -337,7 +348,8 @@ function PairingForm({ onPaired }: { onPaired: (s: RelaySettings) => void }) {
 }
 
 const STATUS_STYLE: Record<DesktopCommand['status'], { dot: string; text: string; label: string }> = {
-  pending: { dot: 'bg-muted-foreground', text: 'text-muted-foreground', label: 'Pending' },
+  // text-muted-foreground on this row's bg-card/40 measures ~4.3:1 (below AA); same hand-verified fix as the page's other sites.
+  pending: { dot: 'bg-muted-foreground', text: 'text-[hsl(230,10%,42%)] dark:text-[hsl(230,10%,55%)]', label: 'Pending' },
   claimed: { dot: 'bg-amber-500', text: 'text-amber-500', label: 'Running' },
   completed: { dot: 'bg-success', text: 'text-success', label: 'Done' },
   failed: { dot: 'bg-destructive', text: 'text-destructive', label: 'Failed' },
@@ -357,7 +369,7 @@ function CommandRow({ command }: { command: DesktopCommand }) {
       {outcome?.error ? (
         <p className="text-xs text-destructive pl-4 break-words">{String(outcome.error)}</p>
       ) : (
-        summary && <p className="text-xs text-muted-foreground pl-4 break-words">{summary}</p>
+        summary && <p className="text-xs text-[hsl(230,10%,42%)] dark:text-[hsl(230,10%,55%)] pl-4 break-words">{summary}</p>
       )}
     </div>
   );
