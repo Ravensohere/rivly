@@ -198,7 +198,7 @@ export function FocusSessionActive({ duration, purpose, linkedTaskId, onComplete
           animate={{ opacity: 1, y: 0 }}
           className="mb-8"
         >
-          <span className="px-4 py-2 rounded-full bg-muted text-muted-foreground text-sm font-medium">
+          <span className="px-4 py-2 rounded-full bg-muted text-[hsl(230,10%,42%)] dark:text-[hsl(230,10%,55%)] text-sm font-medium">
             {purpose}
           </span>
         </motion.div>
@@ -252,7 +252,7 @@ export function FocusSessionActive({ duration, purpose, linkedTaskId, onComplete
           <div className="text-5xl font-light text-foreground tracking-wide mb-2">
             {formattedTime}
           </div>
-          <div className="text-sm text-muted-foreground">
+          <div className="text-sm text-[hsl(230,10%,42%)] dark:text-[hsl(230,10%,55%)]">
             {isPaused ? 'Paused' : isCompleted ? 'Complete!' : 'remaining'}
           </div>
         </motion.div>
@@ -262,7 +262,7 @@ export function FocusSessionActive({ duration, purpose, linkedTaskId, onComplete
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           transition={{ delay: 0.5 }}
-          className="mt-4 flex items-center gap-2 text-xs text-muted-foreground/60"
+          className="mt-4 flex items-center gap-2 text-xs text-[hsl(230,10%,42%)] dark:text-[hsl(230,10%,55%)]"
         >
           <AlertTriangle className="w-3 h-3" />
           <span>Timer continues across pages & refresh</span>
@@ -305,7 +305,7 @@ export function FocusSessionActive({ duration, purpose, linkedTaskId, onComplete
               initial={{ opacity: 0, y: 10 }}
               animate={{ opacity: 1, y: 0 }}
               exit={{ opacity: 0 }}
-              className="mt-6 text-sm text-muted-foreground text-center max-w-xs"
+              className="mt-6 text-sm text-[hsl(230,10%,42%)] dark:text-[hsl(230,10%,55%)] text-center max-w-xs"
             >
               Take your time. Your progress will wait for you.
             </motion.p>

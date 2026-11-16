@@ -135,8 +135,8 @@ export function FocusFeedback({ duration, actualMinutes, endedEarly, onSubmit, o
           <h2 className="text-2xl font-semibold text-foreground mb-2">
             {endedEarly ? 'Session ended' : 'Well done!'}
           </h2>
-          <p className="text-muted-foreground">
-            {endedEarly 
+          <p className="text-[hsl(230,10%,42%)] dark:text-[hsl(230,10%,55%)]">
+            {endedEarly
               ? `You focused for ${formatDuration(actualMinutes)}. Every minute counts.`
               : `You completed ${formatDuration(duration)} of focused work.`
             }
@@ -150,7 +150,7 @@ export function FocusFeedback({ duration, actualMinutes, endedEarly, onSubmit, o
           transition={{ delay: 0.6 }}
           className="space-y-4"
         >
-          <p className="text-sm text-muted-foreground">
+          <p className="text-sm text-[hsl(230,10%,42%)] dark:text-[hsl(230,10%,55%)]">
             How did that session go?
           </p>
           <div className="grid grid-cols-3 gap-3">
@@ -203,7 +203,7 @@ export function FocusFeedback({ duration, actualMinutes, endedEarly, onSubmit, o
               handleSkip();
             }}
             disabled={isExiting}
-            className="text-muted-foreground hover:text-foreground"
+            className="text-[hsl(230,10%,42%)] dark:text-[hsl(230,10%,55%)] hover:text-foreground"
           >
             <SkipForward className="w-4 h-4 mr-2" />
             Skip feedback

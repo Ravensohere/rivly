@@ -14,7 +14,6 @@ import { useEventsLedgerContext } from '@/contexts/EventsLedgerContext';
 import { useFocusTimer, FocusSessionConfig } from '@/contexts/FocusTimerContext';
 import { useBackgroundTimer } from '@/hooks/useBackgroundTimer';
 import { useTimerCompletion } from '@/contexts/TimerCompletionContext';
-import { useFocusTotals } from '@/hooks/useFocusTotals';
 import { useParkedThoughts } from '@/hooks/useParkedThoughts';
 import { ThoughtParkingSheet } from '@/components/mental/ThoughtParkingSheet';
 import { mapLegacyCategory } from '@/types/thoughts';
@@ -33,17 +32,14 @@ export default function FocusPage() {
   const [showThoughtParking, setShowThoughtParking] = useState(false);
   const { addFocusSeed, checkDailyGrowth } = useLandscape();
   const { triggerFocused } = useRhythmOrbContext();
-  
+
   // Events ledger for analytics tracking
-  const { 
-    startFocusSession, 
-    endFocusSession, 
+  const {
+    startFocusSession,
+    endFocusSession,
     reloadData,
   } = useEventsLedgerContext();
-  
-  // Use canonical focus totals hook - single source of truth
-  const { today: todayFocus, focusStreak, totalSessions } = useFocusTotals();
-  
+
   // Global focus timer context
   const {
     focusState,

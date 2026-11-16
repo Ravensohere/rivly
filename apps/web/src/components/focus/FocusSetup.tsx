@@ -78,7 +78,7 @@ export function FocusSetup({ blocks, tasks, onStartFocus }: FocusSetupProps) {
           <h1 className="text-2xl font-semibold text-foreground mb-2">
             Start a Focus Session
           </h1>
-          <p className="text-muted-foreground text-sm">
+          <p className="text-[hsl(230,10%,42%)] dark:text-[hsl(230,10%,55%)] text-sm">
             Choose your duration and dive in
           </p>
         </motion.div>
@@ -91,7 +91,7 @@ export function FocusSetup({ blocks, tasks, onStartFocus }: FocusSetupProps) {
           className="space-y-4"
         >
           <div className="flex justify-between items-center">
-            <span className="text-sm text-muted-foreground">Duration</span>
+            <span className="text-sm text-[hsl(230,10%,42%)] dark:text-[hsl(230,10%,55%)]">Duration</span>
             <span className="text-2xl font-semibold text-foreground">{duration} min</span>
           </div>
           <Slider
@@ -102,7 +102,7 @@ export function FocusSetup({ blocks, tasks, onStartFocus }: FocusSetupProps) {
             step={5}
             className="w-full"
           />
-          <div className="flex justify-between text-xs text-muted-foreground">
+          <div className="flex justify-between text-xs text-[hsl(230,10%,42%)] dark:text-[hsl(230,10%,55%)]">
             <span>5 min</span>
             <span>2 hours</span>
           </div>
@@ -115,7 +115,7 @@ export function FocusSetup({ blocks, tasks, onStartFocus }: FocusSetupProps) {
           transition={{ delay: 0.4 }}
           className="space-y-3"
         >
-          <span className="text-sm text-muted-foreground">What are you focusing on?</span>
+          <span className="text-sm text-[hsl(230,10%,42%)] dark:text-[hsl(230,10%,55%)]">What are you focusing on?</span>
           <div className="grid grid-cols-2 gap-3">
             {purposeOptions.map((option) => (
               <motion.button
@@ -163,11 +163,11 @@ export function FocusSetup({ blocks, tasks, onStartFocus }: FocusSetupProps) {
             transition={{ delay: 0.5 }}
             className="space-y-3"
           >
-            <span className="text-sm text-muted-foreground">Link to (optional)</span>
+            <span className="text-sm text-[hsl(230,10%,42%)] dark:text-[hsl(230,10%,55%)]">Link to (optional)</span>
             
             {pendingTasks.length > 0 && (
               <div className="space-y-2">
-                <span className="text-xs text-muted-foreground uppercase tracking-wide">Tasks</span>
+                <span className="text-xs text-[hsl(230,10%,42%)] dark:text-[hsl(230,10%,55%)] uppercase tracking-wide">Tasks</span>
                 <div className="flex flex-wrap gap-2">
                   {pendingTasks.slice(0, 4).map(task => (
                     <motion.button
@@ -192,7 +192,7 @@ export function FocusSetup({ blocks, tasks, onStartFocus }: FocusSetupProps) {
             
             {activeBlocks.length > 0 && (
               <div className="space-y-2">
-                <span className="text-xs text-muted-foreground uppercase tracking-wide">Time Blocks</span>
+                <span className="text-xs text-[hsl(230,10%,42%)] dark:text-[hsl(230,10%,55%)] uppercase tracking-wide">Time Blocks</span>
                 <div className="flex flex-wrap gap-2">
                   {activeBlocks.slice(0, 3).map(block => (
                     <motion.button
@@ -248,7 +248,7 @@ export function FocusSetup({ blocks, tasks, onStartFocus }: FocusSetupProps) {
             <Link to="/landscape" className="block">
               <motion.div
                 whileTap={{ scale: 0.98 }}
-                className="flex items-center justify-center gap-2 py-3 text-muted-foreground hover:text-foreground transition-colors"
+                className="flex items-center justify-center gap-2 py-3 text-[hsl(230,10%,42%)] dark:text-[hsl(230,10%,55%)] hover:text-foreground transition-colors"
               >
                 <TreePine className="w-4 h-4" />
                 <span className="text-sm font-medium">View My Landscape</span>
