@@ -19,7 +19,7 @@ const NotFound = () => (
     >
       This page wandered off
     </h2>
-    <p className="mb-8 max-w-sm text-muted-foreground">
+    <p className="mb-8 max-w-sm text-[hsl(230,10%,42%)] dark:text-[hsl(230,10%,55%)]">
       Nothing here — but your day is still waiting for you.
     </p>
     <Link
