@@ -94,16 +94,16 @@ function RoomCard({ room, isActive, onJoin }: RoomCardProps) {
             <h3 className="font-semibold text-base truncate" style={{ color: isActive ? palette.pulse : 'hsl(var(--foreground))' }}>
               {room.name}
             </h3>
-            <p className="text-xs text-muted-foreground mt-0.5 truncate">{room.description}</p>
+            <p className="text-xs text-[hsl(230,10%,42%)] dark:text-[hsl(230,10%,55%)] mt-0.5 truncate">{room.description}</p>
           </div>
         </div>
 
         {/* Live count */}
         <div
-          className="flex items-center gap-1.5 shrink-0 px-2.5 py-1 rounded-full text-xs font-semibold"
+          className={`flex items-center gap-1.5 shrink-0 px-2.5 py-1 rounded-full text-xs font-semibold ${isActive ? '' : 'text-[hsl(230,10%,42%)] dark:text-[hsl(230,10%,55%)]'}`}
           style={{
             background: isActive ? `${palette.pulse}22` : 'hsl(var(--muted) / 0.6)',
-            color: isActive ? palette.pulse : 'hsl(var(--muted-foreground))',
+            color: isActive ? palette.pulse : undefined,
           }}
         >
           {isActive && (
@@ -114,16 +114,17 @@ function RoomCard({ room, isActive, onJoin }: RoomCardProps) {
           )}
           <Users className="w-3 h-3" />
           <span>{formatCount(room.active_users)}</span>
-          <span className="opacity-70">now</span>
+          {/* No opacity stacking here — even the darker AA-safe token fails contrast at reduced opacity. */}
+          <span>now</span>
         </div>
       </div>
 
       <div className="mt-3 flex items-center justify-between">
         <span
-          className="text-xs font-medium px-2.5 py-0.5 rounded-full"
+          className={`text-xs font-medium px-2.5 py-0.5 rounded-full ${isActive ? '' : 'text-[hsl(230,10%,42%)] dark:text-[hsl(230,10%,55%)]'}`}
           style={{
             background: isActive ? `${palette.pulse}20` : 'hsl(var(--secondary) / 0.5)',
-            color: isActive ? palette.pulse : 'hsl(var(--muted-foreground))',
+            color: isActive ? palette.pulse : undefined,
           }}
         >
           {isActive ? '● Focusing now' : 'Tap to join'}
@@ -217,7 +218,7 @@ function ActiveRoomView({ room, onLeave, onComplete }: ActiveViewProps) {
       <motion.div
         animate={{ scale: [1, 1.03, 1] }}
         transition={{ repeat: Infinity, duration: 3 }}
-        className="flex items-center gap-2 text-muted-foreground text-sm"
+        className="flex items-center gap-2 text-[hsl(230,10%,42%)] dark:text-[hsl(230,10%,55%)] text-sm"
       >
         <Users className="w-4 h-4" />
         <span>
@@ -266,7 +267,7 @@ function ActiveRoomView({ room, onLeave, onComplete }: ActiveViewProps) {
           >
             {formatTime(secondsLeft)}
           </span>
-          <span className="text-xs text-muted-foreground mt-1">remaining</span>
+          <span className="text-xs text-[hsl(230,10%,42%)] dark:text-[hsl(230,10%,55%)] mt-1">remaining</span>
         </div>
       </div>
 
@@ -277,8 +278,7 @@ function ActiveRoomView({ room, onLeave, onComplete }: ActiveViewProps) {
           onClick={() => setIsRunning((r) => !r)}
           className="px-6 py-2.5 rounded-full text-sm font-semibold transition-all"
           style={{
-            background: `gradient(${palette.from}, ${palette.to})`,
-            backgroundColor: palette.from,
+            background: `linear-gradient(135deg, ${palette.from}, ${palette.to})`,
             color: '#fff',
             boxShadow: `0 4px 16px ${palette.from}55`,
           }}
@@ -289,7 +289,7 @@ function ActiveRoomView({ room, onLeave, onComplete }: ActiveViewProps) {
         <motion.button
           whileTap={{ scale: 0.9 }}
           onClick={() => setIsMuted((m) => !m)}
-          className="p-2.5 rounded-full bg-muted/50 text-muted-foreground hover:text-foreground transition-colors"
+          className="p-2.5 rounded-full bg-muted/50 text-[hsl(230,10%,42%)] dark:text-[hsl(230,10%,55%)] hover:text-foreground transition-colors"
         >
           {isMuted ? <VolumeX className="w-4 h-4" /> : <Volume2 className="w-4 h-4" />}
         </motion.button>
@@ -297,7 +297,7 @@ function ActiveRoomView({ room, onLeave, onComplete }: ActiveViewProps) {
         <motion.button
           whileTap={{ scale: 0.9 }}
           onClick={onLeave}
-          className="p-2.5 rounded-full bg-muted/50 text-muted-foreground hover:text-foreground transition-colors"
+          className="p-2.5 rounded-full bg-muted/50 text-[hsl(230,10%,42%)] dark:text-[hsl(230,10%,55%)] hover:text-foreground transition-colors"
         >
           <X className="w-4 h-4" />
         </motion.button>
@@ -305,7 +305,7 @@ function ActiveRoomView({ room, onLeave, onComplete }: ActiveViewProps) {
 
       {/* Ambient track selector */}
       <div className="w-full max-w-sm">
-        <p className="text-xs text-muted-foreground text-center mb-2 flex items-center justify-center gap-1.5">
+        <p className="text-xs text-[hsl(230,10%,42%)] dark:text-[hsl(230,10%,55%)] text-center mb-2 flex items-center justify-center gap-1.5">
           <Headphones className="w-3.5 h-3.5" /> Ambient Sound
         </p>
         <div className="flex gap-2 flex-wrap justify-center">
@@ -314,10 +314,10 @@ function ActiveRoomView({ room, onLeave, onComplete }: ActiveViewProps) {
               key={t.label}
               whileTap={{ scale: 0.92 }}
               onClick={() => setTrackIdx(i)}
-              className="px-3 py-1 rounded-full text-xs font-medium transition-all"
+              className={`px-3 py-1 rounded-full text-xs font-medium transition-all ${i === trackIdx ? '' : 'text-[hsl(230,10%,42%)] dark:text-[hsl(230,10%,55%)]'}`}
               style={{
                 background: i === trackIdx ? `${palette.pulse}20` : 'hsl(var(--muted) / 0.5)',
-                color: i === trackIdx ? palette.pulse : 'hsl(var(--muted-foreground))',
+                color: i === trackIdx ? palette.pulse : undefined,
                 borderWidth: 1,
                 borderStyle: 'solid',
                 borderColor: i === trackIdx ? palette.pulse : 'transparent',
@@ -366,7 +366,7 @@ function CompletionView({ room, onRejoin, onLeave }: CompletionViewProps) {
 
       <div>
         <h2 className="text-2xl font-bold">Session Complete! 🎉</h2>
-        <p className="text-muted-foreground mt-2 text-sm">
+        <p className="text-[hsl(230,10%,42%)] dark:text-[hsl(230,10%,55%)] mt-2 text-sm">
           25 minutes of focused work done.<br />
           You focused alongside {formatCount(room.active_users)} others.
         </p>
@@ -386,7 +386,7 @@ function CompletionView({ room, onRejoin, onLeave }: CompletionViewProps) {
         <motion.button
           whileTap={{ scale: 0.96 }}
           onClick={onLeave}
-          className="w-full py-3 rounded-2xl font-semibold text-sm bg-muted/50 text-muted-foreground hover:bg-muted transition-colors"
+          className="w-full py-3 rounded-2xl font-semibold text-sm bg-muted/50 text-[hsl(230,10%,42%)] dark:text-[hsl(230,10%,55%)] hover:bg-muted transition-colors"
         >
           Leave Room
         </motion.button>
@@ -448,7 +448,7 @@ export default function StudyTogetherPage() {
                   navigate(-1);
                 }
               }}
-              className="p-2 rounded-full hover:bg-muted/60 text-muted-foreground transition-colors"
+              className="p-2 rounded-full hover:bg-muted/60 text-[hsl(230,10%,42%)] dark:text-[hsl(230,10%,55%)] transition-colors"
             >
               <ArrowLeft className="w-5 h-5" />
             </motion.button>
@@ -456,7 +456,7 @@ export default function StudyTogetherPage() {
             <div className="flex-1">
               <h1 className="font-bold text-base leading-tight">Study Together</h1>
               {!loading && view === 'lobby' && (
-                <p className="text-xs text-muted-foreground">
+                <p className="text-xs text-[hsl(230,10%,42%)] dark:text-[hsl(230,10%,55%)]">
                   <span className="font-semibold text-primary">{formatCount(totalFocusing)}</span>
                   {' '}people focusing globally
                 </p>
@@ -501,7 +501,7 @@ export default function StudyTogetherPage() {
                 {/* Hero text */}
                 <div className="text-center py-4">
                   <h2 className="text-xl font-bold">Pick Your Room</h2>
-                  <p className="text-sm text-muted-foreground mt-1">
+                  <p className="text-sm text-[hsl(230,10%,42%)] dark:text-[hsl(230,10%,55%)] mt-1">
                     No chat. No video. Just shared focus.
                   </p>
                 </div>
@@ -519,7 +519,7 @@ export default function StudyTogetherPage() {
                     ? (
                       <div className="flex flex-col items-center gap-3 py-12 text-center">
                         <span className="text-5xl">🪑</span>
-                        <p className="text-muted-foreground text-sm">
+                        <p className="text-[hsl(230,10%,42%)] dark:text-[hsl(230,10%,55%)] text-sm">
                           No rooms available right now.<br />Check back soon!
                         </p>
                       </div>
