@@ -61,10 +61,9 @@ export default function LoginPage() {
 
       <Link
         to="/"
-        className="absolute top-6 left-5 sm:top-8 sm:left-8 flex items-center gap-2 text-xs tracking-widest uppercase z-10 transition-colors duration-300 hover:opacity-70"
+        className="absolute top-6 left-5 sm:top-8 sm:left-8 flex items-center gap-2 text-xs tracking-widest uppercase z-10 transition-colors duration-300 hover:opacity-70 text-[hsl(230,10%,42%)] dark:text-[hsl(230,10%,55%)]"
         style={{
           fontFamily: "'DM Mono', monospace",
-          color: 'hsl(var(--muted-foreground))',
           paddingTop: 'env(safe-area-inset-top, 0px)',
           paddingLeft: 'env(safe-area-inset-left, 0px)',
         }}
@@ -227,12 +226,12 @@ export default function LoginPage() {
             <div className="flex items-center gap-3 py-1">
               <div className="flex-1 h-px" style={{ background: 'hsl(var(--border) / 0.6)' }} />
               <span
+                className="text-[hsl(230,10%,42%)] dark:text-[hsl(230,10%,55%)]"
                 style={{
                   fontFamily: "'DM Mono', monospace",
                   fontSize: '0.6rem',
                   letterSpacing: '0.15em',
                   textTransform: 'uppercase',
-                  color: 'hsl(var(--muted-foreground) / 0.6)',
                 }}
               >
                 or
@@ -256,8 +255,8 @@ export default function LoginPage() {
           </motion.form>
 
           <p
-            className="text-center"
-            style={{ fontSize: '0.7rem', color: 'hsl(var(--muted-foreground) / 0.6)' }}
+            className="text-center text-[hsl(230,10%,42%)] dark:text-[hsl(230,10%,55%)]"
+            style={{ fontSize: '0.7rem' }}
           >
             By continuing you agree to our{' '}
             <Link to="/terms" className="underline underline-offset-2 hover:text-foreground transition-colors">Terms</Link>
