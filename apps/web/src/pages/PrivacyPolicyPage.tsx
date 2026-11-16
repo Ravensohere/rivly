@@ -14,7 +14,7 @@ export default function PrivacyPolicyPage() {
           variant="ghost" 
           size="sm" 
           onClick={() => navigate(-1)} 
-          className="mb-8 -ml-2 text-muted-foreground hover:text-foreground"
+          className="mb-8 -ml-2 text-[hsl(230,10%,42%)] dark:text-[hsl(230,10%,55%)] hover:text-foreground"
         >
           <ChevronLeft className="w-4 h-4 mr-1" /> Back
         </Button>
@@ -30,16 +30,16 @@ export default function PrivacyPolicyPage() {
             </div>
             <div>
               <h1 className="text-3xl font-bold text-foreground">Privacy Policy</h1>
-              <p className="text-muted-foreground text-sm">Last updated: January 26, 2026</p>
+              <p className="text-[hsl(230,10%,42%)] dark:text-[hsl(230,10%,55%)] text-sm">Last updated: January 26, 2026</p>
             </div>
           </div>
 
           <section className="space-y-4">
             <h2 className="text-xl font-semibold text-foreground">1. Information We Collect</h2>
-            <p className="text-muted-foreground leading-relaxed">
+            <p className="text-[hsl(230,10%,42%)] dark:text-[hsl(230,10%,55%)] leading-relaxed">
               Rivly collects information to provide a better experience to all our users. This includes:
             </p>
-            <ul className="list-disc list-inside text-muted-foreground space-y-2 ml-4">
+            <ul className="list-disc list-inside text-[hsl(230,10%,42%)] dark:text-[hsl(230,10%,55%)] space-y-2 ml-4">
               <li><strong>Profile Information:</strong> Name and email address provided during Google Sign-In.</li>
               <li><strong>Google Calendar Data:</strong> If you connect your calendar, we access your calendar events and metadata to display them within the app.</li>
               <li><strong>App Preferences:</strong> Your customized settings, such as theme and notification preferences.</li>
@@ -48,10 +48,10 @@ export default function PrivacyPolicyPage() {
 
           <section className="space-y-4">
             <h2 className="text-xl font-semibold text-foreground">2. How We Use Information</h2>
-            <p className="text-muted-foreground leading-relaxed">
+            <p className="text-[hsl(230,10%,42%)] dark:text-[hsl(230,10%,55%)] leading-relaxed">
               We use the collected information to:
             </p>
-            <ul className="list-disc list-inside text-muted-foreground space-y-2 ml-4">
+            <ul className="list-disc list-inside text-[hsl(230,10%,42%)] dark:text-[hsl(230,10%,55%)] space-y-2 ml-4">
               <li>Provide and maintain the Rivly services.</li>
               <li>Display your Google Calendar events to help you plan your day.</li>
               <li>Personalize your experience with greetings and reminders.</li>
@@ -61,27 +61,27 @@ export default function PrivacyPolicyPage() {
 
           <section className="space-y-4">
             <h2 className="text-xl font-semibold text-foreground">3. Google API Disclosure</h2>
-            <p className="text-muted-foreground leading-relaxed">
-              Rivly's use and transfer to any other app of information received from Google APIs will adhere to 
+            <p className="text-[hsl(230,10%,42%)] dark:text-[hsl(230,10%,55%)] leading-relaxed">
+              Rivly's use and transfer to any other app of information received from Google APIs will adhere to
               <a href="https://developers.google.com/terms/api-services-user-data-policy#additional_requirements_for_specific_api_scopes" target="_blank" rel="noopener noreferrer" className="text-primary hover:underline ml-1">
                 Google API Service User Data Policy
               </a>, including the Limited Use requirements.
             </p>
-            <p className="text-muted-foreground leading-relaxed">
+            <p className="text-[hsl(230,10%,42%)] dark:text-[hsl(230,10%,55%)] leading-relaxed">
               We do not store your calendar events on our servers. The data is fetched directly from Google APIs and displayed locally in your browser/app.
             </p>
           </section>
 
           <section className="space-y-4">
             <h2 className="text-xl font-semibold text-foreground">4. Data Security</h2>
-            <p className="text-muted-foreground leading-relaxed">
+            <p className="text-[hsl(230,10%,42%)] dark:text-[hsl(230,10%,55%)] leading-relaxed">
               We use industry-standard security measures to protect your data. Your profile and preferences are stored securely using Supabase. We never sell your personal data to third parties.
             </p>
           </section>
 
           <section className="space-y-4">
             <h2 className="text-xl font-semibold text-foreground">5. Contact Us</h2>
-            <p className="text-muted-foreground leading-relaxed">
+            <p className="text-[hsl(230,10%,42%)] dark:text-[hsl(230,10%,55%)] leading-relaxed">
               If you have any questions about this Privacy Policy, please contact us at 
               <span className="text-primary ml-1">ravenso.here@gmail.com</span>.
             </p>
