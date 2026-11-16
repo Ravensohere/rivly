@@ -14,7 +14,7 @@ export default function MobileAppPage() {
             <Smartphone className="w-10 h-10 text-primary" />
           </div>
           <h1 className="text-4xl font-bold tracking-tight">Rivly Mobile</h1>
-          <p className="text-xl text-muted-foreground">The full rhythm experience, in your pocket.</p>
+          <p className="text-xl text-[hsl(230,10%,42%)] dark:text-[hsl(230,10%,55%)]">The full rhythm experience, in your pocket.</p>
         </div>
 
         {/* Benefits */}
@@ -45,7 +45,7 @@ export default function MobileAppPage() {
         <div className="bg-secondary/30 rounded-[3rem] p-8 md:p-12 text-center space-y-8 border border-border/20">
           <div className="space-y-4">
             <h2 className="text-2xl font-bold">Get the App</h2>
-            <p className="text-muted-foreground">Native iOS and Android apps are currently in private beta.</p>
+            <p className="text-[hsl(230,10%,42%)] dark:text-[hsl(230,10%,55%)]">Native iOS and Android apps are currently in private beta.</p>
           </div>
 
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
@@ -64,7 +64,7 @@ export default function MobileAppPage() {
                  <Globe className="w-4 h-4 text-primary" /> 
                  Install as a PWA
                </h4>
-               <ol className="text-sm text-muted-foreground space-y-2 list-decimal list-inside">
+               <ol className="text-sm text-[hsl(230,10%,42%)] dark:text-[hsl(230,10%,55%)] space-y-2 list-decimal list-inside">
                  <li>Open <span className="text-foreground font-medium">rivly.in</span> in Safari or Chrome.</li>
                  <li>Tap the <span className="text-foreground font-medium">Share</span> or <span className="text-foreground font-medium">Menu</span> button.</li>
                  <li>Select <span className="text-foreground font-medium">"Add to Home Screen"</span>.</li>
@@ -75,7 +75,7 @@ export default function MobileAppPage() {
 
         <div className="text-center pt-8">
           <Link to="/">
-            <Button variant="ghost" className="text-muted-foreground hover:text-foreground">
+            <Button variant="ghost" className="text-[hsl(230,10%,42%)] dark:text-[hsl(230,10%,55%)] hover:text-foreground">
               Return to Landing Page
             </Button>
           </Link>
