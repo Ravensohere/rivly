@@ -86,7 +86,7 @@ export default function ResetPasswordPage() {
         className="w-full max-w-sm text-center"
       >
         {linkState === 'checking' && (
-          <p className="text-sm text-muted-foreground">Checking your link…</p>
+          <p className="text-sm text-[hsl(230,10%,42%)] dark:text-[hsl(230,10%,55%)]">Checking your link…</p>
         )}
 
         {linkState === 'invalid' && (
@@ -95,7 +95,7 @@ export default function ResetPasswordPage() {
               <AlertCircle className="w-10 h-10 text-destructive" />
             </div>
             <h1 className="text-xl font-semibold mb-2">This link has expired</h1>
-            <p className="text-sm text-muted-foreground mb-6">
+            <p className="text-sm text-[hsl(230,10%,42%)] dark:text-[hsl(230,10%,55%)] mb-6">
               Reset links are single-use and last an hour. Request a fresh one and you'll be back in
               a minute.
             </p>
@@ -108,7 +108,7 @@ export default function ResetPasswordPage() {
         {linkState === 'valid' && (
           <>
             <h1 className="text-xl font-semibold mb-2">Choose a new password</h1>
-            <p className="text-sm text-muted-foreground mb-6">
+            <p className="text-sm text-[hsl(230,10%,42%)] dark:text-[hsl(230,10%,55%)] mb-6">
               Make it at least {MIN_PASSWORD} characters.
             </p>
             <form onSubmit={handleSubmit} className="space-y-3 text-left">
