@@ -1,8 +1,8 @@
 import { useState, useMemo } from 'react';
 import { motion } from 'framer-motion';
-import { 
-  User, Trophy, Target, CheckCircle2, Flame, Clock, 
-  TrendingUp, Calendar, Star, Award, Zap, Crown,
+import {
+  User, Trophy, Target, CheckCircle2, Flame, Clock,
+  TrendingUp, Star, Award, Crown,
   Settings, Edit3, Share2
 } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
@@ -32,7 +32,8 @@ function QuickStat({ label, value, icon }: QuickStatProps) {
         <div className="text-primary">{icon}</div>
       </div>
       <div className="text-lg font-bold text-foreground">{value}</div>
-      <div className="text-xs text-muted-foreground">{label}</div>
+      {/* text-muted-foreground on flat bg-background fails AA (~4.385:1 light); established fix token */}
+      <div className="text-xs text-[hsl(230,10%,42%)] dark:text-[hsl(230,10%,55%)]">{label}</div>
     </div>
   );
 }
@@ -80,7 +81,7 @@ function ShowcaseBadge({ achievement, delay = 0, onClick }: ShowcaseBadgeProps) 
 
 export default function ProfilePage() {
   const navigate = useNavigate();
-  const { firstName, tagline, createdAt, dailyFocusGoal, dailyTaskGoal } = useUserPreferences();
+  const { firstName, tagline, createdAt } = useUserPreferences();
   const { allAchievements, unlockedCount, totalCount, stats } = useAchievements();
   const { week, focusStreak } = useFocusTotals();
   const { taskEvents } = useEventsLedgerContext();
@@ -174,7 +175,7 @@ export default function ProfilePage() {
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             transition={{ delay: 0.4 }}
-            className="text-xs text-muted-foreground mt-1"
+            className="text-xs text-[hsl(230,10%,42%)] dark:text-[hsl(230,10%,55%)] mt-1"
           >
             {memberSince}
           </motion.p>
