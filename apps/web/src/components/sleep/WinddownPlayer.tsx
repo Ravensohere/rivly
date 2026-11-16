@@ -14,18 +14,19 @@ interface WinddownPlayerProps {
 }
 
 export function WinddownPlayer({ open, onClose }: WinddownPlayerProps) {
-  const { 
-    activeSession, 
-    isPlaying, 
+  const {
+    activeSession,
+    isPlaying,
     remainingSeconds,
+    volume,
+    setVolume,
     pauseSession,
     resumeSession,
     completeSession,
     cancelSession,
   } = useWinddownContext();
-  
+
   const [showCelebration, setShowCelebration] = useState(false);
-  const [volume, setVolume] = useState(70);
   
   const sound = activeSession ? getSoundById(activeSession.soundId) : null;
   const packInfo = activeSession ? SOUND_PACK_INFO[activeSession.soundPack] : null;

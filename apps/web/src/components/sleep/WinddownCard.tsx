@@ -105,9 +105,9 @@ export function WinddownCard({ onStartPlayer }: WinddownCardProps) {
                     onClick={() => setSelectedDuration(dur)}
                     className={`
                       flex-1 py-2.5 rounded-xl text-sm font-medium transition-all duration-300 border
-                      ${selectedDuration === dur 
-                        ? 'bg-primary text-primary-foreground border-primary' 
-                        : 'bg-secondary text-muted-foreground border-border hover:bg-secondary/80'}
+                      ${selectedDuration === dur
+                        ? 'bg-primary text-primary-foreground border-primary'
+                        : 'bg-secondary text-[hsl(230,10%,40%)] dark:text-[hsl(230,10%,60%)] border-border hover:bg-secondary/80'}
                     `}
                   >
                     {dur}m
@@ -128,9 +128,9 @@ export function WinddownCard({ onStartPlayer }: WinddownCardProps) {
                       onClick={() => setSelectedPack(pack)}
                       className={`
                         flex items-center gap-2 px-3 py-3 rounded-xl text-sm transition-all duration-300 border
-                        ${selectedPack === pack 
-                          ? 'bg-primary text-primary-foreground border-primary' 
-                          : 'bg-secondary text-muted-foreground border-border hover:bg-secondary/80'}
+                        ${selectedPack === pack
+                          ? 'bg-primary text-primary-foreground border-primary'
+                          : 'bg-secondary text-[hsl(230,10%,40%)] dark:text-[hsl(230,10%,60%)] border-border hover:bg-secondary/80'}
                       `}
                     >
                       <span className="text-lg">{info.icon}</span>

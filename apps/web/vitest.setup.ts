@@ -11,3 +11,12 @@ if (typeof window !== 'undefined') {
   window.HTMLElement.prototype.scrollBy = vi.fn();
   window.HTMLElement.prototype.scrollIntoView = vi.fn();
 }
+
+// jsdom has no ResizeObserver; Radix UI primitives (e.g. Slider) use it.
+if (typeof globalThis.ResizeObserver === 'undefined') {
+  (globalThis as any).ResizeObserver = class {
+    observe() {}
+    unobserve() {}
+    disconnect() {}
+  };
+}

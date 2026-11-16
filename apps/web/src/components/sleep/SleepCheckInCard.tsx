@@ -86,9 +86,9 @@ export function SleepCheckInCard() {
                   onClick={() => setSelectedQuality(opt.id)}
                   className={`
                     flex-1 flex flex-col items-center gap-1.5 py-4 rounded-xl transition-all duration-300 border-2
-                    ${selectedQuality === opt.id 
+                    ${selectedQuality === opt.id
                       ? opt.color
-                      : 'bg-secondary border-border text-muted-foreground hover:bg-secondary/80'}
+                      : 'bg-secondary border-border text-[hsl(230,10%,40%)] dark:text-[hsl(230,10%,60%)] hover:bg-secondary/80'}
                   `}
                 >
                   <span className="text-2xl">{opt.emoji}</span>

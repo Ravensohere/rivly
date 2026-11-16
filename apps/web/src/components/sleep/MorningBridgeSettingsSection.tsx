@@ -127,7 +127,7 @@ export function MorningBridgeSettingsSection({
                   className="bg-card border border-border rounded-lg px-3 py-1.5 text-sm"
                 />
               </div>
-              <p className="text-xs text-muted-foreground mt-2">
+              <p className="text-xs text-[hsl(230,10%,40%)] dark:text-[hsl(230,10%,60%)] mt-2">
                 Morning Bridge shows within 3 hours of this time
               </p>
             </div>

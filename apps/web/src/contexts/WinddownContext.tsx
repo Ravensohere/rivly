@@ -21,7 +21,8 @@ interface WinddownContextType {
   isPlaying: boolean;
   remainingSeconds: number;
   todayCompleted: boolean;
-  
+  volume: number;
+
   // Actions
   startSession: (durationMinutes: number, soundPack: WinddownSoundPack, soundId: string) => void;
   pauseSession: () => void;
@@ -29,6 +30,7 @@ interface WinddownContextType {
   completeSession: () => void;
   cancelSession: () => void;
   updatePreferences: (updates: Partial<WinddownPreferences>) => void;
+  setVolume: (volume: number) => void;
   
   // Stats
   weeklyWinddownCount: number;
@@ -48,6 +50,7 @@ export function WinddownProvider({ children }: { children: React.ReactNode }) {
   const [preferences, setPreferences] = useState<WinddownPreferences>(defaultPrefs);
   const [isPlaying, setIsPlaying] = useState(false);
   const [remainingSeconds, setRemainingSeconds] = useState(0);
+  const [volume, setVolume] = useState(70);
   const audioRef = useRef<HTMLAudioElement | null>(null);
   const timerRef = useRef<number | null>(null);
   
@@ -115,7 +118,7 @@ export function WinddownProvider({ children }: { children: React.ReactNode }) {
         if (!audioRef.current) {
           audioRef.current = new Audio(sound.audioUrl);
           audioRef.current.loop = true;
-          audioRef.current.volume = 0.7;
+          audioRef.current.volume = volume / 100;
         }
         audioRef.current.play().catch(console.error);
       }
@@ -124,11 +127,19 @@ export function WinddownProvider({ children }: { children: React.ReactNode }) {
         audioRef.current.pause();
       }
     }
-    
+
     return () => {
       // Don't stop audio on unmount - let it continue during navigation
     };
   }, [isPlaying, activeSession?.soundId]);
+
+  // Keep the live audio element's volume in sync with the volume control
+  // without recreating/restarting the Audio element on every change.
+  useEffect(() => {
+    if (audioRef.current) {
+      audioRef.current.volume = volume / 100;
+    }
+  }, [volume]);
   
   const saveSessionToHistory = (session: WinddownSession) => {
     try {
@@ -268,12 +279,14 @@ export function WinddownProvider({ children }: { children: React.ReactNode }) {
       isPlaying,
       remainingSeconds,
       todayCompleted,
+      volume,
       startSession,
       pauseSession,
       resumeSession,
       completeSession,
       cancelSession,
       updatePreferences,
+      setVolume,
       weeklyWinddownCount,
       getSessionHistory,
     }}>

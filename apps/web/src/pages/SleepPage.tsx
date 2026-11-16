@@ -9,7 +9,6 @@ import { WinddownPlayer } from '@/components/sleep/WinddownPlayer';
 import { SleepCheckInCard } from '@/components/sleep/SleepCheckInCard';
 import { MorningBridgeSettingsSection } from '@/components/sleep/MorningBridgeSettingsSection';
 import { useUserPreferences } from '@/hooks/useUserPreferences';
-import { useSleep } from '@/hooks/useSleep';
 import { useMorningBridge } from '@/hooks/useMorningBridge';
 import { useWinddownContext } from '@/contexts/WinddownContext';
 import { useAuthContext } from '@/contexts/AuthContext';
@@ -19,7 +18,6 @@ import { Link } from 'react-router-dom';
 
 export default function SleepPage() {
   const { firstName } = useUserPreferences();
-  const { prefs, updatePrefs } = useSleep();
   const { activeSession } = useWinddownContext();
   const { isGuest } = useAuthContext();
   const {
@@ -79,7 +77,7 @@ export default function SleepPage() {
           {/* Guest Lock Overlay */}
           {isGuest && (
             <div className="absolute inset-0 flex items-center justify-center z-10">
-              <div className="bg-card/90 backdrop-blur-md p-8 rounded-3xl border border-border shadow-xl text-center max-w-xs mx-4">
+              <div className="bg-card backdrop-blur-md p-8 rounded-3xl border border-border shadow-xl text-center max-w-xs mx-4">
                 <div className="w-12 h-12 bg-secondary rounded-full flex items-center justify-center mx-auto mb-4">
                   <Lock className="w-6 h-6 text-muted-foreground" />
                 </div>
