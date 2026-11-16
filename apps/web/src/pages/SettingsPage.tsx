@@ -86,7 +86,7 @@ export default function SettingsPage() {
     dailyReminderEnabled, dailyReminderTime, windDownReminderEnabled,
     windDownReminderTime, gentleWakeEnabled, updatePreferences, setFirstName: setLocalFirstName,
     connectCalendar, disconnectCalendar, logout: logoutLocal, resetOnboarding: resetUserPrefs,
-    rivaLanguage,
+    rivaLanguage, voiceId,
   } = useUserPreferences();
 
   const { resetTutorialOnly, resetOnboarding } = useOnboarding();
@@ -169,7 +169,7 @@ export default function SettingsPage() {
       <div className="max-w-lg mx-auto px-4 pt-8">
         <motion.div initial={{ opacity: 0, y: -10 }} animate={{ opacity: 1, y: 0 }} className="mb-8">
           <h1 className="text-2xl font-semibold text-foreground">Settings</h1>
-          <p className="text-muted-foreground text-sm mt-1">Customize your experience</p>
+          <p className="text-[hsl(230,10%,42%)] dark:text-[hsl(230,10%,55%)] text-sm mt-1">Customize your experience</p>
         </motion.div>
 
         <div className="space-y-5">
@@ -223,7 +223,7 @@ export default function SettingsPage() {
               <div className="flex gap-2">
                 {themeOptions.map((option) => (
                   <motion.button key={option.value} onClick={() => setTheme(option.value)} whileTap={{ scale: 0.95 }}
-                    className={`flex-1 flex items-center justify-center gap-2 py-2.5 px-3 rounded-xl text-sm font-medium transition-all ${themeMode === option.value ? 'bg-primary text-primary-foreground' : 'bg-secondary text-muted-foreground'}`}>
+                    className={`flex-1 flex items-center justify-center gap-2 py-2.5 px-3 rounded-xl text-sm font-medium transition-all ${themeMode === option.value ? 'bg-primary text-primary-foreground' : 'bg-secondary text-[hsl(230,10%,40%)] dark:text-[hsl(230,10%,60%)]'}`}>
                     {option.icon}{option.label}
                   </motion.button>
                 ))}
@@ -262,7 +262,7 @@ export default function SettingsPage() {
                     className={`px-3 py-1.5 rounded-lg text-xs font-medium transition-all ${
                       rivaLanguage === lang.id
                         ? 'bg-primary text-primary-foreground'
-                        : 'bg-secondary text-muted-foreground hover:bg-secondary/80'
+                        : 'bg-secondary text-[hsl(230,10%,40%)] dark:text-[hsl(230,10%,60%)] hover:bg-secondary/80'
                     }`}
                   >
                     {lang.name}
@@ -278,21 +278,15 @@ export default function SettingsPage() {
                 <select
                     id="voice-persona"
                     name="voice-persona"
-                    value={
-                        // @ts-ignore - voiceId added to prefs
-                        (useUserPreferences() as any).voiceId || 'meera'
-                    }
-                    onChange={(e) => updatePreferences({
-                        // @ts-ignore
-                        voiceId: e.target.value
-                    })}
+                    value={voiceId || 'meera'}
+                    onChange={(e) => updatePreferences({ voiceId: e.target.value })}
                     className="text-sm bg-secondary text-foreground rounded-lg px-3 py-1.5 border border-border/30"
                 >
                     <option value="meera">Meera (Female)</option>
                     <option value="arvind">Arvind (Male)</option>
                     <option value="ishita">Ishita (Energetic)</option>
                 </select>
-                <span className="text-xs text-muted-foreground/60">Voice uses credits</span>
+                <span className="text-xs text-muted-foreground">Voice uses credits</span>
               </div>
             </SettingsRow>
              <SettingsRow
@@ -329,16 +323,13 @@ export default function SettingsPage() {
               <Button 
                 variant="outline" 
                 size="sm" 
-                onClick={() => { 
-                  if(confirm('Clear all reflections? This cannot be undone.')) { 
-                    // Direct access to ensure it works
-                    window.localStorage.removeItem('dailyRhythm_reflections');
-                    // Also try setting to empty array just in case
-                    window.localStorage.setItem('dailyRhythm_reflections', '[]');
+                onClick={() => {
+                  if(confirm('Clear all reflections? This cannot be undone.')) {
+                    clearReflections();
                     toast.success('Cleared. Reloading...');
                     setTimeout(() => window.location.reload(), 500);
                   }
-                }} 
+                }}
                 className="text-destructive"
               >
                 <Trash2 className="w-4 h-4 mr-2" />Clear
