@@ -25,7 +25,7 @@ import { useJournal } from '@/hooks/useJournal';
 import { useParkedThoughts } from '@/hooks/useParkedThoughts';
 import { JournalEntry, JournalTag, JOURNAL_TAG_OPTIONS } from '@/types/journal';
 import { useAuthContext } from '@/contexts/AuthContext';
-import { Link, useSearchParams } from 'react-router-dom';
+import { Link, useLocation, useSearchParams } from 'react-router-dom';
 
 import { PageTransition } from '@/components/ui/PageTransition';
 
@@ -33,7 +33,11 @@ type TabId = 'reflect' | 'journal' | 'thoughts';
 
 export default function ReflectAndJournalPage() {
   const [searchParams] = useSearchParams();
-  const initialTab = (searchParams.get('tab') as TabId) || 'reflect';
+  const location = useLocation();
+  // /journal is an alternate URL for the Journal tab (JournalPage.tsx is dead
+  // code this route replaces) — default to it from the path when no explicit
+  // ?tab= override is present, so the route name matches what it shows.
+  const initialTab = (searchParams.get('tab') as TabId) || (location.pathname === '/journal' ? 'journal' : 'reflect');
   const [activeTab, setActiveTab] = useState<TabId>(initialTab);
   
   useEffect(() => {
@@ -226,7 +230,7 @@ function JournalTab() {
             New Entry
           </Button>
         </div>
-        <p className="text-sm text-muted-foreground">
+        <p className="text-sm text-[hsl(230,10%,42%)] dark:text-[hsl(230,10%,55%)]">
           {totalCount} {totalCount === 1 ? 'entry' : 'entries'}
         </p>
       </div>
@@ -270,7 +274,7 @@ function JournalTab() {
                     px-3 py-1.5 rounded-full text-xs font-medium transition-all
                     ${tagFilter === option.value
                       ? 'bg-primary text-primary-foreground'
-                      : 'bg-secondary text-muted-foreground hover:bg-secondary/80'}
+                      : 'bg-secondary text-[hsl(230,10%,40%)] dark:text-[hsl(230,10%,60%)] hover:bg-secondary/80'}
                   `}
                 >
                   {option.emoji} {option.label}
@@ -284,7 +288,7 @@ function JournalTab() {
         {hasActiveFilters && (
           <button
             onClick={clearFilters}
-            className="flex items-center gap-1 text-xs text-muted-foreground hover:text-foreground"
+            className="flex items-center gap-1 text-xs text-[hsl(230,10%,42%)] dark:text-[hsl(230,10%,55%)] hover:text-foreground"
           >
             <X className="w-3 h-3" />
             Clear filters
@@ -297,7 +301,7 @@ function JournalTab() {
         {uniqueEntries.length === 0 ? (
           <div className="text-center py-12">
             <BookOpen className="w-12 h-12 text-muted-foreground/30 mx-auto mb-4" />
-            <p className="text-muted-foreground">
+            <p className="text-[hsl(230,10%,42%)] dark:text-[hsl(230,10%,55%)]">
               {hasActiveFilters ? 'No entries match your filters' : 'Start writing your first entry'}
             </p>
             {!hasActiveFilters && (
