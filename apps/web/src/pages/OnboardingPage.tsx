@@ -1,7 +1,8 @@
 /**
  * OnboardingPage.tsx
  * ─────────────────────────────────────────────────────────────────────────────
- * First Win Onboarding Flow - Gets users to their first win in < 3 minutes.
+ * First Win Onboarding Flow - Gets users to their first win in under 6 minutes
+ * (dominated by the fixed 5-minute focus timer in step 2 below).
  * 
  * Flow (4 steps, no skipping):
  * 1. Set intention → Creates a task for today
@@ -107,12 +108,6 @@ function Step1Intention({
     }
   };
 
-  const handleSkip = () => {
-    if (intention.trim().length > 0) {
-      onNext();
-    }
-  };
-
   return (
     <motion.div
       initial={{ opacity: 0, y: 20 }}
@@ -133,7 +128,7 @@ function Step1Intention({
         {STEP_TITLES[0]}
       </h2>
 
-      <p className="text-muted-foreground text-center mb-8">
+      <p className="text-[hsl(230,10%,42%)] dark:text-[hsl(230,10%,55%)] text-center mb-8">
         This becomes your first task. Keep it simple and achievable.
       </p>
 
@@ -160,7 +155,7 @@ function Step1Intention({
         </Button>
       </form>
 
-      <p className="text-xs text-muted-foreground mt-4 text-center">
+      <p className="text-xs text-[hsl(230,10%,42%)] dark:text-[hsl(230,10%,55%)] mt-4 text-center">
         Takes about 30 seconds
       </p>
     </motion.div>
@@ -257,7 +252,7 @@ function Step2Timer({
           {STEP_TITLES[1]}
         </h2>
 
-        <p className="text-muted-foreground text-center mb-8">
+        <p className="text-[hsl(230,10%,42%)] dark:text-[hsl(230,10%,55%)] text-center mb-8">
           Even 2 minutes counts. Let's build momentum together.
         </p>
 
@@ -287,7 +282,7 @@ function Step2Timer({
           </svg>
           <div className="text-center z-10">
             <div className="text-4xl font-bold font-mono">{formatTime(seconds)}</div>
-            <div className="text-sm text-muted-foreground mt-1">5 min focus</div>
+            <div className="text-sm text-[hsl(230,10%,38%)] dark:text-[hsl(230,10%,60%)] mt-1">5 min focus</div>
           </div>
         </div>
 
@@ -299,8 +294,8 @@ function Step2Timer({
           Start Focus
         </Button>
 
-        <p className="text-xs text-muted-foreground mt-4 text-center">
-          Takes about 90 seconds (we'll speed it up for demo)
+        <p className="text-xs text-[hsl(230,10%,42%)] dark:text-[hsl(230,10%,55%)] mt-4 text-center">
+          Takes about 5 minutes
         </p>
       </motion.div>
     );
@@ -338,7 +333,7 @@ function Step2Timer({
         </svg>
         <div className="text-center z-10">
           <div className="text-4xl font-bold font-mono">{formatTime(seconds)}</div>
-          <div className="text-sm text-muted-foreground mt-1">Keep going!</div>
+          <div className="text-sm text-[hsl(230,10%,38%)] dark:text-[hsl(230,10%,60%)] mt-1">Keep going!</div>
         </div>
       </div>
 
@@ -420,7 +415,7 @@ function Step3Landscape({
         {STEP_TITLES[2]}
       </h2>
 
-      <p className="text-muted-foreground text-center mb-8">
+      <p className="text-[hsl(230,10%,42%)] dark:text-[hsl(230,10%,55%)] text-center mb-8">
         Your focus plants seeds in your landscape. Every session grows it.
       </p>
 
@@ -523,7 +518,7 @@ function Step3Landscape({
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         transition={{ delay: 2 }}
-        className="flex items-center gap-2 text-sm text-muted-foreground"
+        className="flex items-center gap-2 text-sm text-[hsl(230,10%,42%)] dark:text-[hsl(230,10%,55%)]"
       >
         <span>Continuing in</span>
         <motion.span
@@ -588,7 +583,7 @@ function Step4Welcome({
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         transition={{ delay: 0.5 }}
-        className="text-muted-foreground text-center mb-8"
+        className="text-[hsl(230,10%,42%)] dark:text-[hsl(230,10%,55%)] text-center mb-8"
       >
         You just completed your first Vivly session.
       </motion.p>
@@ -614,7 +609,7 @@ function Step4Welcome({
         initial={{ opacity: 0, y: 10 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ delay: 0.8 }}
-        className="flex items-center gap-2 text-sm text-muted-foreground mb-8"
+        className="flex items-center gap-2 text-sm text-[hsl(230,10%,42%)] dark:text-[hsl(230,10%,55%)] mb-8"
       >
         <div className="flex -space-x-2">
           {[1, 2, 3, 4].map((i) => (
@@ -649,7 +644,7 @@ function Step4Welcome({
               <ArrowRight className="w-5 h-5 ml-2" />
             </Button>
 
-            <p className="text-xs text-muted-foreground mt-4 text-center">
+            <p className="text-xs text-[hsl(230,10%,42%)] dark:text-[hsl(230,10%,55%)] mt-4 text-center">
               Your journey begins now 🌱
             </p>
           </motion.div>
@@ -756,13 +751,13 @@ export default function OnboardingPage() {
           </motion.div>
         </AnimatePresence>
 
-        {/* Skip hint (only on step 1) */}
+        {/* Personalization note — shown only on step 1 of 4 (intention input) */}
         {step === 0 && (
           <motion.p
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             transition={{ delay: 1 }}
-            className="text-xs text-muted-foreground text-center pb-4"
+            className="text-xs text-[hsl(230,10%,42%)] dark:text-[hsl(230,10%,55%)] text-center pb-4"
           >
             This helps us personalize your experience
           </motion.p>

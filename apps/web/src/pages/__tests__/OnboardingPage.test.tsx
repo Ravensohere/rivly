@@ -148,7 +148,7 @@ describe('OnboardingPage', () => {
       expect(screen.getByRole('button', { name: /Start Focus/i })).toBeInTheDocument();
     });
 
-    it('shows estimated time (90 seconds for demo)', async () => {
+    it('shows an estimated time that matches the actual 5-minute timer (not the stale "90 seconds" demo claim)', async () => {
       renderOnboarding();
 
       const input = screen.getByPlaceholderText(/e.g., Finish the presentation/i);
@@ -159,7 +159,11 @@ describe('OnboardingPage', () => {
         expect(screen.getByRole('button', { name: /Start Focus/i })).toBeInTheDocument();
       }, { timeout: 5000 });
 
-      expect(screen.getByText(/Takes about 90 seconds/i)).toBeInTheDocument();
+      // The timer is hardcoded to FOCUS_DURATION_SECONDS = 5 * 60 with no
+      // speed-up logic anywhere in the component, so the copy must say 5
+      // minutes, not the old "90 seconds (we'll speed it up for demo)" claim.
+      expect(screen.getByText(/Takes about 5 minutes/i)).toBeInTheDocument();
+      expect(screen.queryByText(/90 seconds/i)).not.toBeInTheDocument();
     });
 
     it('shows pause button when timer is running', async () => {
@@ -227,6 +231,68 @@ describe('OnboardingPage', () => {
       fireEvent.keyDown(input, { key: 'Enter', code: 'Enter' });
 
       expect(screen.getByText(/What's your one intention for today/i)).toBeInTheDocument();
+    });
+  });
+
+  // Contrast audit: every `text-muted-foreground` site on this page was hand-checked
+  // (HSL->sRGB->relative-luminance) against its actual composited background —
+  // most sit on the flat `bg-background` page background (same tokens/fix as the
+  // not-found card: fails AA in light mode at 4.385:1, passes dark at 5.109:1), but
+  // the two timer-circle labels sit on an opacity-stacked `from-primary/20
+  // to-primary/5` gradient over that same background, which fails AA in BOTH
+  // themes at the flat-background fix color — they need their own, stronger fix.
+  describe('Contrast — text-muted-foreground AA fix', () => {
+    const FIXED_FLAT = 'text-[hsl(230,10%,42%)] dark:text-[hsl(230,10%,55%)]';
+    const FIXED_GRADIENT = 'text-[hsl(230,10%,38%)] dark:text-[hsl(230,10%,60%)]';
+
+    it('Step 1 subtitle uses the AA-passing flat-background color', () => {
+      renderOnboarding();
+      const node = screen.getByText('This becomes your first task. Keep it simple and achievable.');
+      expect(node.className).not.toContain('text-muted-foreground');
+      expect(node.className).toContain(FIXED_FLAT);
+    });
+
+    it('Step 1 time estimate uses the AA-passing flat-background color', () => {
+      renderOnboarding();
+      const node = screen.getByText('Takes about 30 seconds');
+      expect(node.className).not.toContain('text-muted-foreground');
+      expect(node.className).toContain(FIXED_FLAT);
+    });
+
+    it('Step 2 intro subtitle uses the AA-passing flat-background color', async () => {
+      renderOnboarding();
+      const input = screen.getByPlaceholderText(/e.g., Finish the presentation/i);
+      fireEvent.change(input, { target: { value: 'Test' } });
+      fireEvent.click(screen.getByRole('button', { name: /Start/i }));
+
+      const node = await screen.findByText("Even 2 minutes counts. Let's build momentum together.");
+      expect(node.className).not.toContain('text-muted-foreground');
+      expect(node.className).toContain(FIXED_FLAT);
+    });
+
+    it('the "5 min focus" label inside the gradient timer circle uses the stronger gradient-composite AA fix', async () => {
+      renderOnboarding();
+      const input = screen.getByPlaceholderText(/e.g., Finish the presentation/i);
+      fireEvent.change(input, { target: { value: 'Test' } });
+      fireEvent.click(screen.getByRole('button', { name: /Start/i }));
+
+      const node = await screen.findByText('5 min focus');
+      expect(node.className).not.toContain('text-muted-foreground');
+      expect(node.className).toContain(FIXED_GRADIENT);
+    });
+
+    it('the "Keep going!" label inside the running gradient timer circle uses the gradient-composite AA fix', async () => {
+      renderOnboarding();
+      const input = screen.getByPlaceholderText(/e.g., Finish the presentation/i);
+      fireEvent.change(input, { target: { value: 'Test' } });
+      fireEvent.click(screen.getByRole('button', { name: /Start/i }));
+
+      await screen.findByRole('button', { name: /Start Focus/i });
+      fireEvent.click(screen.getByRole('button', { name: /Start Focus/i }));
+
+      const node = await screen.findByText('Keep going!');
+      expect(node.className).not.toContain('text-muted-foreground');
+      expect(node.className).toContain(FIXED_GRADIENT);
     });
   });
 });
