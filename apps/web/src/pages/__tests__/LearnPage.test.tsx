@@ -363,4 +363,54 @@ describe('LearnPage — contrast fix (recurring text-muted-foreground-on-backgro
     const node = screen.getByText('~3h');
     expect(node.className).not.toContain('text-muted-foreground/70');
   });
+
+  // Fix round 2 (coordinator review): TodayCard's "~Nh today" label and its
+  // per-checkpoint <li> were left unfixed on the theory that bg-card/80
+  // computed to ~4.51:1 (just passing). A reviewer recomputed the real
+  // 3-stop --gradient-calm backdrop (not a flat color) at ~4.50-4.52:1 —
+  // part of that range genuinely fails — so these are fixed too, for
+  // consistency with the other 15 sites in this file.
+  it('the TodayCard "~Nh today" label uses the AA-passing muted color', () => {
+    const p = path({ id: 'p1', topic: 'React' });
+    const cp = checkpoint({ id: 'cp1', title: 'React Hooks', estimatedHours: 2 });
+    setupLearningPathsMock({ paths: [p], todayStudyPlan: [{ path: p, checkpoints: [cp] }] });
+    setupRivaMock();
+
+    render(<LearnPage />);
+
+    const node = screen.getByText('~2h today');
+    expect(node.className).not.toContain('text-muted-foreground');
+    expect(node.className).toContain(FIXED_MUTED);
+  });
+
+  it('the TodayCard per-checkpoint list item uses the AA-passing muted color', () => {
+    const p = path({ id: 'p1', topic: 'React' });
+    const cp = checkpoint({ id: 'cp1', title: 'React Hooks', estimatedHours: 2 });
+    setupLearningPathsMock({ paths: [p], todayStudyPlan: [{ path: p, checkpoints: [cp] }] });
+    setupRivaMock();
+
+    render(<LearnPage />);
+
+    const li = screen.getByText('React Hooks').closest('li')!;
+    expect(li.className).not.toContain('text-muted-foreground');
+    expect(li.className).toContain(FIXED_MUTED);
+  });
+
+  // Fix round 2: this site stacked opacity-60 on top of the inherited
+  // muted-foreground color, compounding an already-borderline contrast down
+  // to ~2.25:1 (reviewer-computed) — the same severely-failing category as
+  // the /70-opacity checkpoint-hours case above. Swapping just the color
+  // while keeping opacity-60 still computes to ~2.49:1 (fails), so the
+  // opacity is dropped entirely, not just the color swapped.
+  it('the TodayCard checkpoint estimated-hours span no longer stacks opacity-60 on the muted color', () => {
+    const p = path({ id: 'p1', topic: 'React' });
+    const cp = checkpoint({ id: 'cp1', title: 'React Hooks', estimatedHours: 2 });
+    setupLearningPathsMock({ paths: [p], todayStudyPlan: [{ path: p, checkpoints: [cp] }] });
+    setupRivaMock();
+
+    render(<LearnPage />);
+
+    const node = screen.getByText('2h');
+    expect(node.className).not.toContain('opacity-60');
+  });
 });

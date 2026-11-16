@@ -3,6 +3,14 @@
 Route `/learn`, protected (`AnimatedRoutes.tsx:23` lazy import, `:99` route).
 File: `apps/web/src/pages/LearnPage.tsx` (662 lines pre-edit).
 
+> **Fix round 2 (coordinator review) appended at the bottom of this report.**
+> Two Important findings were raised against the original pass below: a
+> missed `opacity-60`-stacked contrast failure (line 247) and an
+> inconsistently-applied threshold policy on the 2 TodayCard sites. Both
+> are fixed; see "## Fix round 2" at the end for the math, the diff, and
+> re-run evidence. Everything above this note describes the original pass
+> as submitted and is left unedited for the record.
+
 ## Audit findings
 
 - **Route wiring confirmed.** `AnimatedRoutes.tsx:99`:
@@ -198,3 +206,136 @@ unchanged). No layout, behavior, prop, or data-flow changes.
   `landscape`) — verification rests on passing unit tests against the
   exact DOM/classes changed plus a clean production build, not a live
   authenticated screenshot.
+
+## Fix round 2 (coordinator review)
+
+Two Important findings came back from review. Both independently
+verified and fixed; neither involved my 15 originally-fixed sites, the
+test coverage for them, or the content-accuracy check — those were
+confirmed accurate. This round is about audit *completeness* (one site
+missed) and *consistency* (a stated policy not applied uniformly), not
+an overclaim.
+
+### Finding 1 — missed site: `LearnPage.tsx:247` (TodayCard estimated-hours, `opacity-60`)
+
+**Missed in the original audit.** `<span className="ml-auto text-[0.65rem] opacity-60">{cp.estimatedHours}h</span>`
+sits inside the `<li>` at line 243 (TodayCard's per-checkpoint row), which
+itself carried plain `text-muted-foreground`. The span has no color class
+of its own — it inherits the `<li>`'s muted-foreground color, then
+`opacity-60` stacks on top, compounding an already-borderline color down
+further. This is the numeral "Nh" (real content, not an icon), so the
+icon-exclusion rule in the original pass does not cover it. This is the
+same failure *category* as the `/70`-opacity checkpoint-estimated-hours
+case I did catch and fix in round 1 (line 436 originally) — I simply
+didn't check every opacity-stacked span exhaustively, just the one I'd
+already spotted.
+
+**Reviewer's number:** ~2.25:1 (badly failing). My own recompute, using
+the TodayCard's actual `bg-card/80`-over-page-bg background (sRGB
+≈ (0.9836, 0.97802, 0.9684), linear luminance ≈0.9518):
+
+- Fix color (`hsl(230,10%,42%)`) at full opacity: linear luminance
+  ≈0.1292 → contrast ≈5.59:1 (passes).
+- **Fix color composited AT 0.6 opacity over that same background**
+  (alpha-blend in sRGB space, *then* convert to linear and compute
+  contrast — per the review's explicit instruction to verify this before
+  calling it done): resultant sRGB ≈ (0.620, 0.626, 0.665) → linear
+  luminance ≈0.352 → contrast ≈**2.49:1**. **Still fails** even with the
+  corrected color, because opacity-blending toward a light background
+  erodes contrast regardless of which dark color you start from.
+
+**Fix applied:** dropped `opacity-60` entirely (not just swapped the
+color) — the span now renders at full opacity, inheriting the `<li>`'s
+fixed `text-[hsl(230,10%,42%)] dark:text-[hsl(230,10%,55%)]` color
+(≈5.59:1, comfortably passing), per the review's explicit fallback
+instruction ("if dropping to opacity-60 still fails even with the fixed
+color, drop the opacity entirely too").
+
+### Finding 2 — inconsistent policy: the 2 TodayCard sites left unfixed
+
+Round 1 computed the TodayCard's `bg-card/80`-over-page-bg background as
+a single flat color (≈4.51:1) and left those 2 sites (the "~Nh today"
+label and the per-checkpoint `<li>`) unfixed on that basis, while fixing
+every *other* site that computed to 4.48–4.49 as "within hand-calculation
+margin." That's the inconsistency flagged: treating one end of the same
+margin as "pass, leave it" and the other end as "fail, fix it anyway"
+is not a coherent policy once you've already said the margin is real.
+
+The reviewer additionally pointed out something round 1 got wrong on the
+input, not just the policy: `--gradient-calm` is a **3-stop diagonal**
+(`linear-gradient(160deg, hsl(38 35% 96%) 0%, hsl(38 25% 95%) 50%, hsl(260 20% 96%) 100%)`),
+not a flat color — round 1's math approximated it as flat `--background`.
+Recomputing at the gradient's actual stops gives a real range (reviewer:
+~4.50–4.52:1), meaning part of the TodayCard's actual backdrop is below
+4.5:1 depending on where in the card the text sits.
+
+**Fix applied:** both TodayCard sites (the "~Nh today" label, line 234,
+and the per-checkpoint `<li>`, line 243) now use the same
+`text-[hsl(230,10%,42%)] dark:text-[hsl(230,10%,55%)]` remediation as the
+other 17 sites in this file (15 from round 1 + the line-247 fix above).
+This also makes the fix uniform across every `text-muted-foreground` text
+site in `LearnPage.tsx` — zero remaining bare `text-muted-foreground`
+instances on text (icon-only uses of the token are intentionally
+unchanged; see round 1's icon-exclusion rationale).
+
+### Covering tests (added to `LearnPage.test.tsx`)
+
+Three new tests in the existing contrast `describe` block:
+
+1. `'the TodayCard "~Nh today" label uses the AA-passing muted color'` —
+   asserts the label's className no longer contains `text-muted-foreground`
+   and does contain the fixed-color class.
+2. `'the TodayCard per-checkpoint list item uses the AA-passing muted
+   color'` — same assertion on the `<li>`.
+3. `'the TodayCard checkpoint estimated-hours span no longer stacks
+   opacity-60 on the muted color'` — asserts the span's className no
+   longer contains `opacity-60` (covering the "drop the opacity, not just
+   the color" requirement specifically, since a color-only swap would
+   still fail this review's own bar).
+
+### Re-run evidence
+
+- **Focused file:** `npx vitest run src/pages/__tests__/LearnPage.test.tsx`
+  → **20/20 passed** (17 from round 1 + 3 new).
+- **Full suite:** `npx vitest run` → **40/40 files, 449/449 tests
+  passed** (446 + 3 new; run once, not concurrent with the build).
+- **ESLint:** `npx eslint src/pages/LearnPage.tsx` → clean, zero output.
+- **Build:** `npm run build` → `✓ built in 14.46s`, no errors; `LearnPage`
+  chunk now 14.69 kB (gzip 4.36 kB) — negligible change from round 1's
+  14.64 kB, consistent with a 3-line text-only diff.
+
+### Self-review of this fix round
+
+- Verified the reviewer's ~2.25:1 number independently via my own
+  sRGB-alpha-blend-then-linear-luminance math (got ≈2.49:1 for the
+  corrected-color-at-0.6-opacity case, same "fails badly" conclusion,
+  small numeric difference consistent with hand-calculation variance
+  between two independent reviewers, not a disagreement on the verdict).
+  Did not simply trust the reviewer's number without redoing the
+  calculation myself, per this card's standing instruction to be precise
+  rather than round up to confident.
+- Did not silently assume color-swap-only would fix the opacity-60 site —
+  explicitly recomputed with the fix color at 0.6 opacity first, found it
+  still fails, then applied the fallback (drop the opacity) the review
+  specified for exactly that outcome.
+- Resolved the TodayCard inconsistency by fixing both flagged sites
+  rather than re-arguing the original 4.51:1 call — the reviewer's point
+  that the backdrop is a gradient, not a flat color, independently
+  undermines the single-number basis for leaving them unfixed, so fixing
+  is the correct response, not just the path of least resistance.
+- No other `text-muted-foreground` text sites remain in `LearnPage.tsx`
+  after this round (confirmed via `grep -n "text-muted-foreground"
+  apps/web/src/pages/LearnPage.tsx` — every remaining hit is on an
+  icon-only element, consistent with round 1's documented exclusion).
+
+### Concerns (updated)
+
+- All concerns from round 1 stand except the TodayCard hairline-call
+  concern, which this round resolves by fixing both sites instead of
+  leaving a judgment call in place.
+- The gradient-background point is a reminder that any future contrast
+  audit on a page using `--gradient-calm` (several other pages in this
+  app do) should sample the gradient's actual stops, not approximate it
+  as flat `--background` — worth carrying forward to other in-flight or
+  future cards in this pipeline, though re-auditing already-merged cards
+  is outside this card's scope to action unilaterally.

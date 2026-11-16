@@ -231,7 +231,7 @@ function TodayCard({
         <span className="text-sm font-semibold" style={{ fontFamily: "'Syne', sans-serif" }}>
           {path.topic}
         </span>
-        <span className="text-xs text-muted-foreground flex items-center gap-1">
+        <span className="text-xs text-[hsl(230,10%,42%)] dark:text-[hsl(230,10%,55%)] flex items-center gap-1">
           <Clock className="w-3 h-3" />
           ~{totalHours}h today
         </span>
@@ -240,11 +240,11 @@ function TodayCard({
         {checkpoints.map((cp) => {
           const TypeIcon = (cp.type && TYPE_ICON[cp.type]) || BookOpen;
           return (
-            <li key={cp.id} className="flex items-center gap-2 text-xs text-muted-foreground">
+            <li key={cp.id} className="flex items-center gap-2 text-xs text-[hsl(230,10%,42%)] dark:text-[hsl(230,10%,55%)]">
               <TypeIcon className="w-3 h-3 flex-shrink-0 text-primary/60" />
               <span className="truncate">{cp.title}</span>
               {cp.estimatedHours && (
-                <span className="ml-auto text-[0.65rem] opacity-60">{cp.estimatedHours}h</span>
+                <span className="ml-auto text-[0.65rem]">{cp.estimatedHours}h</span>
               )}
             </li>
           );

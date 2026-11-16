@@ -10,7 +10,7 @@ acceptance:
   - primary interaction verified
   - no shared-component regression in holistic smoke pass
 merge_gate: work stays inside F:\Personal Assistant\rivly-assistant-worktrees\integrated-main or fresh worktrees branched from it (never rivly-assistant's own checkout, F:\skipwise, or F:\Personal Assistant\app); <=2 concurrent builds; riva/integrated-main stays local (no push); no .env/secrets access
-handoff: see "## Handoff" below — apps/web/src/pages/LearnPage.tsx (route /learn, protected, 662 lines pre-edit). No landing-page marketing claim names this feature (grepped LandingPage.tsx for "Learn", no hits), so there was no advertised-vs-real cross-check to run, unlike the landscape card. The one page-local claim checked (EmptyState copy: "she'll create a curated roadmap with the best YouTube videos for you") traces to a real create_learning_path AI-planning action plus a real api.riva.searchVideo() call in useRivaLogic.ts — genuine mechanism behind marketing framing, not a fabricated statistic. Hand-computed AA contrast (HSL->sRGB->relative-luminance) for every text-muted-foreground site against its actual composited background (not just assumed): fixed 15 genuinely-failing sites (ratios computed ~2.60:1 to ~4.49:1, all below the 4.5:1 AA threshold) using the pipeline's established remediation; left the 2 TodayCard sites untouched since their bg-card/80 composite computed to ~4.51:1 (passing, barely) — explicitly flagged in-report as a hairline call given hand-calculation precision limits.
+handoff: see "## Handoff" below — apps/web/src/pages/LearnPage.tsx (route /learn, protected, 662 lines pre-edit). No landing-page marketing claim names this feature (grepped LandingPage.tsx for "Learn", no hits), so there was no advertised-vs-real cross-check to run, unlike the landscape card. The one page-local claim checked (EmptyState copy: "she'll create a curated roadmap with the best YouTube videos for you") traces to a real create_learning_path AI-planning action plus a real api.riva.searchVideo() call in useRivaLogic.ts — genuine mechanism behind marketing framing, not a fabricated statistic. Hand-computed AA contrast (HSL->sRGB->relative-luminance) for every text-muted-foreground site against its actual composited background: round 1 fixed 15 sites; a coordinator review caught 2 Important gaps — a missed opacity-60-stacked site (line 247, ~2.25:1) and an inconsistent hairline call on 2 TodayCard sites left unfixed at ~4.51:1 despite the real --gradient-calm backdrop (a 3-stop gradient, not flat) ranging ~4.50-4.52:1. Both fixed in round 2 (18 total sites fixed); zero bare text-muted-foreground remains on text in this file (icon-only uses intentionally excluded, per WCAG non-text 3:1 vs text 4.5:1).
 ---
 
 # Card: Learn Page
@@ -162,3 +162,26 @@ Unlike `landscape`, no functional/behavioral gap was found on this page —
 the resource-list legacy-fallback chain and the AI-planning/video-search
 mechanism behind the EmptyState copy both check out against the real
 code.
+
+### PASS 4 — Fix round 2 (coordinator review)
+
+Two Important findings addressed, full math/diff/re-run evidence in
+`.superpowers/sdd/2026-11-14-redesign-pipeline-execution/task-4-learn-report.md`'s
+"Fix round 2" section:
+
+1. **Missed site** `LearnPage.tsx:247` — TodayCard's checkpoint
+   estimated-hours span stacked `opacity-60` on an inherited
+   `text-muted-foreground` color (not icon-only, missed by the original
+   audit). Reviewer-computed ~2.25:1; my own recompute of the fix color
+   at 0.6 opacity over the TodayCard's real `bg-card/80` backdrop gave
+   ~2.49:1 — still fails even with the corrected color — so the opacity
+   was dropped entirely rather than just swapping the color.
+2. **Inconsistent hairline call** — the 2 TodayCard sites round 1 left
+   unfixed at ~4.51:1 (computed against a flattened approximation of
+   `--gradient-calm`) are fixed now: the real gradient is a 3-stop
+   diagonal, and sampling its actual stops gives a range (~4.50-4.52:1)
+   that partially fails. Fixed for consistency with every other
+   hairline-band site in this file, which were all fixed in round 1.
+
+18 sites fixed total. 3 new covering tests added (20/20 focused, 449/449
+full suite, build clean, `LearnPage` chunk 14.69 kB gzip 4.36 kB).
