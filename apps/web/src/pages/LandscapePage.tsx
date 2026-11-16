@@ -50,13 +50,12 @@ function getMonthDates(date: Date): string[] {
 }
 
 export default function LandscapePage() {
-  const { 
-    landscapeState, 
-    getSeedsForDate, 
-    getSessionsByDateRange,
-    unlockedCollectibles: landscapeCollectibles, 
-    getLandscapeMessage, 
-    updateLandscapeState, 
+  const {
+    landscapeState,
+    getSeedsForDate,
+    unlockedCollectibles: landscapeCollectibles,
+    getLandscapeMessage,
+    updateLandscapeState,
     checkDailyGrowth,
   } = useLandscape();
   
@@ -196,7 +195,7 @@ export default function LandscapePage() {
           </Link>
           <div className="flex-1">
             <h1 className="text-xl font-semibold text-foreground">My Landscape</h1>
-            <p className="text-xs text-muted-foreground">Your focus journey visualized</p>
+            <p className="text-xs text-[hsl(230,10%,42%)] dark:text-[hsl(230,10%,55%)]">Your focus journey visualized</p>
           </div>
           
           {/* Collection Button */}
@@ -211,7 +210,7 @@ export default function LandscapePage() {
           </Button>
           
           {/* Streak Badge */}
-          <div className="flex items-center gap-1.5 text-xs text-muted-foreground bg-muted/50 px-3 py-1.5 rounded-full">
+          <div className="flex items-center gap-1.5 text-xs text-[hsl(230,10%,42%)] dark:text-[hsl(230,10%,55%)] bg-muted/50 px-3 py-1.5 rounded-full">
             <Sparkles className="w-3.5 h-3.5 text-primary" />
             <span>{safeNumber(focusStreak)} day streak</span>
           </div>
@@ -228,7 +227,7 @@ export default function LandscapePage() {
               className={`flex-1 py-2 px-3 rounded-lg text-sm font-medium transition-all ${
                 viewMode === option.value
                   ? 'bg-card text-foreground shadow-sm'
-                  : 'text-muted-foreground hover:text-foreground'
+                  : 'text-[hsl(230,10%,42%)] dark:text-[hsl(230,10%,55%)] hover:text-foreground'
               }`}
             >
               {option.label}
@@ -321,7 +320,7 @@ export default function LandscapePage() {
           transition={{ delay: 0.5, duration: 1 }}
           className="mt-6 text-center"
         >
-          <p className="text-muted-foreground text-sm leading-relaxed max-w-xs mx-auto">
+          <p className="text-[hsl(230,10%,42%)] dark:text-[hsl(230,10%,55%)] text-sm leading-relaxed max-w-xs mx-auto">
             {viewSeeds.length === 0 
               ? (isToday ? "Start a focus session to grow your landscape" : "No focus sessions on this day")
               : getLandscapeMessage()
@@ -339,7 +338,7 @@ export default function LandscapePage() {
           >
             <button 
               onClick={() => setShowCollection(true)}
-              className="text-xs text-muted-foreground/60 hover:text-primary transition-colors"
+              className="text-xs text-[hsl(230,10%,42%)] dark:text-[hsl(230,10%,55%)] hover:text-primary transition-colors"
             >
               {unlockedCount} collectible{unlockedCount !== 1 ? 's' : ''} discovered — tap to view
             </button>
