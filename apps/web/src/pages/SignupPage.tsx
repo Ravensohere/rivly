@@ -31,7 +31,7 @@ export default function SignupPage() {
       />
       <Link
         to="/"
-        className="absolute top-6 left-5 sm:top-8 sm:left-8 flex items-center gap-2 text-sm font-medium text-muted-foreground hover:text-foreground transition-colors z-10"
+        className="absolute top-6 left-5 sm:top-8 sm:left-8 flex items-center gap-2 text-sm font-medium text-[hsl(230,10%,42%)] dark:text-[hsl(230,10%,55%)] hover:text-foreground transition-colors z-10"
         style={{ paddingTop: 'env(safe-area-inset-top, 0px)', paddingLeft: 'env(safe-area-inset-left, 0px)' }}
       >
         <ArrowLeft className="w-4 h-4" />
