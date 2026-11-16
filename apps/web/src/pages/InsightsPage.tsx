@@ -26,7 +26,6 @@ import { safeNumber, formatFocusTime, getLocalDateKey } from '@/lib/focusTotals'
 import { FeedbackModal } from '@/components/settings/FeedbackModal';
 import { getPatternInsights } from '@/lib/patternInsights';
 import { Sparkles } from 'lucide-react';
-import { AnimatePresence } from 'framer-motion';
 import { RhythmReportCard } from '@/components/analytics/RhythmReportCard';
 import { generateMonthlyReport } from '@/lib/rhythmReport';
 import { useFocusSessions } from '@/hooks/useFocusSessions';
@@ -103,7 +102,8 @@ function InsightCard({
       </div>
       <div className="text-2xl font-bold text-foreground">{value}</div>
       <div className="text-sm text-muted-foreground">{title}</div>
-      {subtitle && <div className="text-xs text-muted-foreground/70 mt-1">{subtitle}</div>}
+      {/* was text-muted-foreground/70 on bg-card: alpha-composited that failed AA at ~2.65:1 (hand-verified HSL->sRGB->luminance); dropping the opacity modifier restores it to the plain token's passing ~4.57:1 on this same bg-card background */}
+      {subtitle && <div className="text-xs text-muted-foreground mt-1">{subtitle}</div>}
 
       {progress && progress.total > 0 && (
         <div className="mt-3">
@@ -180,6 +180,14 @@ export default function InsightsPage() {
   const [showRhythmReport, setShowRhythmReport] = useState(false);
 
   // Rhythm report — generate lazily for current month
+  // FIXME: allSessions/allCheckIns come from useFocusSessions()/useCheckIn(), which read the
+  // legacy 'dailyRhythm_*' localStorage keys. Every other stat on this page reads
+  // useEventsLedgerContext(), documented below as "SINGLE SOURCE OF TRUTH". Both stores are
+  // actively written by real app flows (FocusPage.addSession, DayPlanner.saveCheckIn), so this
+  // is not dead code, but the two can drift apart — the "See Your Month" report may not match
+  // the numbers shown elsewhere on this same page. Escalated in docs/superpowers/cards/insights.md;
+  // reconciling the two stores is out of scope for this card (needs type-level investigation of
+  // FocusSession/DailyCheckIn vs the ledger's FocusSessionEvent/CheckInEvent).
   const { sessions: allSessions } = useFocusSessions();
   const { tasks: allTasks } = useTasks();
   const { checkIns: allCheckIns } = useCheckIn();
@@ -418,7 +426,8 @@ export default function InsightsPage() {
     return (
       <PageTransition className="page-container">
         <div className="content-wrapper pt-6 sm:pt-8 flex items-center justify-center min-h-[50vh]">
-          <div className="text-muted-foreground">Loading insights...</div>
+          {/* text-muted-foreground on the page's near-flat gradient background measures ~4.3:1 by hand (HSL->sRGB->luminance), failing AA 4.5:1 — same recurring defect as calendar-callback/alarm-ringing/auth-callback; darkened value below passes at ~5.4:1, dark mode unchanged (already passing) */}
+          <div className="text-[hsl(230,10%,42%)] dark:text-[hsl(230,10%,55%)]">Loading insights...</div>
         </div>
       </PageTransition>
     );
@@ -438,12 +447,13 @@ export default function InsightsPage() {
             <div>
               <div className="flex items-center gap-2 mb-1">
                 <Calendar className="w-5 h-5 text-primary" />
-                <span className="text-sm text-muted-foreground">{getRangeLabel()}</span>
+                {/* text-muted-foreground on the page's near-flat gradient background fails AA (~4.3:1 by hand); see loading-state comment above */}
+                <span className="text-sm text-[hsl(230,10%,42%)] dark:text-[hsl(230,10%,55%)]">{getRangeLabel()}</span>
               </div>
               <h1 className="text-2xl font-semibold text-foreground">
                 {viewRange === 'day' ? 'Today\'s' : viewRange === 'week' ? 'Weekly' : 'Monthly'} Insights
               </h1>
-              <p className="text-muted-foreground text-sm mt-1">
+              <p className="text-[hsl(230,10%,42%)] dark:text-[hsl(230,10%,55%)] text-sm mt-1">
                 Your rhythm at a glance
               </p>
             </div>
@@ -504,7 +514,8 @@ export default function InsightsPage() {
                 className={`flex-1 py-2 px-3 rounded-lg text-sm font-medium transition-all ${
                   viewRange === option.value
                     ? 'bg-card text-foreground shadow-sm'
-                    : 'text-muted-foreground hover:text-foreground'
+                    // text-muted-foreground on this bg-muted/50 pill (over the page background) measures ~4.2:1 by hand, failing AA; darkened value passes
+                    : 'text-[hsl(230,10%,42%)] dark:text-[hsl(230,10%,55%)] hover:text-foreground'
                 }`}
               >
                 {option.label}
@@ -607,6 +618,10 @@ export default function InsightsPage() {
               </div>
 
               {/* CTA */}
+              {/* FIXME: no-op — this button has no handler/implementation anywhere in the app
+                  (verified: no other "apply next week" logic exists). Escalated in
+                  docs/superpowers/cards/insights.md rather than fabricated here; wiring it up is
+                  new feature work, out of this card's dead-code/contrast scope. */}
               <button
                 onClick={() => {}}
                 className="w-full mt-1 py-2.5 rounded-xl bg-primary text-primary-foreground text-sm font-medium hover:bg-primary/90 transition-colors"
@@ -1052,7 +1067,7 @@ export default function InsightsPage() {
           animate={{ opacity: 1 }}
           transition={{ delay: 0.55 }}
           onClick={() => navigate('/settings')}
-          className="w-full mt-3 py-3 text-sm text-muted-foreground hover:text-foreground transition-colors"
+          className="w-full mt-3 py-3 text-sm text-[hsl(230,10%,42%)] dark:text-[hsl(230,10%,55%)] hover:text-foreground transition-colors"
         >
           Settings & Preferences →
         </motion.button>
