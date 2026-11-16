@@ -136,7 +136,7 @@ earlier test finish first. Verified stable across 5 repeated runs.
 ## What I implemented
 
 `apps/web/src/pages/StudyTogetherPage.tsx`:
-- Swept all 13 `text-muted-foreground`/`hsl(var(--muted-foreground))`
+- Swept all 15 `text-muted-foreground`/`hsl(var(--muted-foreground))`
   sites to the established AA-safe
   `text-[hsl(230,10%,42%)] dark:text-[hsl(230,10%,55%)]` token: room-card
   description, live-count badge (+ "Tap to join" pill, both previously
@@ -176,16 +176,16 @@ in-SPA route change — re-hits the top-level waitlist gate, which fails on
 the unreachable network call). Did not attempt to bypass the app's own
 access-control gate to force a screenshot. The full automated DOM-
 assertion suite (exact Tailwind class / computed inline `style.color`
-checks at all 13 fixed sites, plus real interaction flows through
+checks at all 15 fixed sites, plus real interaction flows through
 join/leave/timer-completion/rejoin) stands in for visual verification,
 consistent with precedent on those two prior cards.
 
 ## Files changed
 
-- `apps/web/src/pages/StudyTogetherPage.tsx` — contrast fixes (13 sites),
+- `apps/web/src/pages/StudyTogetherPage.tsx` — contrast fixes (15 sites),
   invalid-gradient CSS fix.
 - `apps/web/src/pages/__tests__/StudyTogetherPage.test.tsx` — new file,
-  20 tests.
+  21 tests (after the fix round below).
 - `docs/superpowers/cards/study-together.md` — state → merged, full
   audit/product-fit/contrast record.
 - `.superpowers/sdd/2026-11-14-redesign-pipeline-execution/progress.md` —
@@ -201,9 +201,10 @@ consistent with precedent on those two prior cards.
   migration-drift caveat flagged.
 - Swept all muted-foreground sites including opacity-stacked (`opacity-70`
   on the "now" badge, dropped) and bg-secondary/bg-muted variants (Tap to
-  join pill, mute/leave buttons, Leave Room button) — 13 sites total,
+  join pill, mute/leave buttons, Leave Room button) — 15 sites total,
   matching the exact count from `grep -n text-muted-foreground` on the
-  pre-edit file.
+  pre-edit file. (Initial self-review undercounted this as 13 — see Fix
+  round below.)
 - Positive test assertions cover real room-join/presence interactions:
   asserting the actual `joinRoom`/`leaveRoom` mock calls with the correct
   room id, the live count rendered in the session view, and the
@@ -225,3 +226,35 @@ consistent with precedent on those two prior cards.
   environment/network limitation (see above) — not something this card
   could fix or route around without bypassing the app's own access
   control, which I declined to do.
+
+## Fix round (coordinator review)
+
+**Finding (Important):** the actual contrast-fix count in
+`StudyTogetherPage.tsx` is 15 sites, not the 13 reported throughout the
+card/report/progress log. All 15 were already correctly fixed in source
+(reviewer verified line-by-line, no missing fix) — the error was purely in
+the count and in test coverage. Two fixed sites had zero test coverage:
+1. The leave (X) icon button (`lucide-x`, `bg-muted/50`, line 300 of the
+   pre-edit file) — the test titled "the mute/leave icon buttons ... use
+   the AA-passing muted color" only actually asserted on the mute button,
+   overclaiming its own scope.
+2. The lobby hero subtext ("No chat. No video. Just shared focus.",
+   line 504 of the pre-edit file) — no test referenced it at all.
+
+**Fixed:**
+- Re-counted every `text-[hsl(230,10%,42%)]` occurrence in the fixed file
+  (`grep -c`) — confirmed 15, matching the reviewer's count exactly.
+  Corrected "13" → "15" in the card file and this report (cosmetic text
+  fix, no source-code change — the fixes themselves were never wrong).
+- Extended the existing "the mute/leave icon buttons..." test to also
+  locate the leave button (`findButtonWithIcon('lucide-x')`) and assert
+  its class list excludes the raw `text-muted-foreground` token and
+  includes the fixed one — now the title matches what it checks.
+- Added a new test, "the lobby hero subtext (...) uses the AA-passing
+  muted color", asserting the same on the "No chat. No video. Just shared
+  focus." paragraph.
+
+Re-ran the full suite: `StudyTogetherPage.test.tsx` now 21/21 (was 20/20),
+stable across 3 repeated runs. Full suite 51/51 files, 614/614 tests
+(was 613/613 — the one new test). Build unaffected (no source change,
+test-only + doc-only fix).

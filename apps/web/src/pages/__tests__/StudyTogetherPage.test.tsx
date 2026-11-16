@@ -361,6 +361,18 @@ describe('StudyTogetherPage — contrast fix (recurring text-muted-foreground-on
     const muteBtn = findButtonWithIcon('lucide-volume2')!;
     expect(muteBtn.className).not.toContain('text-muted-foreground');
     expect(muteBtn.className).toContain(FIXED_MUTED);
+
+    const leaveBtn = findButtonWithIcon('lucide-x')!;
+    expect(leaveBtn.className).not.toContain('text-muted-foreground');
+    expect(leaveBtn.className).toContain(FIXED_MUTED);
+  });
+
+  it('the lobby hero subtext ("No chat. No video. Just shared focus.") uses the AA-passing muted color', () => {
+    renderPage();
+
+    const node = screen.getByText('No chat. No video. Just shared focus.');
+    expect(node.className).not.toContain('text-muted-foreground');
+    expect(node.className).toContain(FIXED_MUTED);
   });
 
   it('the "Ambient Sound" label and unselected track pills use the AA-passing muted color', async () => {

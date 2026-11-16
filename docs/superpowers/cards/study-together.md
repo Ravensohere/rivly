@@ -10,7 +10,7 @@ acceptance:
   - primary interaction verified
   - no shared-component regression in holistic smoke pass
 merge_gate: work stays inside F:\Personal Assistant\rivly-assistant-worktrees\integrated-main or fresh worktrees branched from it (never rivly-assistant's own checkout, F:\skipwise, or F:\Personal Assistant\app); <=2 concurrent builds; riva/integrated-main stays local (no push); no .env/secrets access
-handoff: see "## Handoff" below — apps/web/src/pages/StudyTogetherPage.tsx (route /study, not /study-together as the original card brief named it — confirmed in AnimatedRoutes.tsx:98, linked from FocusSetup.tsx; auth-gated, 563 lines pre-edit). Social/realtime claim traced and found REAL: useFocusRooms.ts wires a real Supabase `focus_rooms` table, real `join_focus_room`/`leave_focus_room` RPCs (server-side atomic active_users increment/decrement), and a real `postgres_changes` Realtime subscription broadcasting every room's live count to all connected clients — not a client-side facade. Caveat: no committed .sql migration defines this schema (unlike e.g. deduct_credits, which is annotated with its migration file in the generated types.ts) — drift risk, not a bug, out of scope. No room-code/invite mechanism exists (fixed named rooms only); page copy ("No chat. No video. Just shared focus.") accurately describes the real capability. ESCALATED (not fixed): the 3 "ambient sound" tracks (Lo-fi Beats/Rain & Thunder/Brown Noise) all point to generic royalty-free SoundHelix demo songs that don't match their labels at all — audio genuinely plays (unlike the sleep card's missing files), but the content is mislabeled placeholder data presented as real sound categories. Contrast audit: 13 text-muted-foreground sites swept (plain, opacity-stacked via `opacity-70` on two sites, and bg-muted/bg-secondary variants) — all 13 fail AA in light mode against this page's warm-pastel tokens (~4.0-4.4:1), all pass in dark mode already; fixed with the established `text-[hsl(230,10%,42%)] dark:text-[hsl(230,10%,55%)]` token, dropping the `opacity-70` modifier on the live-count "now" badge since it still failed AA even with the darker token. Also fixed 1 real CSS bug (not contrast): the Pause/Resume button's `background: gradient(...)` used an invalid CSS function name (should be `linear-gradient`), silently falling back to a flat color — one-line fix to match the identical pattern used correctly elsewhere on the same page (CompletionView's "Another Round" button).
+handoff: see "## Handoff" below — apps/web/src/pages/StudyTogetherPage.tsx (route /study, not /study-together as the original card brief named it — confirmed in AnimatedRoutes.tsx:98, linked from FocusSetup.tsx; auth-gated, 563 lines pre-edit). Social/realtime claim traced and found REAL: useFocusRooms.ts wires a real Supabase `focus_rooms` table, real `join_focus_room`/`leave_focus_room` RPCs (server-side atomic active_users increment/decrement), and a real `postgres_changes` Realtime subscription broadcasting every room's live count to all connected clients — not a client-side facade. Caveat: no committed .sql migration defines this schema (unlike e.g. deduct_credits, which is annotated with its migration file in the generated types.ts) — drift risk, not a bug, out of scope. No room-code/invite mechanism exists (fixed named rooms only); page copy ("No chat. No video. Just shared focus.") accurately describes the real capability. ESCALATED (not fixed): the 3 "ambient sound" tracks (Lo-fi Beats/Rain & Thunder/Brown Noise) all point to generic royalty-free SoundHelix demo songs that don't match their labels at all — audio genuinely plays (unlike the sleep card's missing files), but the content is mislabeled placeholder data presented as real sound categories. Contrast audit: 15 text-muted-foreground sites swept (plain, opacity-stacked via `opacity-70` on two sites, and bg-muted/bg-secondary variants) — all 15 fail AA in light mode against this page's warm-pastel tokens (~4.0-4.4:1), all pass in dark mode already; fixed with the established `text-[hsl(230,10%,42%)] dark:text-[hsl(230,10%,55%)]` token, dropping the `opacity-70` modifier on the live-count "now" badge since it still failed AA even with the darker token. Also fixed 1 real CSS bug (not contrast): the Pause/Resume button's `background: gradient(...)` used an invalid CSS function name (should be `linear-gradient`), silently falling back to a flat color — one-line fix to match the identical pattern used correctly elsewhere on the same page (CompletionView's "Another Round" button).
 ---
 
 # Card: Study Together Page
@@ -133,21 +133,22 @@ real hook, with no orphaned props or unused destructured values.
 
 ### Contrast sweep
 
-13 `text-muted-foreground` / `hsl(var(--muted-foreground))` sites found
+15 `text-muted-foreground` / `hsl(var(--muted-foreground))` sites found
 (`grep -n` on the pre-edit file), covering plain text, two opacity-stacked
 sites (`opacity-70` on the room-card "now" badge text, compounding an
 already-borderline color), and `bg-muted`/`bg-secondary`-backed sites
-(the "Tap to join" pill, the mute/leave icon buttons, the "Leave Room"
-button). All 13 computed to ~4.0-4.4:1 in light mode against this page's
-warm-pastel `--background`/`--card`/`--muted`/`--secondary` tokens (all
-near-white, ~0.92-0.95 relative luminance) — failing AA's 4.5:1 threshold
-for normal text — and ~5.0-5.4:1 in dark mode, already passing (same
-light-mode-only pattern established on `alarm-ringing` and others). Fixed
-with the established `text-[hsl(230,10%,42%)] dark:text-[hsl(230,10%,55%)]`
-token at every site. The "now" badge's `opacity-70` was dropped entirely
-(not just recolored) after confirming the darker token still fails at that
-alpha (~2.95:1) — the same "drop the alpha" lesson from `login`/`learn`.
-Two sites used dynamic inline `style` color driven by a JS ternary
+(the "Tap to join" pill, the mute button, the leave (X) button, the
+"Leave Room" button). All 15 computed to ~4.0-4.4:1 in light mode against
+this page's warm-pastel `--background`/`--card`/`--muted`/`--secondary`
+tokens (all near-white, ~0.92-0.95 relative luminance) — failing AA's
+4.5:1 threshold for normal text — and ~5.0-5.4:1 in dark mode, already
+passing (same light-mode-only pattern established on `alarm-ringing` and
+others). Fixed with the established
+`text-[hsl(230,10%,42%)] dark:text-[hsl(230,10%,55%)]` token at every
+site. The "now" badge's `opacity-70` was dropped entirely (not just
+recolored) after confirming the darker token still fails at that alpha
+(~2.95:1) — the same "drop the alpha" lesson from `login`/`learn`. Two
+sites used dynamic inline `style` color driven by a JS ternary
 (`isActive ? palette.pulse : 'hsl(var(--muted-foreground))'`) rather than
 a static className — inline `style` always wins over a class for the same
 CSS property, so the fix moves the non-active branch's color into a
@@ -161,9 +162,16 @@ construction/mute wiring for the ambient-track player) + contrast-fix
 block. RED 11/21 baseline before the fix (10 behavioral baseline tests all
 passed pre-fix as expected; 11 contrast assertions failed as expected),
 GREEN 20/20 after (one pair of fake-timer tests merged into a single test
-during the RED phase for test-infra stability, net 20 tests). Full suite
-51/51 files, 613/613 tests. Build clean, StudyTogetherPage chunk 14.85 kB
-gzip 4.81 kB.
+during the RED phase for test-infra stability, net 20 tests). **Review fix
+round:** reviewer found the contrast-fix count undercounted (13 reported,
+15 actually fixed in source — no missing *fix*, only a missing *count* and
+2 missing *test assertions*): the leave (X) button test only actually
+checked the mute button despite its title claiming both, and the lobby
+hero subtext ("No chat. No video. Just shared focus.") had no test at
+all. Fixed: extended the mute/leave test to assert the leave button's
+fixed color too, added a dedicated hero-subtext test. 21/21 green.
+Full suite 51/51 files, 614/614 tests. Build clean, StudyTogetherPage
+chunk 14.85 kB gzip 4.81 kB.
 
 **Live visual check:** blocked by the same pre-existing environment
 limitation `landscape` and `day-planner` hit — the guest-mode waitlist
@@ -171,6 +179,6 @@ check (`App.tsx`) requires a live Supabase network call this sandbox can't
 reach, and it gates the entire authenticated app (not just this page), so
 no authenticated route is live-browser-reachable here. Build + the full
 automated DOM-assertion suite (exact Tailwind class / computed inline
-`style.color` checks at all 13 fixed sites, plus real interaction flows)
+`style.color` checks at all 15 fixed sites, plus real interaction flows)
 stand in for visual verification, consistent with precedent on those two
 prior cards.
