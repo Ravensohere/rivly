@@ -10,7 +10,7 @@ acceptance:
   - primary interaction verified
   - no shared-component regression in holistic smoke pass
 merge_gate: work stays inside F:\Personal Assistant\rivly-assistant-worktrees\integrated-main or fresh worktrees branched from it (never rivly-assistant's own checkout, F:\skipwise, or F:\Personal Assistant\app); <=2 concurrent builds; riva/integrated-main stays local (no push); no .env/secrets access
-handoff: see "## Handoff" below — apps/web/src/pages/LandscapePage.tsx (route /landscape, protected, 362 lines pre-edit). This is the "Living Landscape" feature named on the landing page's FeaturesSection (card '01'). Cross-checked that marketing claim against the real implementation: no fabrication found, seeds/trees are genuinely derived from real Events-Ledger focus-session data via useLandscape(), with no streak-based decay. Fixed 5 hand-verified AA contrast failures (the recurring bare text-muted-foreground-on-background pattern, a bg-muted/50-composite variant, and a severely-failing /60-opacity variant) and removed one dead destructured value (getSessionsByDateRange, never used in the file).
+handoff: see "## Handoff" below — apps/web/src/pages/LandscapePage.tsx (route /landscape, protected, 362 lines pre-edit). This is the "Living Landscape" feature named on the landing page's FeaturesSection (card '01'). Cross-checked that marketing claim against the real implementation: seeds/trees genuinely derive from real Events-Ledger focus-session data via useLandscape() and never decay (true), but the ambient sky/water/light mood DOES visibly regress after an 8+ day gap because updateLandscapeState() recomputes it from a stateless trailing-7-day window with no ratchet (partially false for "the landscape waits, patient as nature itself") — flagged via in-source FIXME, not fixed (shared hook logic, out of this card's contrast-only scope). Fixed 5 hand-verified AA contrast failures (the recurring bare text-muted-foreground-on-background pattern, a bg-muted/50-composite variant, and a severely-failing /60-opacity variant) and removed one dead destructured value (getSessionsByDateRange, never used in the file).
 ---
 
 # Card: Landscape Page
@@ -53,12 +53,24 @@ code:
   (real ledger-backed sessions), not `focusStreak`. `updateLandscapeState`
   (sky/water/light state) is likewise computed from `recentSeeds` (last 7
   days of real sessions), never from the streak counter. **True.**
-- *"Miss a day? The landscape waits, patient as nature itself"* — no decay
-  logic exists anywhere in `useLandscape.ts`: `landscapeState` only ever
-  improves/holds based on `focusDays`/`avgMinutesPerDay` over a trailing
-  7-day window; there is no code path that removes seeds, downgrades sky
-  state, or shrinks trees for an inactive day. **True — grepped the whole
-  hook for any subtractive/decay write and found none.**
+- *"Miss a day? The landscape waits, patient as nature itself"* — **TRUE for
+  seeds/trees; PARTIALLY FALSE for ambient mood state.** Seeds/trees never
+  decay: no code path removes seeds or shrinks trees for an inactive day
+  (grepped the whole hook for any subtractive/decay write, found none).
+  But `updateLandscapeState()` unconditionally recomputes `skyState`/
+  `waterState`/`lightState` from scratch on every call (including every
+  page mount, via `LandscapePage.tsx`'s `useEffect(..., [])`), purely from
+  a **stateless trailing-7-day rolling window** (`recentSeeds =
+  derivedSeeds.filter(s => s.date >= weekAgoStr)`) — with **no ratchet or
+  floor against the previous state**. A user who built up to e.g. `golden`
+  sky over an active week, then takes an 8+ day break, will see the
+  ambient mood **visibly regress** back toward `cloudy`/`dim` next time
+  they open the page, once that week ages out of the lookback — not via
+  any decay function, but because nothing holds the earned state steady.
+  Seeds "wait patiently" (true); the ambient mood does not (false).
+  Flagged via in-source `FIXME` at `updateLandscapeState()` in
+  `useLandscape.ts` rather than fixed — a ratchet/decay-curve design is a
+  product decision, outside this card's contrast-only scope.
 - *"Plant Focus Seeds, watch them bloom"* — each completed session becomes a
   seed (`addFocusSeed`/`derivedSeeds`) rendered as a real tree in
   `PremiumLandscapeScene.tsx` whose **type and size are driven by real
@@ -106,9 +118,11 @@ anything named from `LandscapePage.tsx`.
 
 **Verdict: APPROVED, scope as proposed in PASS 1** — 5 contrast fixes + 1
 dead-destructure removal (no behavior/visual change beyond the darkened
-text colors). No structural redesign attempted; no functional gaps found
-worth escalating (unlike `insights`, no no-op buttons or dual data
-sources were found on this page).
+text colors). No structural redesign attempted; no no-op buttons or dual
+data sources found on this page. One genuine functional gap found (see
+the corrected "Miss a day" clause above) — ambient-mood state regression
+after 8+ day gaps — escalated via in-source `FIXME`, not fixed (shared
+hook logic, product decision, outside this card's contrast-only scope).
 
 ### PASS 3 — Build / verification record
 
@@ -147,5 +161,12 @@ sources were found on this page).
   unit tests and a clean production build. No protected-route or guest-mode
   behavior was touched by this card's diff.
 
-**Escalations for a future dedicated card (not actioned here):** none — no
-functional gaps or dual-source-of-truth risks found on this page.
+**Escalations for a future dedicated card (not actioned here):** 1.
+`updateLandscapeState()` in `useLandscape.ts` recomputes ambient sky/water/
+light mood from a stateless trailing-7-day window with no ratchet against
+the previous state — an earned "golden"/"radiant" mood visibly regresses
+toward "cloudy"/"dim" after an 8+ day gap, contradicting the landing page's
+"the landscape waits, patient as nature itself" claim for ambient mood
+specifically (seeds/trees are unaffected and genuinely never decay).
+Flagged via in-source `FIXME`; a ratchet/decay-curve redesign is a product
+decision, not this card's contrast-only scope.

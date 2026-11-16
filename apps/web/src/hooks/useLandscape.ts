@@ -214,6 +214,16 @@ export function useLandscape() {
 
   // Evaluate weekly environment evolution based on ledger data
   const updateLandscapeState = useCallback(() => {
+    // FIXME(landscape card, redesign pipeline): this recomputes skyState/waterState/lightState
+    // purely from a stateless trailing-7-day rolling window every call (including on every
+    // mount), with no ratchet/floor against `prev.landscapeState`. Seeds/trees never decay
+    // (derivedSeeds keeps full history), but the AMBIENT MOOD does regress — a user who built
+    // up to e.g. 'golden' skyState over an active week will see it visibly fall back toward
+    // 'cloudy'/'dim' after an 8+ day gap, once that week ages out of the lookback. This
+    // contradicts the landing page's "the landscape waits, patient as nature itself" claim for
+    // the ambient state specifically (even though it holds for seeds/trees). Escalating via
+    // comment rather than fixing — a ratchet/decay-curve design is a product decision outside
+    // this card's contrast-only scope, not a mechanical bug fix.
     const weekAgo = new Date();
     weekAgo.setDate(weekAgo.getDate() - 7);
     const weekAgoStr = formatDate(weekAgo);
