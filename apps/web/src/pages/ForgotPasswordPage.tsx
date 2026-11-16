@@ -38,7 +38,7 @@ export default function ForgotPasswordPage() {
 
       <Link
         to="/login"
-        className="absolute top-6 left-6 flex items-center gap-2 text-sm text-muted-foreground hover:text-foreground transition-colors"
+        className="absolute top-6 left-6 flex items-center gap-2 text-sm text-[hsl(230,10%,42%)] dark:text-[hsl(230,10%,55%)] hover:text-foreground transition-colors"
       >
         <ArrowLeft className="w-4 h-4" /> Back to sign in
       </Link>
@@ -55,7 +55,7 @@ export default function ForgotPasswordPage() {
               <MailCheck className="w-10 h-10 text-primary" />
             </div>
             <h1 className="text-xl font-semibold mb-2">Check your email</h1>
-            <p className="text-sm text-muted-foreground mb-6">
+            <p className="text-sm text-[hsl(230,10%,42%)] dark:text-[hsl(230,10%,55%)] mb-6">
               If <span className="font-medium text-foreground">{email}</span> has an account, we've
               sent a link to choose a new password. It expires in an hour.
             </p>
@@ -66,7 +66,7 @@ export default function ForgotPasswordPage() {
         ) : (
           <>
             <h1 className="text-xl font-semibold mb-2">Forgot your password?</h1>
-            <p className="text-sm text-muted-foreground mb-6">
+            <p className="text-sm text-[hsl(230,10%,42%)] dark:text-[hsl(230,10%,55%)] mb-6">
               Enter your email and we'll send you a link to set a new one.
             </p>
             <form onSubmit={handleSubmit} className="space-y-3 text-left">
