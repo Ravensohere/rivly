@@ -190,12 +190,12 @@ function SectionLabel({ label }: { label: string }) {
   return (
     <div className="flex items-center gap-2.5 mb-3 pl-0.5">
       <span
+        className="text-[hsl(230,10%,42%)] dark:text-[hsl(230,10%,55%)]"
         style={{
           fontFamily: "'DM Mono', monospace",
           fontSize: '0.6rem',
           letterSpacing: '0.2em',
           textTransform: 'uppercase',
-          color: 'hsl(var(--muted-foreground))',
         }}
       >
         {label}
@@ -285,7 +285,7 @@ function PathCard({
               {path.topic}
             </h3>
             {path.description && (
-              <p className="text-xs text-muted-foreground mt-0.5 line-clamp-1">{path.description}</p>
+              <p className="text-xs text-[hsl(230,10%,42%)] dark:text-[hsl(230,10%,55%)] mt-0.5 line-clamp-1">{path.description}</p>
             )}
           </div>
           {path.difficulty && (
@@ -296,19 +296,19 @@ function PathCard({
         </div>
         <div className="flex items-center gap-3">
           <Progress value={progress.percent} className="flex-1 h-1.5" />
-          <span className="text-[0.65rem] text-muted-foreground whitespace-nowrap">
+          <span className="text-[0.65rem] text-[hsl(230,10%,42%)] dark:text-[hsl(230,10%,55%)] whitespace-nowrap">
             {progress.completed}/{progress.total}
           </span>
         </div>
         {progress.hoursLeft > 0 && (
-          <p className="text-[0.6rem] text-muted-foreground mt-1.5 flex items-center gap-1">
+          <p className="text-[0.6rem] text-[hsl(230,10%,42%)] dark:text-[hsl(230,10%,55%)] mt-1.5 flex items-center gap-1">
             <Clock className="w-2.5 h-2.5" />
             ~{progress.hoursLeft}h remaining
           </p>
         )}
       </button>
       <div className="flex items-center justify-between border-t border-border/40 px-4 py-2">
-        <span className="text-[0.6rem] text-muted-foreground">
+        <span className="text-[0.6rem] text-[hsl(230,10%,42%)] dark:text-[hsl(230,10%,55%)]">
           {path.checkpoints.length} chapters
         </span>
         <button
@@ -357,7 +357,7 @@ function RoadmapView({ path, onClose }: { path: LearningPath; onClose: () => voi
           </h2>
           <div className="flex items-center gap-2 mt-1">
             <Progress value={progress.percent} className="flex-1 h-1.5 max-w-[140px]" />
-            <span className="text-[0.65rem] text-muted-foreground">
+            <span className="text-[0.65rem] text-[hsl(230,10%,42%)] dark:text-[hsl(230,10%,55%)]">
               {progress.percent}% done
             </span>
             {path.difficulty && (
@@ -375,7 +375,7 @@ function RoadmapView({ path, onClose }: { path: LearningPath; onClose: () => voi
       {/* Checkpoint list */}
       <div className="flex-1 overflow-y-auto px-4 pt-4 pb-24">
         {path.description && (
-          <p className="text-xs text-muted-foreground mb-4 px-1">{path.description}</p>
+          <p className="text-xs text-[hsl(230,10%,42%)] dark:text-[hsl(230,10%,55%)] mb-4 px-1">{path.description}</p>
         )}
 
         <div className="space-y-3">
@@ -408,7 +408,7 @@ function RoadmapView({ path, onClose }: { path: LearningPath; onClose: () => voi
                     className={`flex-shrink-0 w-7 h-7 rounded-full flex items-center justify-center text-xs font-bold ${
                       done
                         ? 'bg-primary text-primary-foreground'
-                        : 'bg-muted text-muted-foreground'
+                        : 'bg-muted text-[hsl(230,10%,42%)] dark:text-[hsl(230,10%,55%)]'
                     }`}
                   >
                     {done ? <Check className="w-3.5 h-3.5" /> : idx + 1}
@@ -416,11 +416,11 @@ function RoadmapView({ path, onClose }: { path: LearningPath; onClose: () => voi
 
                   <div className="flex-1 min-w-0">
                     <div className="flex items-center gap-2 flex-wrap">
-                      <span className={`text-sm font-medium ${done ? 'line-through text-muted-foreground' : ''}`}>
+                      <span className={`text-sm font-medium ${done ? 'line-through text-[hsl(230,10%,42%)] dark:text-[hsl(230,10%,55%)]' : ''}`}>
                         {cp.title}
                       </span>
                       {cp.type && (
-                        <span className="inline-flex items-center gap-0.5 text-[0.55rem] text-muted-foreground bg-muted/50 px-1.5 py-px rounded-full">
+                        <span className="inline-flex items-center gap-0.5 text-[0.55rem] text-[hsl(230,10%,42%)] dark:text-[hsl(230,10%,55%)] bg-muted/50 px-1.5 py-px rounded-full">
                           <TypeIcon className="w-2.5 h-2.5" />
                           {TYPE_LABEL[cp.type]}
                         </span>
@@ -431,9 +431,9 @@ function RoadmapView({ path, onClose }: { path: LearningPath; onClose: () => voi
                         </span>
                       )}
                     </div>
-                    <p className="text-xs text-muted-foreground mt-0.5 line-clamp-2">{cp.description}</p>
+                    <p className="text-xs text-[hsl(230,10%,42%)] dark:text-[hsl(230,10%,55%)] mt-0.5 line-clamp-2">{cp.description}</p>
                     {cp.estimatedHours && (
-                      <span className="text-[0.6rem] text-muted-foreground/70 flex items-center gap-0.5 mt-1">
+                      <span className="text-[0.6rem] text-[hsl(230,10%,42%)] dark:text-[hsl(230,10%,55%)] flex items-center gap-0.5 mt-1">
                         <Clock className="w-2.5 h-2.5" /> ~{cp.estimatedHours}h
                       </span>
                     )}
@@ -467,8 +467,8 @@ function RoadmapView({ path, onClose }: { path: LearningPath; onClose: () => voi
                         {/* Notes */}
                         {cp.notes && (
                           <div>
-                            <span className="text-[0.6rem] text-muted-foreground uppercase tracking-wider">Notes</span>
-                            <p className="text-xs text-muted-foreground mt-1 bg-muted/30 rounded-lg p-2">{cp.notes}</p>
+                            <span className="text-[0.6rem] text-[hsl(230,10%,42%)] dark:text-[hsl(230,10%,55%)] uppercase tracking-wider">Notes</span>
+                            <p className="text-xs text-[hsl(230,10%,42%)] dark:text-[hsl(230,10%,55%)] mt-1 bg-muted/30 rounded-lg p-2">{cp.notes}</p>
                           </div>
                         )}
 
@@ -579,7 +579,7 @@ function ResourceList({
 
   return (
     <div className="space-y-2">
-      <span className="text-[0.6rem] text-muted-foreground uppercase tracking-wider">Resources</span>
+      <span className="text-[0.6rem] text-[hsl(230,10%,42%)] dark:text-[hsl(230,10%,55%)] uppercase tracking-wider">Resources</span>
       {resources.map((r, idx) => {
         const Icon = RESOURCE_KIND_ICON[r.kind] || BookOpen;
         const isVideo = r.kind === 'video' && r.videoId;
@@ -592,7 +592,7 @@ function ResourceList({
             </div>
             <div className="flex-1 min-w-0">
               <p className="text-xs line-clamp-2">{r.title}</p>
-              <p className="text-[0.6rem] text-muted-foreground mt-0.5 flex items-center gap-1">
+              <p className="text-[0.6rem] text-[hsl(230,10%,42%)] dark:text-[hsl(230,10%,55%)] mt-0.5 flex items-center gap-1">
                 <span>{sourceLabel}</span>
                 {!isVideo && <ExternalLink className="w-2.5 h-2.5" />}
               </p>
@@ -647,14 +647,14 @@ function EmptyState({ onAsk }: { onAsk: () => void }) {
       >
         Start learning something new
       </h2>
-      <p className="text-sm text-muted-foreground mb-6 max-w-[280px]">
+      <p className="text-sm text-[hsl(230,10%,42%)] dark:text-[hsl(230,10%,55%)] mb-6 max-w-[280px]">
         Tell Riva what you want to learn and she'll create a curated roadmap with the best YouTube videos for you.
       </p>
       <Button onClick={onAsk} className="gap-2">
         <Mic className="w-4 h-4" />
         Ask Riva
       </Button>
-      <p className="text-xs text-muted-foreground mt-3">
+      <p className="text-xs text-[hsl(230,10%,42%)] dark:text-[hsl(230,10%,55%)] mt-3">
         Try: "I want to learn React" or "Teach me Python"
       </p>
     </motion.div>
