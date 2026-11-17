@@ -58,3 +58,10 @@
 - Routed page files: 24
 - Landing section cards (with WhyNotSection + PromiseSection combined as 1): 7
 - **Total cards expected: 31**
+
+## Change Log
+
+- All 31 cards merged into `riva/integrated-main`.
+- Product/scope escalations raised during the pipeline (GA/GTM/Cashfree disclosure, missing sleep audio files, dead Settings controls, mislabeled study-together ambient tracks, the landing-page "thousands of calm achievers" headcount claim, the landscape ambient-state regression, and others) are tracked in `.superpowers/sdd/2026-11-14-redesign-pipeline-execution/progress.md` and, per the pipeline's established policy, also recorded as in-source `FIXME` comments at each affected site.
+- A final whole-branch review (see `progress.md`'s "FINAL WHOLE-BRANCH REVIEW" entry) found one real dark-mode AA contrast defect spanning 4 sites, plus several ledger-hygiene and documentation gaps; all were addressed in one bounded fix wave (no second wave planned).
+- `riva/integrated-main` is still local-only — no push to any remote has been performed.

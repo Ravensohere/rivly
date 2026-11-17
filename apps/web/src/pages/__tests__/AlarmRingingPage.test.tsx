@@ -243,7 +243,7 @@ describe('AlarmRingingPage', () => {
 
       const message = screen.getByText(/Snoozed - will ring again soon/i);
       expect(message.className).toContain('text-[hsl(230,10%,42%)]');
-      expect(message.className).toContain('dark:text-[hsl(230,10%,55%)]');
+      expect(message.className).toContain('dark:text-[hsl(230,10%,60%)]');
     });
   });
 });

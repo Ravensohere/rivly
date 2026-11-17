@@ -242,6 +242,7 @@ export default function SettingsPage() {
           </SettingsSection>
 
           {/* Sound & Sleep */}
+          {/* FIXME: these settings write real state but have zero consumers anywhere in the app — confirmed repo-wide. See docs/superpowers/cards/settings.md. */}
           <SettingsSection title="Sound & Sleep" icon={<Volume2 className="w-5 h-5" />} delay={0.23}>
             <SettingsRow label="Default Sound"><select id="default-sleep-sound" name="default-sleep-sound" value={defaultSleepSound || ''} onChange={(e) => updatePreferences({ defaultSleepSound: e.target.value || null })} className="text-sm bg-secondary text-foreground rounded-lg px-3 py-1.5 border border-border/30"><option value="">None</option>{SOUND_OPTIONS.map((s) => <option key={s.id} value={s.id}>{s.name}</option>)}</select></SettingsRow>
             <SettingsRow label="Default Timer"><select id="default-sleep-timer" name="default-sleep-timer" value={defaultSleepTimer || ''} onChange={(e) => updatePreferences({ defaultSleepTimer: e.target.value ? Number(e.target.value) : null })} className="text-sm bg-secondary text-foreground rounded-lg px-3 py-1.5 border border-border/30">{TIMER_OPTIONS.map((o) => <option key={o.label} value={o.value || ''}>{o.label}</option>)}</select></SettingsRow>
@@ -270,6 +271,7 @@ export default function SettingsPage() {
                 ))}
               </div>
             </SettingsRow>
+             {/* FIXME: this setting writes real state but has zero consumers anywhere in the app — confirmed repo-wide. See docs/superpowers/cards/settings.md. */}
              <SettingsRow
                 label="Voice Persona"
                 description="Choose your AI companion's voice"
@@ -303,6 +305,7 @@ export default function SettingsPage() {
           {/* Advanced section intentionally removed from user-facing UI */}
 
           {/* Notifications */}
+          {/* FIXME: these settings write real state but have zero consumers anywhere in the app — confirmed repo-wide. See docs/superpowers/cards/settings.md. */}
           <SettingsSection title="Notifications" icon={<Bell className="w-5 h-5" />} delay={0.28}>
             <SettingsRow label="Daily Reminder"><Switch checked={dailyReminderEnabled} onCheckedChange={(c) => updatePreferences({ dailyReminderEnabled: c })} /></SettingsRow>
             {dailyReminderEnabled && <SettingsRow label="Time"><TimePickerTrigger value={dailyReminderTime} onClick={() => setShowDailyTimePicker(true)} /><WheelTimePicker open={showDailyTimePicker} onOpenChange={setShowDailyTimePicker} value={dailyReminderTime} onChange={(v) => updatePreferences({ dailyReminderTime: v })} title="Reminder" /></SettingsRow>}

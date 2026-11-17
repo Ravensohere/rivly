@@ -422,7 +422,7 @@ describe('StudyTogetherPage — fake-timer scenarios (pomodoro completion)', () 
 
     const leaveRoomBtn = screen.getByText('Leave Room').closest('button')!;
     expect(leaveRoomBtn.className).not.toContain('text-muted-foreground');
-    expect(leaveRoomBtn.className).toContain(FIXED_MUTED);
+    expect(leaveRoomBtn.className).toContain('text-[hsl(230,10%,42%)] dark:text-[hsl(230,10%,60%)]');
 
     mockJoinRoom.mockClear();
     fireEvent.click(screen.getByText('Another Round'));

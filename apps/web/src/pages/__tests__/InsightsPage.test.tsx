@@ -305,7 +305,7 @@ describe('InsightsPage — redesign (contrast fix)', () => {
   it('the inactive Day/Week/Month tab label uses the AA-passing muted color', () => {
     renderPage();
     const node = screen.getByText('Day'); // 'week' is the default active tab, so 'Day' starts inactive
-    expect(node.className).not.toContain('text-muted-foreground"');
+    expect(node.className).not.toContain('text-muted-foreground');
     expect(node.className).toContain(FIXED_MUTED);
   });
 

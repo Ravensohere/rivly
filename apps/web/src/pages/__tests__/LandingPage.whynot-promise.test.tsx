@@ -77,6 +77,16 @@ function renderLanding() {
   );
 }
 
+// Exact-match on purpose: querySelectorAll includes every ancestor wrapper
+// too, and an ancestor's textContent is the concatenation of all its
+// descendants' text — a substring/regex .find() would match an outer wrapper
+// instead of the actual label leaf. Exact equality after trim only matches
+// the leaf that renders nothing else. Same helper as LandingPage.cta.test.tsx.
+function findByExactText(root: Element, selector: string, text: string): HTMLElement | undefined {
+  return [...root.querySelectorAll(selector)]
+    .find(el => el.textContent?.trim() === text) as HTMLElement | undefined;
+}
+
 describe('LandingPage — why-not / promise sections', () => {
   describe('baseline contract (true before and after the redesign)', () => {
     it('renders the why-not section before the promise section', () => {
@@ -146,6 +156,58 @@ describe('LandingPage — why-not / promise sections', () => {
 
       // Nothing on a section about rest should flag itself as interactive.
       expect(promise.querySelectorAll('[data-h="true"]')).toHaveLength(0);
+    });
+  });
+
+  // Final whole-branch review found this card (the pipeline's pilot) had
+  // merged before the AA contrast defect was discovered elsewhere and was
+  // never revisited — unlike every other LandingPage.*.test.tsx file, this
+  // one had zero contrast assertions. Added here, following the same
+  // fix-and-assert pattern as LandingPage.cta.test.tsx.
+  describe('contrast fix (final review)', () => {
+    it('fixes the "Interlude" chapter label font size (8.5px -> 9px, matching the other sections) and contrast', () => {
+      const { container } = renderLanding();
+      const whyNot = container.querySelector('#why-not')!;
+
+      const label = findByExactText(whyNot, 'div', 'Interlude · The difference');
+      expect(label).toBeTruthy();
+      expect(label!.style.fontSize).toBe('9px');
+      // T.muted on T.bg measured 4.39:1, fails AA; hsl(230,10%,42%) (rendered
+      // by jsdom as this rgb() value) measures 5.42:1 — same fix as landing-cta.
+      expect(label!.style.color).toBe('rgb(96, 100, 118)');
+    });
+
+    it('fixes the "Every other assistant" label font size (8.5px -> 9px) and contrast', () => {
+      const { container } = renderLanding();
+      const whyNot = container.querySelector('#why-not')!;
+
+      const label = findByExactText(whyNot, 'div', 'Every other assistant');
+      expect(label).toBeTruthy();
+      expect(label!.style.fontSize).toBe('9px');
+      expect(label!.style.color).toBe('rgb(96, 100, 118)');
+    });
+
+    it('fixes the "waits for you to type" caption by dropping the opacity modifier and swapping to the AA-passing color', () => {
+      const { container } = renderLanding();
+      const whyNot = container.querySelector('#why-not')!;
+
+      const caption = findByExactText(whyNot, 'div', 'waits for you to type');
+      expect(caption).toBeTruthy();
+      // T.muted at opacity 0.6 on T.bg measured ~2.22:1, fails AA hard. Just
+      // dropping the opacity still only reaches 4.39:1 (also fails), so the
+      // color is swapped to hsl(230,10%,42%) too — that combination measures
+      // 5.42:1 and passes.
+      expect(caption!.style.opacity).toBe('');
+      expect(caption!.style.color).toBe('rgb(96, 100, 118)');
+    });
+
+    it('leaves the intentionally low-contrast mock input specimen untouched', () => {
+      const { container } = renderLanding();
+      const whyNot = container.querySelector('#why-not')!;
+
+      const mockInput = findByExactText(whyNot, 'span', 'Ask me anything…');
+      expect(mockInput).toBeTruthy();
+      expect(mockInput!.style.opacity).toBe('0.45');
     });
   });
 });

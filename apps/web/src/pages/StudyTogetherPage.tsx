@@ -8,6 +8,7 @@ import { useNavigate } from 'react-router-dom';
 // ── Constants ────────────────────────────────────────────────────────────────
 const POMODORO_DURATION = 25 * 60; // 25 minutes in seconds
 
+// FIXME: all 3 tracks are mislabeled — URLs point to generic SoundHelix demo songs, not the labeled Lo-fi/Rain/Brown-Noise content. Audio plays, content is wrong. See docs/superpowers/cards/study-together.md.
 const AMBIENT_TRACKS = [
   { label: 'Lo-fi Beats',      url: 'https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3' },
   { label: 'Rain & Thunder',   url: 'https://www.soundhelix.com/examples/mp3/SoundHelix-Song-2.mp3' },
@@ -386,7 +387,7 @@ function CompletionView({ room, onRejoin, onLeave }: CompletionViewProps) {
         <motion.button
           whileTap={{ scale: 0.96 }}
           onClick={onLeave}
-          className="w-full py-3 rounded-2xl font-semibold text-sm bg-muted/50 text-[hsl(230,10%,42%)] dark:text-[hsl(230,10%,55%)] hover:bg-muted transition-colors"
+          className="w-full py-3 rounded-2xl font-semibold text-sm bg-muted/50 text-[hsl(230,10%,42%)] dark:text-[hsl(230,10%,60%)] hover:bg-muted transition-colors"
         >
           Leave Room
         </motion.button>

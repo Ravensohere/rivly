@@ -413,4 +413,64 @@ describe('LearnPage — contrast fix (recurring text-muted-foreground-on-backgro
     const node = screen.getByText('2h');
     expect(node.className).not.toContain('opacity-60');
   });
+
+  // Whole-branch review (fix wave) found that the className-string-matching
+  // tests above can't catch a same-value regression: dark:55% is
+  // byte-identical to the broken shared --muted-foreground token, so a test
+  // that only asserts "not the raw token string" would pass even though the
+  // rendered color still fails AA against a solid --muted/--secondary
+  // background. This test computes a real WCAG contrast ratio instead, as a
+  // template for future cards to copy.
+  it('[ratio-computed] the step-number badge text clears the WCAG AA 4.5:1 floor against bg-muted in dark mode', () => {
+    function parseHsl(hsl: string): [number, number, number] {
+      const m = hsl.match(/hsl\(\s*([-\d.]+)[,\s]+([-\d.]+)%[,\s]+([-\d.]+)%\s*\)/);
+      if (!m) throw new Error(`not an hsl() string: ${hsl}`);
+      return [parseFloat(m[1]), parseFloat(m[2]), parseFloat(m[3])];
+    }
+    function hslToRgb(h: number, s: number, l: number): [number, number, number] {
+      s /= 100; l /= 100;
+      const k = (n: number) => (n + h / 30) % 12;
+      const a = s * Math.min(l, 1 - l);
+      const f = (n: number) => l - a * Math.max(-1, Math.min(k(n) - 3, Math.min(9 - k(n), 1)));
+      return [255 * f(0), 255 * f(8), 255 * f(4)];
+    }
+    function relativeLuminance([r, g, b]: [number, number, number]): number {
+      const [rs, gs, bs] = [r, g, b].map((v) => {
+        const c = v / 255;
+        return c <= 0.03928 ? c / 12.92 : Math.pow((c + 0.055) / 1.055, 2.4);
+      });
+      return 0.2126 * rs + 0.7152 * gs + 0.0722 * bs;
+    }
+    function contrastRatio(hslA: string, hslB: string): number {
+      const lA = relativeLuminance(hslToRgb(...parseHsl(hslA)));
+      const lB = relativeLuminance(hslToRgb(...parseHsl(hslB)));
+      const lighter = Math.max(lA, lB);
+      const darker = Math.min(lA, lB);
+      return (lighter + 0.05) / (darker + 0.05);
+    }
+
+    const p = path({
+      id: 'p1',
+      topic: 'React',
+      checkpoints: [checkpoint({ id: 'cp1', title: 'Badge Contrast Checkpoint' })],
+    });
+    setupLearningPathsMock({ paths: [p] });
+    setupRivaMock();
+
+    render(<LearnPage />);
+    fireEvent.click(screen.getByText('React'));
+
+    const badge = screen.getByText('Badge Contrast Checkpoint')
+      .closest('button')!
+      .querySelector('div.bg-muted')!;
+    const darkColorMatch = badge.className.match(/dark:text-\[(hsl\([^\]]+\))\]/);
+    expect(darkColorMatch).toBeTruthy();
+    const textColorDark = darkColorMatch![1];
+
+    // Known value from src/index.css's `.dark` block: `--muted: 230 18% 15%`.
+    const mutedBackgroundDark = 'hsl(230, 18%, 15%)';
+
+    const ratio = contrastRatio(textColorDark, mutedBackgroundDark);
+    expect(ratio).toBeGreaterThanOrEqual(4.5);
+  });
 });

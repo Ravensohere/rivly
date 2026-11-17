@@ -34,6 +34,7 @@ export default function PrivacyPolicyPage() {
             </div>
           </div>
 
+          {/* FIXME: see index.html FIXME — analytics/tracking scripts not disclosed below */}
           <section className="space-y-4">
             <h2 className="text-xl font-semibold text-foreground">1. Information We Collect</h2>
             <p className="text-[hsl(230,10%,42%)] dark:text-[hsl(230,10%,55%)] leading-relaxed">

@@ -198,7 +198,7 @@ export function FocusSessionActive({ duration, purpose, linkedTaskId, onComplete
           animate={{ opacity: 1, y: 0 }}
           className="mb-8"
         >
-          <span className="px-4 py-2 rounded-full bg-muted text-[hsl(230,10%,42%)] dark:text-[hsl(230,10%,55%)] text-sm font-medium">
+          <span className="px-4 py-2 rounded-full bg-muted text-[hsl(230,10%,42%)] dark:text-[hsl(230,10%,60%)] text-sm font-medium">
             {purpose}
           </span>
         </motion.div>

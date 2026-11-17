@@ -28,6 +28,7 @@ export interface WinddownPreferences {
   scheduleEnabled: boolean;
 }
 
+// FIXME: 10 of these 12 audioUrl paths point to files that don't exist in public/audio (including all 3 default-pack sounds) — Audio.play() fails silently, most sessions play nothing. See docs/superpowers/cards/sleep.md.
 // Sound definitions for each pack
 export const WINDDOWN_SOUNDS: WinddownSound[] = [
   // Calm pack - slow, peaceful

@@ -1268,7 +1268,10 @@ function WhyNotSection() {
   return (
     <section id="why-not" style={{ background: T.bg, borderTop: `1px solid ${T.border}`, borderBottom: `1px solid ${T.border}`, padding: '12vh clamp(1.5rem,5vw,4rem)' }}>
       <div style={{ maxWidth: 1000, margin: '0 auto' }}>
-        <motion.div style={{ fontSize: 8.5, letterSpacing: '.26em', textTransform: 'uppercase', color: T.muted, marginBottom: 'clamp(2.5rem,6vh,4rem)', fontFamily: "'Roboto', sans-serif", fontWeight: 500 }}
+        {/* fontSize 9 matches the five sibling sections' label convention (was 8.5);
+            color hsl(230,10%,42%) (was T.muted): T.muted on T.bg measured 4.39:1, fails AA;
+            this measures 5.42:1 */}
+        <motion.div style={{ fontSize: 9, letterSpacing: '.26em', textTransform: 'uppercase', color: 'hsl(230, 10%, 42%)', marginBottom: 'clamp(2.5rem,6vh,4rem)', fontFamily: "'Roboto', sans-serif", fontWeight: 500 }}
           initial={{ opacity: 0, y: 10 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }}>
           Interlude · The difference
         </motion.div>
@@ -1276,14 +1279,22 @@ function WhyNotSection() {
         <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(290px,1fr))', gap: 'clamp(2.5rem,5vw,4.5rem)', alignItems: 'start' }}>
           {/* The prompt you have to fill in */}
           <motion.div initial={{ opacity: 0, y: 18 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ duration: 0.7, ease: E }}>
-            <div className="rv-mono" style={{ fontSize: 8.5, letterSpacing: '.2em', textTransform: 'uppercase', color: T.muted, marginBottom: 18 }}>
+            {/* same fontSize/color fix as the "Interlude" label above */}
+            <div className="rv-mono" style={{ fontSize: 9, letterSpacing: '.2em', textTransform: 'uppercase', color: 'hsl(230, 10%, 42%)', marginBottom: 18 }}>
               Every other assistant
             </div>
+            {/* intentionally low-contrast mock input (~1.78:1/1.41:1) — a deliberate
+                specimen of the "every other assistant" waiting-prompt, not a real
+                control; left untouched per the pilot card's own design. */}
             <div style={{ display: 'flex', alignItems: 'center', gap: 14, padding: '18px 20px', borderRadius: 14, border: `1px solid ${T.border}`, background: T.surface }}>
               <span className="rv-sans" style={{ flex: 1, fontSize: '0.86rem', color: T.muted, opacity: 0.45 }}>Ask me anything…</span>
               <ArrowUpRight size={15} aria-hidden style={{ color: T.muted, opacity: 0.28, flexShrink: 0 }} />
             </div>
-            <div className="rv-mono" style={{ fontSize: 9, letterSpacing: '.14em', color: T.muted, opacity: 0.6, marginTop: 14 }}>
+            {/* opacity removed (was 0.6): T.muted dimmed to 0.6 on T.bg measured ~2.22:1,
+                fails AA hard. Un-dimmed T.muted on T.bg still only measures 4.39:1 (also
+                fails), so the color is swapped to hsl(230,10%,42%) too, same as the
+                labels above — that combination measures 5.42:1 and passes. */}
+            <div className="rv-mono" style={{ fontSize: 9, letterSpacing: '.14em', color: 'hsl(230, 10%, 42%)', marginTop: 14 }}>
               waits for you to type
             </div>
           </motion.div>

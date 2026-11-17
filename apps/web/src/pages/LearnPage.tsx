@@ -408,7 +408,7 @@ function RoadmapView({ path, onClose }: { path: LearningPath; onClose: () => voi
                     className={`flex-shrink-0 w-7 h-7 rounded-full flex items-center justify-center text-xs font-bold ${
                       done
                         ? 'bg-primary text-primary-foreground'
-                        : 'bg-muted text-[hsl(230,10%,42%)] dark:text-[hsl(230,10%,55%)]'
+                        : 'bg-muted text-[hsl(230,10%,42%)] dark:text-[hsl(230,10%,60%)]'
                     }`}
                   >
                     {done ? <Check className="w-3.5 h-3.5" /> : idx + 1}
