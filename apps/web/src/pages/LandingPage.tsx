@@ -944,6 +944,30 @@ function FamilyCareSVG() {
   );
 }
 
+function DesktopAssistantSVG() {
+  return (
+    <svg viewBox="0 0 480 280" fill="none" style={{ width: '100%', height: '100%' }}>
+      <rect width="480" height="280" fill={T.nightSub} rx="20" />
+      {/* Desktop monitor */}
+      <rect x="120" y="40" width="200" height="130" rx="10" fill="#121226" stroke="rgba(165,164,239,0.3)" strokeWidth="1.5" />
+      <rect x="200" y="170" width="40" height="18" fill="#121226" />
+      <rect x="176" y="186" width="88" height="8" rx="4" fill="#121226" />
+      {/* Waveform — listening */}
+      {[0, 1, 2, 3, 4, 5, 6].map((i) => {
+        const h = [14, 26, 40, 54, 40, 26, 14][i];
+        return <rect key={i} x={158 + i * 18} y={105 - h / 2} width="6" height={h} rx="3" fill={T.indigoXL} opacity={0.5 + (i % 2) * 0.3} />;
+      })}
+      {/* Connection line to phone */}
+      <path d="M320 150 Q370 170 372 196" stroke={T.indigoL} strokeWidth="1.2" strokeDasharray="4 5" fill="none" opacity="0.6" />
+      {/* Phone */}
+      <rect x="352" y="196" width="40" height="68" rx="8" fill="#121226" stroke="rgba(165,164,239,0.3)" strokeWidth="1.5" />
+      <circle cx="372" cy="250" r="2.2" fill={T.indigoXL} opacity="0.7" />
+      <rect x="360" y="206" width="24" height="34" rx="3" fill="rgba(61,59,191,0.28)" />
+      <text x="240" y="252" textAnchor="middle" fontFamily="DM Mono" fontSize="7.5" fill={T.indigoXL} letterSpacing="2" opacity="0.75">YOUR DESKTOP, BY VOICE · FROM ANYWHERE</text>
+    </svg>
+  );
+}
+
 /* ─────────────────────────────────────────────────────
    FEATURES  — Chapter 4
 ───────────────────────────────────────────────────── */
@@ -956,6 +980,7 @@ const FEATURES = [
   { num: '06', tag: 'Morning',           title: 'Morning Bridge',         body: 'A gentle transition from sleep to intention. Log mood, energy, sleep quality. Let Riva set the tone for your day before the chaos begins.',                                   Visual: MorningBridgeSVG },
   { num: '07', tag: 'Evening',           title: 'Wind Down Ritual',       body: 'Close the loop every evening. Review, reflect, release. The day is complete — let it go. Tomorrow begins in peace, not anxiety.',                                             Visual: WindDownSVG     },
   { num: '08', tag: 'Family Care',       title: 'Riva cares for everyone you love.', body: "Add your parents to Riva's world. She sends medicine reminders, answers their questions, and alerts you if something needs your attention. Peace of mind for the whole family.", Visual: FamilyCareSVG },
+  { num: '09', tag: 'Desktop',           title: 'Riva on Your Desktop',   body: "A local-first voice assistant for your PC — dictation, commands, agent panes, and memory, all running on your own machine. Control it from your phone too, from anywhere, over a secure relay. Your desktop, by voice.", Visual: DesktopAssistantSVG },
 ];
 
 function FeaturesSection({ onChapter }: { onChapter: (n: number) => void }) {
