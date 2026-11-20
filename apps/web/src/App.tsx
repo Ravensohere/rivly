@@ -133,7 +133,7 @@ function AppContent() {
   } = useOnboarding();
 
   const { hasCompletedProfileSetup, markProfileSetupComplete, setProfile } = useUserPreferences();
-  const { user } = useAuthContext();
+  const { user, isGuest } = useAuthContext();
   const { doneToday: morningRitualDoneToday } = useMorningRitual();
 
   const [showProfileSetup, setShowProfileSetup] = useState(false);
@@ -158,7 +158,7 @@ function AppContent() {
   // Check waitlist status
   useEffect(() => {
     const checkWaitlist = async () => {
-      if (user?.email) {
+      if (user?.email && !isGuest) {
         setIsWaitlistChecking(true);
         try {
           const status = await getWaitlistStatus(user.email);
@@ -174,7 +174,7 @@ function AppContent() {
     };
     
     checkWaitlist();
-  }, [user]);
+  }, [user, isGuest]);
 
   // App initialization loading
   useEffect(() => {
@@ -269,7 +269,7 @@ function AppContent() {
   // 2. User is not an admin AND
   // 3. User is not on the approved list (pending, rejected, or deleted from waitlist) AND
   // 4. Not trying to access admin pages
-  if (user && waitlistStatus !== 'approved' && !isAdmin && !location.pathname.startsWith('/admin')) {
+  if (user && !isGuest && waitlistStatus !== 'approved' && !isAdmin && !location.pathname.startsWith('/admin')) {
     return (
       <Suspense fallback={<LoadingScreen />}>
         <WaitlistScreen />
