@@ -12,6 +12,7 @@ import { LOCAL_DESKTOP_URL, localDesktop } from '@/lib/localDesktop';
 import { useRelaySettings, RelaySettings } from '@/lib/relaySettings';
 import { cloudRelay } from '@/lib/cloudRelay';
 import { desktopCall, DesktopContext } from '@/lib/desktopApi';
+import { api } from '@/lib/api';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Send, Mic, Settings2 } from 'lucide-react';
@@ -182,7 +183,10 @@ export default function DesktopControlPage() {
       {customizing && <AvatarCustomizer settings={avatarSettings} onChange={updateAvatarSettings} />}
 
       {!active ? (
-        <PairingForm onPaired={setPairing} />
+        <>
+          <PairingCodeStep />
+          <PairingForm onPaired={setPairing} />
+        </>
       ) : (
         <>
           <div className="w-full flex items-center justify-between text-xs text-muted-foreground px-1">
@@ -299,6 +303,62 @@ export default function DesktopControlPage() {
         </>
       )}
     </PageTransition>
+  );
+}
+
+/**
+ * Step 1: get a one-time code tied to this (logged-in) account, to type into the desktop app's
+ * own setup. The desktop won't register itself with the relay without a valid code — see
+ * worker/src/routes/relay.ts's /pairing/create and /devices/register.
+ */
+function PairingCodeStep() {
+  const [code, setCode] = useState<string | null>(null);
+  const [expiresAt, setExpiresAt] = useState<string | null>(null);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+
+  async function getCode() {
+    setLoading(true);
+    setError(null);
+    try {
+      const result = await api.relay.createPairingCode();
+      setCode(result.code);
+      setExpiresAt(result.expires_at);
+    } catch (e) {
+      setError(e instanceof Error ? e.message : String(e));
+    } finally {
+      setLoading(false);
+    }
+  }
+
+  return (
+    <div className="w-full rounded-2xl border border-border bg-card/60 p-4 flex flex-col gap-3">
+      <div>
+        <p className="text-sm font-medium">Step 1 — get a pairing code</p>
+        <p className="text-xs text-muted-foreground mt-1">
+          This code ties the desktop app to your Rivly account. It's single-use and expires in 10 minutes.
+        </p>
+      </div>
+      {code ? (
+        <div className="text-center">
+          <p className="text-2xl font-mono tracking-[0.3em] font-semibold">{code}</p>
+          <p className="text-xs text-muted-foreground mt-1">
+            Expires {expiresAt ? new Date(expiresAt).toLocaleTimeString() : 'soon'}
+          </p>
+          <Button variant="outline" size="sm" className="rounded-full mt-2" onClick={getCode} disabled={loading}>
+            Get a new code
+          </Button>
+        </div>
+      ) : (
+        <Button onClick={getCode} disabled={loading} className="rounded-full">
+          {loading ? 'Generating…' : 'Get pairing code'}
+        </Button>
+      )}
+      {error && <p className="text-xs text-destructive">{error}</p>}
+      <p className="text-xs text-muted-foreground">
+        Then, on your PC, open the assistant's setup and enter this code when it asks.
+      </p>
+    </div>
   );
 }
 

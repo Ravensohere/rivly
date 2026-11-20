@@ -1,5 +1,6 @@
 import { Hono } from 'hono';
 import { Bindings, Variables } from '../types';
+import { extractBearerToken, verifyAccessToken } from '../services/auth';
 
 /**
  * Phone-to-desktop control relay — Cloudflare-native (D1), no Supabase. Mounted at `/relay` in
@@ -18,23 +19,81 @@ async function sha256Hex(input: string): Promise<string> {
   return Array.from(new Uint8Array(digest)).map((b) => b.toString(16).padStart(2, '0')).join('');
 }
 
-// POST /relay/devices/register  { secret }  — self-registration bootstrap, no auth required (the
-// caller is choosing their own secret, like generating an API key). Requires a reasonably long
-// secret so a guessed/weak one can't be registered; the raw secret is hashed before storage and
-// never returned or logged.
+// Unambiguous alphabet (no 0/O/1/I) — this gets read off a screen and typed by hand into a setup
+// wizard. 8 chars from a 32-symbol alphabet is ~40 bits of entropy, plenty for a code that's also
+// single-use and expires in minutes.
+const PAIRING_CODE_ALPHABET = 'ABCDEFGHJKLMNPQRSTUVWXYZ23456789';
+const PAIRING_CODE_LENGTH = 8;
+const PAIRING_CODE_TTL_MINUTES = 10;
+
+export function generatePairingCode(): string {
+  const bytes = crypto.getRandomValues(new Uint8Array(PAIRING_CODE_LENGTH));
+  return Array.from(bytes, (b) => PAIRING_CODE_ALPHABET[b % PAIRING_CODE_ALPHABET.length]).join('');
+}
+
+// POST /relay/pairing/create — requires a logged-in Rivly (Supabase) user. Issues a short-lived,
+// single-use code; the desktop setup wizard asks the person to type this in, which is what binds
+// the device they're about to register to this user_id. This is the only relay endpoint that uses
+// Supabase auth directly (the group below stays on device-secret auth, same as before) — it's the
+// one call a browser/phone session, not a desktop agent, is expected to make.
+relayRoutes.post('/pairing/create', async (c) => {
+  const token = extractBearerToken(c.req.header('Authorization'));
+  if (!token) return c.json({ error: 'missing bearer token' }, 401);
+  const user = await verifyAccessToken(c.env, token);
+  if (!user) return c.json({ error: 'invalid or expired session' }, 401);
+
+  const code = generatePairingCode();
+  const expiresAt = new Date(Date.now() + PAIRING_CODE_TTL_MINUTES * 60_000).toISOString();
+  await c.env.DESKTOP_RELAY_DB.prepare(
+    'INSERT INTO relay_pairing_codes (code, user_id, expires_at) VALUES (?, ?, ?)',
+  )
+    .bind(code, user.userId, expiresAt)
+    .run();
+
+  return c.json({ code, expires_at: expiresAt });
+});
+
+// POST /relay/devices/register  { secret, pairing_code }  — the desktop agent calls this once,
+// during setup, after the person has typed in the code shown on their phone/web session. Replaces
+// the old "anyone can self-register, ownership is whoever holds the secret" bootstrap: a device
+// now exists only bound to the user_id who issued the code, and the code is burned on use.
 relayRoutes.post('/devices/register', async (c) => {
-  const body = await c.req.json<{ secret?: string; label?: string }>().catch(() => ({}) as { secret?: string; label?: string });
+  const body = await c.req
+    .json<{ secret?: string; label?: string; pairing_code?: string }>()
+    .catch(() => ({}) as { secret?: string; label?: string; pairing_code?: string });
   const secret = body.secret;
+  const pairingCode = body.pairing_code?.trim().toUpperCase();
   if (!secret || typeof secret !== 'string' || secret.length < 32) {
     return c.json({ error: 'secret must be a string of at least 32 characters' }, 400);
   }
+  if (!pairingCode) {
+    return c.json({ error: 'pairing_code is required' }, 400);
+  }
+
+  const codeRow = await c.env.DESKTOP_RELAY_DB.prepare(
+    'SELECT user_id, expires_at, consumed_at FROM relay_pairing_codes WHERE code = ?',
+  )
+    .bind(pairingCode)
+    .first<{ user_id: string; expires_at: string; consumed_at: string | null }>();
+  if (!codeRow) return c.json({ error: 'invalid pairing code' }, 400);
+  if (codeRow.consumed_at) return c.json({ error: 'pairing code already used' }, 400);
+  if (new Date(codeRow.expires_at).getTime() < Date.now()) {
+    return c.json({ error: 'pairing code expired' }, 400);
+  }
+
   const id = crypto.randomUUID();
   const secretHash = await sha256Hex(secret);
   await c.env.DESKTOP_RELAY_DB.prepare(
-    'INSERT INTO desktop_devices (id, secret_hash, label) VALUES (?, ?, ?)',
+    'INSERT INTO desktop_devices (id, secret_hash, label, user_id) VALUES (?, ?, ?, ?)',
   )
-    .bind(id, secretHash, body.label ?? null)
+    .bind(id, secretHash, body.label ?? null, codeRow.user_id)
     .run();
+  await c.env.DESKTOP_RELAY_DB.prepare(
+    "UPDATE relay_pairing_codes SET consumed_at = datetime('now'), device_id = ? WHERE code = ?",
+  )
+    .bind(id, pairingCode)
+    .run();
+
   return c.json({ device_id: id });
 });
 

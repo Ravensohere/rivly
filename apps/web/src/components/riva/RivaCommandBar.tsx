@@ -1,15 +1,17 @@
 import { useState, useRef, useEffect, useCallback } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
+import { useNavigate } from 'react-router-dom';
 import {
   Mic, MicOff, Send, Loader2, Sparkles, X,
-  Zap, Calendar, Plus, Play, Clock, BellRing, BookOpen,
+  Zap, Calendar, Plus, Play, Clock, BellRing, BookOpen, Monitor,
   ChevronUp, ChevronDown
 } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { useRiva } from '@/hooks/useRiva';
 
-// Quick-command chip definitions (7 P0 commands)
-const QUICK_CMDS = [
+// A chip with `nav` routes instead of running a command — used for the one non-voice entry
+// below ("On Desktop"), which opens /desktop rather than processing text through Riva.
+const QUICK_CMDS: { label: string; icon: typeof Calendar; cmd?: string; nav?: string }[] = [
   { label: 'Plan my day', icon: Calendar,  cmd: 'Plan my day' },
   { label: "What's next",  icon: Zap,       cmd: "What's next?" },
   { label: 'Add task',     icon: Plus,      cmd: 'add task ' },
@@ -17,9 +19,11 @@ const QUICK_CMDS = [
   { label: 'Start focus',  icon: Play,      cmd: 'Start focus for 25 minutes' },
   { label: 'Explain',      icon: BookOpen,  cmd: 'Explain ' },
   { label: 'Reminder',     icon: BellRing,  cmd: 'Set reminder for ' },
+  { label: 'On Desktop',   icon: Monitor,   nav: '/desktop' },
 ];
 
 export function RivaCommandBar() {
+  const navigate = useNavigate();
   const {
     isListening, isProcessing, transcript, interimTranscript,
     rivaResponse, startListening, stopListening,
@@ -77,7 +81,14 @@ export function RivaCommandBar() {
     if (e.key === 'Escape') { setInputText(''); setShowChips(false); setIsCommandBarOpen(false); }
   };
 
-  const handleChip = (cmd: string) => {
+  const handleChip = (chip: (typeof QUICK_CMDS)[number]) => {
+    if (chip.nav) {
+      setShowChips(false);
+      setIsCommandBarOpen(false);
+      navigate(chip.nav);
+      return;
+    }
+    const cmd = chip.cmd!;
     // If ends with space, focus input for user to complete
     if (cmd.endsWith(' ')) {
       setInputText(cmd);
@@ -193,18 +204,18 @@ export function RivaCommandBar() {
             >
               <p className="text-xs text-muted-foreground mb-2 px-1">Quick commands</p>
               <div className="flex flex-wrap gap-2">
-                {QUICK_CMDS.map(({ label, icon: Icon, cmd }) => (
+                {QUICK_CMDS.map((chip) => (
                   <button
-                    key={label}
-                    onClick={() => handleChip(cmd)}
+                    key={chip.label}
+                    onClick={() => handleChip(chip)}
                     className={cn(
                       'flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-medium transition-all',
                       'bg-primary/10 text-primary border border-primary/20',
                       'hover:bg-primary/20 active:scale-95'
                     )}
                   >
-                    <Icon className="w-3 h-3" />
-                    {label}
+                    <chip.icon className="w-3 h-3" />
+                    {chip.label}
                   </button>
                 ))}
               </div>
