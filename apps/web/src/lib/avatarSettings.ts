@@ -30,7 +30,7 @@ export interface AvatarPreset {
 export const AVATAR_PRESETS: AvatarPreset[] = [
   { id: 'rivly-indigo', label: 'Rivly Indigo', pillColor: '#1a1a2e', eyeColor: '#8b85f0' },
   { id: 'flowzo-orange', label: 'Flowzo Orange', pillColor: '#141414', eyeColor: '#ff7a1a' },
-  { id: 'nixi-classic', label: 'Classic', pillColor: '#14141c', eyeColor: '#ffffff' },
+  { id: 'classic', label: 'Classic', pillColor: '#14141c', eyeColor: '#ffffff' },
   { id: 'teal', label: 'Teal', pillColor: '#0f1f1d', eyeColor: '#2dd4bf' },
   { id: 'rose', label: 'Rose', pillColor: '#1f1316', eyeColor: '#fb7185' },
 ];

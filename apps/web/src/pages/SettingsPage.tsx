@@ -321,6 +321,11 @@ export default function SettingsPage() {
           <SettingsSection title="Tutorial" icon={<Play className="w-5 h-5" />} delay={0.33}>
             <SettingsRow label="Replay Tutorial"><Button variant="outline" size="sm" onClick={handleReplayTutorial}><Play className="w-4 h-4 mr-2" />Replay</Button></SettingsRow>
             <SettingsRow label="Reset Onboarding"><Button variant="outline" size="sm" onClick={handleResetOnboardingFull}><RotateCcw className="w-4 h-4 mr-2" />Reset</Button></SettingsRow>
+            <SettingsRow label="Learn" description="Lessons and learning paths">
+              <Button variant="ghost" size="sm" onClick={() => navigate('/learn')} className="text-muted-foreground">
+                Open<ChevronRight className="w-4 h-4 ml-1" />
+              </Button>
+            </SettingsRow>
           </SettingsSection>
 
           {/* Privacy */}

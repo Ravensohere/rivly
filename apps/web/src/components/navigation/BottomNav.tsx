@@ -1,12 +1,11 @@
 import { motion } from 'framer-motion';
 import { useLocation, useNavigate } from 'react-router-dom';
-import { Calendar, Zap, GraduationCap, Moon, BarChart3 } from 'lucide-react';
+import { Calendar, Zap, Moon, BarChart3 } from 'lucide-react';
 import { AnimatePresence } from 'framer-motion';
 
 const navItems = [
   { path: '/app',      label: 'Day',      icon: Calendar  },
   { path: '/focus',    label: 'Focus',    icon: Zap       },
-  { path: '/learn',    label: 'Learn',    icon: GraduationCap },
   { path: '/sleep',    label: 'Sleep',    icon: Moon      },
   { path: '/insights', label: 'Insights', icon: BarChart3 },
 ];

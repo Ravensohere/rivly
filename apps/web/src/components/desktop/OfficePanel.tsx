@@ -55,7 +55,7 @@ function CalendarCard() {
   }, [connected, fetchGoogleEvents]);
 
   return (
-    <SectionCard title="Today's calendar" icon={<CalendarIcon className="w-4 h-4 text-orange-400" />}>
+    <SectionCard title="Today's calendar" icon={<CalendarIcon className="w-4 h-4 text-primary" />}>
       {connected === false && (
         <p className="text-xs text-muted-foreground text-center">
           Connect Google Calendar in Settings to see events here.
@@ -84,7 +84,7 @@ function CalendarCard() {
 
 function SentRepliesCard() {
   return (
-    <SectionCard title="Sent replies" icon={<Send className="w-4 h-4 text-orange-400" />}>
+    <SectionCard title="Sent replies" icon={<Send className="w-4 h-4 text-primary" />}>
       <SentRepliesList />
     </SectionCard>
   );
@@ -142,7 +142,7 @@ function CheckinCard({ ctx }: { ctx: DesktopContext }) {
   );
 
   return (
-    <SectionCard title="Mail & meeting check-ins" icon={<Mail className="w-4 h-4 text-orange-400" />}>
+    <SectionCard title="Mail & meeting check-ins" icon={<Mail className="w-4 h-4 text-primary" />}>
       <p className="text-xs text-muted-foreground">
         Speaks up on its own about new important mail, a reply you were waiting on, or a meeting starting soon. Each
         check uses your Claude plan.
@@ -157,14 +157,14 @@ function CheckinCard({ ctx }: { ctx: DesktopContext }) {
         />
         <Button
           variant={cfg?.enabled ? 'outline' : 'default'}
-          className={`rounded-full shrink-0 ${cfg?.enabled ? '' : 'bg-orange-400 hover:bg-orange-500 text-white'}`}
+          className={`rounded-full shrink-0 ${cfg?.enabled ? '' : 'bg-primary hover:bg-primary/90 text-primary-foreground'}`}
           disabled={busy || !draft.trim()}
           onClick={() => void save(cfg?.enabled ? { enabled: false } : { enabled: true, schedule: draft.trim() })}
         >
           {cfg?.enabled ? 'Turn off' : 'Turn on'}
         </Button>
       </div>
-      {cfg?.enabled && <p className="text-xs text-orange-400">On — checking {cfg.schedule}.</p>}
+      {cfg?.enabled && <p className="text-xs text-success">On — checking {cfg.schedule}.</p>}
       {error && <p className="text-xs text-destructive">{error}</p>}
     </SectionCard>
   );
@@ -210,7 +210,7 @@ function DeadlineCheckinCard({ ctx }: { ctx: DesktopContext }) {
   );
 
   return (
-    <SectionCard title="Deadline reminders" icon={<CalendarClock className="w-4 h-4 text-orange-400" />}>
+    <SectionCard title="Deadline reminders" icon={<CalendarClock className="w-4 h-4 text-primary" />}>
       <p className="text-xs text-muted-foreground">
         Speaks up about tasks due within the next 3 days, so a deadline doesn't sneak up on you.
       </p>
@@ -224,14 +224,14 @@ function DeadlineCheckinCard({ ctx }: { ctx: DesktopContext }) {
         />
         <Button
           variant={cfg?.enabled ? 'outline' : 'default'}
-          className={`rounded-full shrink-0 ${cfg?.enabled ? '' : 'bg-orange-400 hover:bg-orange-500 text-white'}`}
+          className={`rounded-full shrink-0 ${cfg?.enabled ? '' : 'bg-primary hover:bg-primary/90 text-primary-foreground'}`}
           disabled={busy || !draft.trim()}
           onClick={() => void save(cfg?.enabled ? { enabled: false } : { enabled: true, schedule: draft.trim() })}
         >
           {cfg?.enabled ? 'Turn off' : 'Turn on'}
         </Button>
       </div>
-      {cfg?.enabled && <p className="text-xs text-orange-400">On — checking {cfg.schedule}.</p>}
+      {cfg?.enabled && <p className="text-xs text-success">On — checking {cfg.schedule}.</p>}
       {error && <p className="text-xs text-destructive">{error}</p>}
     </SectionCard>
   );
@@ -277,7 +277,7 @@ function WellnessCheckinCard({ ctx }: { ctx: DesktopContext }) {
   );
 
   return (
-    <SectionCard title="Wellness check-ins" icon={<HeartPulse className="w-4 h-4 text-orange-400" />}>
+    <SectionCard title="Wellness check-ins" icon={<HeartPulse className="w-4 h-4 text-primary" />}>
       <p className="text-xs text-muted-foreground">
         Nudges you to log how you're feeling if you haven't checked in by evening.
       </p>
@@ -291,14 +291,14 @@ function WellnessCheckinCard({ ctx }: { ctx: DesktopContext }) {
         />
         <Button
           variant={cfg?.enabled ? 'outline' : 'default'}
-          className={`rounded-full shrink-0 ${cfg?.enabled ? '' : 'bg-orange-400 hover:bg-orange-500 text-white'}`}
+          className={`rounded-full shrink-0 ${cfg?.enabled ? '' : 'bg-primary hover:bg-primary/90 text-primary-foreground'}`}
           disabled={busy || !draft.trim()}
           onClick={() => void save(cfg?.enabled ? { enabled: false } : { enabled: true, schedule: draft.trim() })}
         >
           {cfg?.enabled ? 'Turn off' : 'Turn on'}
         </Button>
       </div>
-      {cfg?.enabled && <p className="text-xs text-orange-400">On — checking {cfg.schedule}.</p>}
+      {cfg?.enabled && <p className="text-xs text-success">On — checking {cfg.schedule}.</p>}
       {error && <p className="text-xs text-destructive">{error}</p>}
     </SectionCard>
   );
@@ -354,7 +354,7 @@ function TasksCard({ ctx }: { ctx: DesktopContext }) {
 
   const items = tasks.data ?? [];
   return (
-    <SectionCard title="Tasks" icon={<Check className="w-4 h-4 text-orange-400" />}>
+    <SectionCard title="Tasks" icon={<Check className="w-4 h-4 text-primary" />}>
       <div className="flex gap-2">
         <Input
           value={title}
@@ -376,7 +376,7 @@ function TasksCard({ ctx }: { ctx: DesktopContext }) {
             <button
               type="button"
               onClick={() => void toggle(t)}
-              className={`w-5 h-5 rounded-full border shrink-0 flex items-center justify-center ${t.done ? 'bg-orange-400 border-orange-400 text-white' : 'border-neutral-300'}`}
+              className={`w-5 h-5 rounded-full border shrink-0 flex items-center justify-center ${t.done ? 'bg-primary border-primary text-primary-foreground' : 'border-neutral-300'}`}
             >
               {t.done && <Check className="w-3 h-3" />}
             </button>
@@ -443,7 +443,7 @@ function FocusCard({ ctx }: { ctx: DesktopContext }) {
 
   const session = active.data;
   return (
-    <SectionCard title="Focus" icon={<Timer className="w-4 h-4 text-orange-400" />}>
+    <SectionCard title="Focus" icon={<Timer className="w-4 h-4 text-primary" />}>
       {(active.error || error) && <p className="text-xs text-destructive">{error ?? active.error}</p>}
       {session ? (
         <div className="flex flex-col gap-2">
@@ -463,7 +463,7 @@ function FocusCard({ ctx }: { ctx: DesktopContext }) {
                 <Play className="w-3.5 h-3.5 mr-1" /> Resume
               </Button>
             )}
-            <Button size="sm" className="rounded-full flex-1 bg-orange-400 hover:bg-orange-500 text-white" disabled={busy} onClick={() => void act(`/focus/${session.id}/finish`)}>
+            <Button size="sm" className="rounded-full flex-1 bg-primary hover:bg-primary/90 text-primary-foreground" disabled={busy} onClick={() => void act(`/focus/${session.id}/finish`)}>
               <Check className="w-3.5 h-3.5 mr-1" /> Finish
             </Button>
             <Button size="sm" variant="ghost" className="rounded-full" disabled={busy} onClick={() => void act(`/focus/${session.id}/cancel`)}>
@@ -563,7 +563,7 @@ function ListsCard({ ctx }: { ctx: DesktopContext }) {
   };
 
   return (
-    <SectionCard title="Lists" icon={<ListTodo className="w-4 h-4 text-orange-400" />}>
+    <SectionCard title="Lists" icon={<ListTodo className="w-4 h-4 text-primary" />}>
       {(lists.error || detail.error || error) && <p className="text-xs text-destructive">{error ?? lists.error ?? detail.error}</p>}
       {(lists.data?.length ?? 0) > 0 && (
         <div className="flex flex-wrap gap-2">
@@ -573,7 +573,7 @@ function ListsCard({ ctx }: { ctx: DesktopContext }) {
               type="button"
               onClick={() => setSelected(selected === String(l.id) ? null : String(l.id))}
               className={`rounded-full px-3 py-1 text-xs font-medium border ${
-                selected === String(l.id) ? 'bg-orange-400 text-white border-orange-400' : 'border-neutral-300 text-muted-foreground'
+                selected === String(l.id) ? 'bg-primary text-primary-foreground border-primary' : 'border-neutral-300 text-muted-foreground'
               }`}
             >
               {l.name}
@@ -616,7 +616,7 @@ function ListsCard({ ctx }: { ctx: DesktopContext }) {
               <button
                 type="button"
                 onClick={() => void toggle(it)}
-                className={`w-5 h-5 rounded-full border shrink-0 flex items-center justify-center ${it.done ? 'bg-orange-400 border-orange-400 text-white' : 'border-neutral-300'}`}
+                className={`w-5 h-5 rounded-full border shrink-0 flex items-center justify-center ${it.done ? 'bg-primary border-primary text-primary-foreground' : 'border-neutral-300'}`}
               >
                 {it.done && <Check className="w-3 h-3" />}
               </button>
@@ -667,15 +667,15 @@ function SkillsCard({ ctx }: { ctx: DesktopContext }) {
   };
 
   return (
-    <SectionCard title="Learned skills" icon={<Sparkles className="w-4 h-4 text-orange-400" />}>
+    <SectionCard title="Learned skills" icon={<Sparkles className="w-4 h-4 text-primary" />}>
       {(skills.error || error) && <p className="text-xs text-destructive">{error ?? skills.error}</p>}
       {proposed.length > 0 && (
         <div className="flex flex-col gap-1.5">
           <p className="text-xs text-muted-foreground">Pending — solved once, ready to skip the AI next time</p>
           {proposed.map((s) => (
-            <div key={s.id} className="flex items-center gap-2 rounded-xl border border-orange-200 bg-orange-50/50 px-2 py-1.5 text-sm">
+            <div key={s.id} className="flex items-center gap-2 rounded-xl border border-primary/30 bg-primary/10 px-2 py-1.5 text-sm">
               <span className="flex-1 truncate" title={s.trigger_value ?? ''}>{s.name}</span>
-              <button type="button" onClick={() => void decide(s.id, true)} className="text-orange-400 shrink-0">
+              <button type="button" onClick={() => void decide(s.id, true)} className="text-primary shrink-0">
                 <Check className="w-4 h-4" />
               </button>
               <button type="button" onClick={() => void decide(s.id, false)} className="text-muted-foreground hover:text-destructive shrink-0">
@@ -793,7 +793,7 @@ function MemoryCard({ ctx }: { ctx: DesktopContext }) {
   const items = pages.data ?? [];
   const pending = proposals.data ?? [];
   return (
-    <SectionCard title="Memory" icon={<Brain className="w-4 h-4 text-orange-400" />}>
+    <SectionCard title="Memory" icon={<Brain className="w-4 h-4 text-primary" />}>
       <div className="flex gap-2">
         <Input
           value={text}
@@ -814,9 +814,9 @@ function MemoryCard({ ctx }: { ctx: DesktopContext }) {
         <div className="flex flex-col gap-1.5">
           <p className="text-xs text-muted-foreground">Pending — inferred, not yet confirmed</p>
           {pending.map((p) => (
-            <div key={p.id} className="flex items-center gap-2 rounded-xl border border-orange-200 bg-orange-50/50 px-2 py-1.5 text-sm">
+            <div key={p.id} className="flex items-center gap-2 rounded-xl border border-primary/30 bg-primary/10 px-2 py-1.5 text-sm">
               <span className="flex-1 truncate" title={p.proposed_body}>{p.title}</span>
-              <button type="button" onClick={() => void decide(p.id, true)} className="text-orange-400 shrink-0">
+              <button type="button" onClick={() => void decide(p.id, true)} className="text-primary shrink-0">
                 <Check className="w-4 h-4" />
               </button>
               <button type="button" onClick={() => void decide(p.id, false)} className="text-muted-foreground hover:text-destructive shrink-0">

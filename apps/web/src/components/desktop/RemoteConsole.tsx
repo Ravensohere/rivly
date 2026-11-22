@@ -75,7 +75,7 @@ export function usePolled<T>(fetcher: () => Promise<T>, intervalMs: number, enab
 
 const STATE_STYLE: Record<string, string> = {
   running: 'bg-amber-500',
-  idle: 'bg-orange-500',
+  idle: 'bg-muted-foreground',
 };
 
 export function TerminalsPanel({ ctx, shellConnected }: { ctx: DesktopContext; shellConnected: boolean | null }) {
@@ -268,7 +268,7 @@ function PaneView({
                 setView(v);
                 setDiffPath(null);
               }}
-              className={`px-3 py-1 rounded-full flex items-center gap-1 ${view === v ? 'bg-orange-500 text-white' : 'text-muted-foreground'}`}
+              className={`px-3 py-1 rounded-full flex items-center gap-1 ${view === v ? 'bg-primary text-primary-foreground' : 'text-muted-foreground'}`}
             >
               {v === 'git' && <GitBranch className="w-3 h-3" />}
               {v === 'output' ? 'Output' : 'Git'}
@@ -332,7 +332,7 @@ function PaneView({
                   onClick={() => setDiffPath(f.path)}
                   className="rounded-2xl border border-border bg-card/40 px-3 py-2 text-xs flex gap-3 text-left hover:bg-accent/40"
                 >
-                  <code className="shrink-0 text-orange-500">{f.status.trim() || '·'}</code>
+                  <code className="shrink-0 text-primary">{f.status.trim() || '·'}</code>
                   <span className="break-all">{f.path}</span>
                 </button>
               ))}
@@ -361,7 +361,7 @@ function DiffText({ text }: { text: string }) {
 }
 
 const RISK_STYLE: Record<string, string> = {
-  low: 'text-orange-500',
+  low: 'text-muted-foreground',
   medium: 'text-amber-500',
   high: 'text-destructive',
 };

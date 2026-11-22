@@ -1,7 +1,10 @@
 import { supabase } from '@/integrations/supabase/client';
 
 // Change this to your deployed worker URL when going to production
-const API_BASE_URL = import.meta.env.VITE_API_URL || 'https://vivly-backend.gnvenkatapathiraju.workers.dev/api';
+const API_BASE_URL = import.meta.env.VITE_API_URL || 'https://rivly-api.ravenso-here.workers.dev/api';
+// /relay/* sits next to /api/* on the same Worker but isn't under it (see worker/src/routes/relay.ts) —
+// strip the /api suffix to get the Worker's root for relay calls.
+const WORKER_ROOT = API_BASE_URL.replace(/\/api$/, '');
 
 /**
  * Perform an authenticated fetch to the Cloudflare Worker API
@@ -136,6 +139,24 @@ export const api = {
       }),
     status: () => fetchWithAuth('/payment/status'),
     cancel: () => fetchWithAuth('/payment/cancel-subscription', { method: 'POST', body: '{}' }),
+  },
+
+  relay: {
+    /** One-time code the desktop setup flow asks the person to type in — binds the device
+     * they're about to register to this (logged-in) account. See worker/src/routes/relay.ts. */
+    createPairingCode: async (): Promise<{ code: string; expires_at: string }> => {
+      const { data: { session } } = await supabase.auth.getSession();
+      if (!session) throw new Error('User not authenticated');
+      const response = await fetch(`${WORKER_ROOT}/relay/pairing/create`, {
+        method: 'POST',
+        headers: { Authorization: `Bearer ${session.access_token}` },
+      });
+      if (!response.ok) {
+        const body = await response.json().catch(() => ({}));
+        throw new Error(body.error || `Failed to create pairing code (${response.status})`);
+      }
+      return response.json();
+    },
   },
 
   inbox: {

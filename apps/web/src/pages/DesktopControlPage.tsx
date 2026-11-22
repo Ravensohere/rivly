@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useRef, useState } from 'react';
 import { PageTransition } from '@/components/ui/PageTransition';
-import { NixiAvatar, NixiAvatarState } from '@/components/riva/NixiAvatar';
+import { RivaAvatar, RivaAvatarState } from '@/components/riva/RivaAvatar';
 import { AvatarCustomizer } from '@/components/riva/AvatarCustomizer';
 import { AssistantPanel, type AssistantActivity } from '@/components/desktop/AssistantPanel';
 import { ApprovalsPanel, Approval, TerminalsPanel, usePolled } from '@/components/desktop/RemoteConsole';
@@ -12,6 +12,7 @@ import { LOCAL_DESKTOP_URL, localDesktop } from '@/lib/localDesktop';
 import { useRelaySettings, RelaySettings } from '@/lib/relaySettings';
 import { cloudRelay } from '@/lib/cloudRelay';
 import { desktopCall, DesktopContext } from '@/lib/desktopApi';
+import { api } from '@/lib/api';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Send, Mic, Settings2 } from 'lucide-react';
@@ -117,7 +118,7 @@ export default function DesktopControlPage() {
   const showRecorderFallback = !speech.supported && !!LOCAL_DESKTOP_URL;
   const baseAvatarState = useAvatarStateFromCommands(commands, sending);
   const [assistantActivity, setAssistantActivity] = useState<AssistantActivity>('idle');
-  const avatarState: NixiAvatarState =
+  const avatarState: RivaAvatarState =
     tab === 'assistant' && assistantActivity !== 'idle'
       ? assistantActivity
       : speech.listening || recorder.recording
@@ -165,7 +166,7 @@ export default function DesktopControlPage() {
         >
           <Settings2 className="w-4 h-4" />
         </button>
-        <NixiAvatar
+        <RivaAvatar
           state={avatarState}
           size={120}
           pillColor={avatarSettings.pillColor}
@@ -182,7 +183,10 @@ export default function DesktopControlPage() {
       {customizing && <AvatarCustomizer settings={avatarSettings} onChange={updateAvatarSettings} />}
 
       {!active ? (
-        <PairingForm onPaired={setPairing} />
+        <>
+          <PairingCodeStep />
+          <PairingForm onPaired={setPairing} />
+        </>
       ) : (
         <>
           <div className="w-full flex items-center justify-between text-xs text-muted-foreground px-1">
@@ -217,9 +221,9 @@ export default function DesktopControlPage() {
                 onClick={() => setTab(id)}
                 className={`flex-1 py-1.5 rounded-full transition-colors ${
                   tab === id
-                    ? 'bg-orange-400 text-white'
+                    ? 'bg-primary text-primary-foreground'
                     : id === 'approvals' && pendingApprovals > 0
-                      ? 'text-orange-400 font-medium'
+                      ? 'text-primary font-medium'
                       : 'text-muted-foreground'
                 }`}
               >
@@ -245,7 +249,7 @@ export default function DesktopControlPage() {
                     disabled={sending}
                     size="icon"
                     variant={speech.listening ? 'default' : 'outline'}
-                    className={`rounded-full shrink-0 ${speech.listening ? 'bg-orange-400 hover:bg-orange-500 text-white' : ''}`}
+                    className={`rounded-full shrink-0 ${speech.listening ? 'bg-primary hover:bg-primary/90 text-primary-foreground' : ''}`}
                     title={speech.listening ? 'Stop listening' : 'Speak a command'}
                   >
                     <Mic className="w-4 h-4" />
@@ -257,7 +261,7 @@ export default function DesktopControlPage() {
                     disabled={sending || recorder.busy}
                     size="icon"
                     variant={recorder.recording ? 'default' : 'outline'}
-                    className={`rounded-full shrink-0 ${recorder.recording ? 'bg-orange-400 hover:bg-orange-500 text-white' : ''}`}
+                    className={`rounded-full shrink-0 ${recorder.recording ? 'bg-primary hover:bg-primary/90 text-primary-foreground' : ''}`}
                     title={recorder.recording ? 'Stop and transcribe' : recorder.busy ? 'Transcribing…' : 'Record a command'}
                   >
                     <Mic className="w-4 h-4" />
@@ -303,6 +307,62 @@ export default function DesktopControlPage() {
 }
 
 /**
+ * Step 1: get a one-time code tied to this (logged-in) account, to type into the desktop app's
+ * own setup. The desktop won't register itself with the relay without a valid code — see
+ * worker/src/routes/relay.ts's /pairing/create and /devices/register.
+ */
+function PairingCodeStep() {
+  const [code, setCode] = useState<string | null>(null);
+  const [expiresAt, setExpiresAt] = useState<string | null>(null);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+
+  async function getCode() {
+    setLoading(true);
+    setError(null);
+    try {
+      const result = await api.relay.createPairingCode();
+      setCode(result.code);
+      setExpiresAt(result.expires_at);
+    } catch (e) {
+      setError(e instanceof Error ? e.message : String(e));
+    } finally {
+      setLoading(false);
+    }
+  }
+
+  return (
+    <div className="w-full rounded-2xl border border-border bg-card/60 p-4 flex flex-col gap-3">
+      <div>
+        <p className="text-sm font-medium">Step 1 — get a pairing code</p>
+        <p className="text-xs text-muted-foreground mt-1">
+          This code ties the desktop app to your Rivly account. It's single-use and expires in 10 minutes.
+        </p>
+      </div>
+      {code ? (
+        <div className="text-center">
+          <p className="text-2xl font-mono tracking-[0.3em] font-semibold">{code}</p>
+          <p className="text-xs text-muted-foreground mt-1">
+            Expires {expiresAt ? new Date(expiresAt).toLocaleTimeString() : 'soon'}
+          </p>
+          <Button variant="outline" size="sm" className="rounded-full mt-2" onClick={getCode} disabled={loading}>
+            Get a new code
+          </Button>
+        </div>
+      ) : (
+        <Button onClick={getCode} disabled={loading} className="rounded-full">
+          {loading ? 'Generating…' : 'Get pairing code'}
+        </Button>
+      )}
+      {error && <p className="text-xs text-destructive">{error}</p>}
+      <p className="text-xs text-muted-foreground">
+        Then, on your PC, open the assistant's setup and enter this code when it asks.
+      </p>
+    </div>
+  );
+}
+
+/**
  * Manual pairing fallback. The easy path is scanning the QR / opening the link from the desktop's
  * /desktop-relay/pair-page, which carries these values in the URL fragment (never sent to any
  * server) and is consumed by useRelaySettings.
@@ -339,7 +399,7 @@ function PairingForm({ onPaired }: { onPaired: (s: RelaySettings) => void }) {
 const STATUS_STYLE: Record<DesktopCommand['status'], { dot: string; text: string; label: string }> = {
   pending: { dot: 'bg-muted-foreground', text: 'text-muted-foreground', label: 'Pending' },
   claimed: { dot: 'bg-amber-500', text: 'text-amber-500', label: 'Running' },
-  completed: { dot: 'bg-orange-400', text: 'text-orange-400', label: 'Done' },
+  completed: { dot: 'bg-success', text: 'text-success', label: 'Done' },
   failed: { dot: 'bg-destructive', text: 'text-destructive', label: 'Failed' },
 };
 
@@ -374,7 +434,7 @@ function summarize(o: Record<string, unknown> | undefined) {
 
 /** Drives the avatar from the newest command's real lifecycle. Success (heart eyes) shows for a few seconds
  * after a command finishes while this page is open, then settles back to idle. */
-function useAvatarStateFromCommands(commands: DesktopCommand[], sending: boolean): NixiAvatarState {
+function useAvatarStateFromCommands(commands: DesktopCommand[], sending: boolean): RivaAvatarState {
   const latest = commands[0];
   const seen = useRef<{ id: string | null; status: string | null; first: boolean }>({ id: null, status: null, first: true });
   const [celebrate, setCelebrate] = useState(false);
