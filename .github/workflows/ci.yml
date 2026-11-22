@@ -33,6 +33,13 @@ jobs:
         run: npm run typecheck -w rivly-worker
 
       - name: Test web
+        # supabase-js throws at import time if these aren't set to something
+        # URL-shaped; the anon/publishable key is public by design (RLS
+        # protects real data), so a placeholder is fine for tests that never
+        # hit the network.
+        env:
+          VITE_SUPABASE_URL: https://placeholder.supabase.co
+          VITE_SUPABASE_PUBLISHABLE_KEY: placeholder-anon-key
         run: npm run test -w @vivly/web
 
       - name: Test worker
