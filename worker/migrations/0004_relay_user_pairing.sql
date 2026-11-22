@@ -1,7 +1,8 @@
 -- Phase 1 of the stranger-safe relay redesign: a device row is no longer anonymous. Every device
--- is now tied to the Rivly (Supabase) user who paired it, via a one-time pairing code — the shared
--- device secret still protects the desktop<->worker link itself, but ownership of *which device*
--- a given logged-in user may see/command is now enforced in application code against user_id.
+-- is now tied to the Rivly (Supabase) user who paired it, via a one-time pairing code, and that
+-- user_id is recorded here. NOT yet enforced: every /devices/:deviceId/* route is still gated
+-- purely by the device secret, not by checking the caller's user_id against this column — that
+-- enforcement is phase 2, not this migration.
 
 ALTER TABLE desktop_devices ADD COLUMN user_id TEXT;
 

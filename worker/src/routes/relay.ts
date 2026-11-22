@@ -70,28 +70,35 @@ relayRoutes.post('/devices/register', async (c) => {
     return c.json({ error: 'pairing_code is required' }, 400);
   }
 
-  const codeRow = await c.env.DESKTOP_RELAY_DB.prepare(
-    'SELECT user_id, expires_at, consumed_at FROM relay_pairing_codes WHERE code = ?',
+  // Atomic claim: the WHERE guard makes consumed_at NULL -> set a single conditional write, so
+  // two concurrent requests for the same code can't both pass a separate check-then-act step.
+  // Only the request whose UPDATE actually matches the still-unconsumed row gets a RETURNING row.
+  const id = crypto.randomUUID();
+  const claim = await c.env.DESKTOP_RELAY_DB.prepare(
+    `UPDATE relay_pairing_codes
+     SET consumed_at = datetime('now'), device_id = ?
+     WHERE code = ? AND consumed_at IS NULL AND expires_at > datetime('now')
+     RETURNING user_id`,
   )
-    .bind(pairingCode)
-    .first<{ user_id: string; expires_at: string; consumed_at: string | null }>();
-  if (!codeRow) return c.json({ error: 'invalid pairing code' }, 400);
-  if (codeRow.consumed_at) return c.json({ error: 'pairing code already used' }, 400);
-  if (new Date(codeRow.expires_at).getTime() < Date.now()) {
+    .bind(id, pairingCode)
+    .first<{ user_id: string }>();
+
+  if (!claim) {
+    const existing = await c.env.DESKTOP_RELAY_DB.prepare(
+      'SELECT expires_at, consumed_at FROM relay_pairing_codes WHERE code = ?',
+    )
+      .bind(pairingCode)
+      .first<{ expires_at: string; consumed_at: string | null }>();
+    if (!existing) return c.json({ error: 'invalid pairing code' }, 400);
+    if (existing.consumed_at) return c.json({ error: 'pairing code already used' }, 400);
     return c.json({ error: 'pairing code expired' }, 400);
   }
 
-  const id = crypto.randomUUID();
   const secretHash = await sha256Hex(secret);
   await c.env.DESKTOP_RELAY_DB.prepare(
     'INSERT INTO desktop_devices (id, secret_hash, label, user_id) VALUES (?, ?, ?, ?)',
   )
-    .bind(id, secretHash, body.label ?? null, codeRow.user_id)
-    .run();
-  await c.env.DESKTOP_RELAY_DB.prepare(
-    "UPDATE relay_pairing_codes SET consumed_at = datetime('now'), device_id = ? WHERE code = ?",
-  )
-    .bind(id, pairingCode)
+    .bind(id, secretHash, body.label ?? null, claim.user_id)
     .run();
 
   return c.json({ device_id: id });
